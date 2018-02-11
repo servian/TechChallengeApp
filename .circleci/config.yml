@@ -29,7 +29,7 @@ jobs:
           command: |
             go get -v -t -d ./...
             mkdir output
-            go build -v -o awscreds .
+            go build -v -o TechTestApp .
             ls
             ./TechTestApp version | sed -e 's/Version: /v./' > versionfile
 
@@ -144,17 +144,17 @@ jobs:
             export version=$(cat versionfile)
             echo $version
             export tagvalue=$(git tag | grep ${version})
-            export prerelease=$(echo ${version} | grep -pre-release)
+            export prerelease=$(echo ${version} | grep 'pre-release')
             if [ -z "${tagvalue}" ]; then
               go get github.com/tcnksm/ghr
 
               if [ -z "${prerelease}"]; then
                 echo "Found pre-release in version, creating pre-release"
-                ghr -u twinsnes -prerelease ${version} output
+                ghr -u vibrato -prerelease ${version} output
               else
                 echo "No pre-release in version, creating release"
-                ghr -u twinsnes ${version} output
-              if
+                ghr -u vibrato ${version} output
+              fi
             fi
 
       - store_artifacts:

@@ -27,7 +27,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/Vibrato/TechTestApp/ui"
+	"github.com/vibrato/TechTestApp/ui"
 )
 
 // Config - configuration for daemon package

@@ -27,8 +27,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Vibrato/TechTestApp/db"
 	"github.com/gorilla/mux"
+	"github.com/vibrato/TechTestApp/db"
 )
 
 // Config configuration for ui package

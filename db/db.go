@@ -24,8 +24,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/Vibrato/TechTestApp/model"
 	_ "github.com/lib/pq"
+	"github.com/vibrato/TechTestApp/model"
 )
 
 // Config - configuration for the db package
