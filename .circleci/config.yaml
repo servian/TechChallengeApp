@@ -1,0 +1,175 @@
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2
+jobs:
+  build:
+    working_directory: /go/src/github.com/vibrato/TechTestApp
+    docker:
+      - image: circleci/golang:latest
+
+    steps:
+      - checkout
+
+      # build and test
+      - run: go get -v -t -d ./...
+      - run: go build -v
+      - run: go test -v -race -cover ./...
+
+  deploy:
+    working_directory: /go/src/github.com/vibrato/TechTestApp
+    docker:
+      - image: circleci/golang:latest
+
+    steps:
+      - checkout
+
+      - run:
+          name: Setup
+          command: |
+            go get -v -t -d ./...
+            mkdir output
+            go build -v -o awscreds .
+            ls
+            ./TechTestApp version | sed -e 's/Version: /v./' > versionfile
+
+
+      - run: 
+          name: Build for linux
+          environment:
+            GOOS: linux
+            GOARCH: amd64
+          command: |
+            if [ -d "dist" ]; then
+              rm -rf dist
+            fi
+            
+            mkdir -p dist
+            
+            go build -v -o TechTestApp .
+            
+            cp TechTestApp dist/
+            cp -r assets dist/
+            cp conf.toml dist/
+            
+            rm TechTestApp
+
+            export version=$(cat versionfile)
+            
+            zip "output/TechTestApp_${version}_linux64.zip" dist/*
+
+      # build for macos
+      - run: 
+          name: Build for macOS
+          environment:
+            GOOS: darwin
+            GOARCH: amd64
+          command: |
+            if [ -d "dist" ]; then
+              rm -rf dist
+            fi
+            
+            mkdir -p dist
+            
+            go build -v -o TechTestApp .
+            
+            cp TechTestApp dist/
+            cp -r assets dist/
+            cp conf.toml dist/
+            
+            rm TechTestApp
+
+            export version=$(cat versionfile)
+
+            zip "output/TechTestApp_${version}_darwin.zip" dist/*
+
+      # build windows 64 bit
+      - run: 
+          name: Build Windows 64bit
+          environment:
+            GOOS: windows
+            GOARCH: amd64
+          command: | 
+            # cross compile to windows in linux requires a few extra bits
+            # this gets around permission issues
+            sudo chmod -R 0777 /usr/local/go/
+            go get github.com/inconshreveable/mousetrap
+            if [ -d "dist" ]; then
+              rm -rf dist
+            fi
+            
+            mkdir -p dist
+            
+            go build -v -o TechTestApp.exe .
+            
+            cp TechTestApp.exe dist/
+            cp -r assets dist/
+            cp conf.toml dist/
+            
+            rm TechTestApp.exe
+
+            export version=$(cat versionfile)
+
+            zip "output/TechTestApp_${version}_win64.zip" dist/*
+
+      #build windows 32 bit
+      - run: 
+          name: Build Windows 32bit
+          environment:
+            GOOS: windows
+            GOARCH: 386
+          command: |
+            if [ -d "dist" ]; then
+              rm -rf dist
+            fi
+            
+            mkdir -p dist
+            
+            go build -v -o TechTestApp.exe .
+            
+            cp TechTestApp.exe dist/
+            cp -r assets dist/
+            cp conf.toml dist/
+            
+            rm TechTestApp.exe
+
+            export version=$(cat versionfile)
+
+            zip "output/TechTestApp_${version}_win32.zip" dist/*
+            
+
+      - run:
+          name: Release if new version
+          command: |
+            export version=$(cat versionfile)
+            echo $version
+            export tagvalue=$(git tag | grep ${version})
+            export prerelease=$(echo ${version} | grep -pre-release)
+            if [ -z "${tagvalue}" ]; then
+              go get github.com/tcnksm/ghr
+
+              if [ -z "${prerelease}"]; then
+                echo "Found pre-release in version, creating pre-release"
+                ghr -u twinsnes -prerelease ${version} output
+              else
+                echo "No pre-release in version, creating release"
+                ghr -u twinsnes ${version} output
+              if
+            fi
+
+      - store_artifacts:
+          path: output
+          
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires: 
+            - build
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /.*/
