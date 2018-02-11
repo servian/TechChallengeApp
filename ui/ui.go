@@ -47,6 +47,8 @@ func Start(cfg Config, listener net.Listener) {
 
 	mainRouter := mux.NewRouter().PathPrefix("/").Subrouter()
 	mainRouter.PathPrefix("/js/").Handler(assetHandler(cfg))
+	mainRouter.PathPrefix("/css/").Handler(assetHandler(cfg))
+	mainRouter.PathPrefix("/images/").Handler(assetHandler(cfg))
 	mainRouter.Handle("/api/task/", allTasksHandler(cfg))
 	mainRouter.Handle("/", indexHandler())
 	http.Handle("/", mainRouter)
@@ -66,20 +68,28 @@ const indexHTML = `
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Vibrato Tech Test App</title>
+	<title>Vibrato Tech Test App</title>
+	<link rel="stylesheet" href="/css/site.css" type="text/css" />
   </head>
   <body>
-    <div id='root'>Virato Tech Test App</div>
-		<script src="` + cdnReact + `"></script>
+  	<header>
+    	<img src="/images/VIBRATO_Logo_dark-cropped-200.png" width="100" height="85"/>
+    </header>
+    <div id='root'></div>
+	<footer>
+        &COPY; Vibrato
+	</footer>
+	<script src="` + cdnReact + `"></script>
     <script src="` + cdnReactDom + `"></script>
     <script src="` + cdnBabelStandalone + `"></script>
     <script src="` + cdnAxios + `"></script>
-		<script src="/js/app.jsx" type="text/babel"></script>
+	<script src="/js/app.jsx" type="text/babel"></script>
   </body>
 </html>
 `
 
 func assetHandler(cfg Config) http.Handler {
+	// so not secure!
 	return http.FileServer(cfg.Assets)
 }
 

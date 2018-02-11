@@ -11,3 +11,5 @@ go build .
 cp TechTestApp dist/
 cp -r assets dist/
 cp conf.toml dist/
+
+rm TechTestApp

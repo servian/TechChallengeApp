@@ -21,50 +21,35 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
+	"log"
+	"net/http"
 
-	"github.com/Vibrato/TechTestApp/config"
 	"github.com/Vibrato/TechTestApp/daemon"
 	"github.com/spf13/cobra"
 )
 
-var cfgFile string
-var cfg *daemon.Config
+// serveCmd represents the serve command
+var serveCmd = &cobra.Command{
+	Use:   "serve",
+	Short: "Starts the web server",
+	Long: `Starts the web server and starts serving connection on port and hostname 
+			defined in the configuration file`,
+	Run: func(cmd *cobra.Command, args []string) {
+		setupHTTPAssets(cfg)
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "TechTestApp",
-	Short: "",
-	Long:  ``,
-}
-
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+		if err := daemon.Run(cfg); err != nil {
+			log.Printf("Error in main: %v", err)
+		}
+	},
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	rootCmd.AddCommand(serveCmd)
 }
 
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	conf, err := config.LoadConfig("conf.toml")
+func setupHTTPAssets(cfg *daemon.Config) {
+	assetPath := "assets"
 
-	if err != nil {
-		fmt.Print(err)
-		os.Exit(1)
-	}
-
-	cfg = &daemon.Config{}
-	cfg.UI.DB.DbName = conf.DbName
-	cfg.UI.DB.DbPassword = conf.DbPassword
-	cfg.UI.DB.DbUser = conf.DbUser
-	cfg.ListenSpec = conf.ListenHost + ":" + conf.ListenPort
-
+	log.Printf("Assets served from %q.", assetPath)
+	cfg.UI.Assets = http.Dir(assetPath)
 }

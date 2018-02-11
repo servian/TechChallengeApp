@@ -22,49 +22,20 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/Vibrato/TechTestApp/config"
-	"github.com/Vibrato/TechTestApp/daemon"
 	"github.com/spf13/cobra"
 )
 
-var cfgFile string
-var cfg *daemon.Config
-
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "TechTestApp",
-	Short: "",
-	Long:  ``,
-}
-
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+// updatedbCmd represents the updatedb command
+var updatedbCmd = &cobra.Command{
+	Use:   "updatedb",
+	Short: "Updates DB",
+	Long:  `Updates DB that has been defined in the configuration file. If no db exist, one will be created`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("updatedb called")
+	},
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
-}
-
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	conf, err := config.LoadConfig("conf.toml")
-
-	if err != nil {
-		fmt.Print(err)
-		os.Exit(1)
-	}
-
-	cfg = &daemon.Config{}
-	cfg.UI.DB.DbName = conf.DbName
-	cfg.UI.DB.DbPassword = conf.DbPassword
-	cfg.UI.DB.DbUser = conf.DbUser
-	cfg.ListenSpec = conf.ListenHost + ":" + conf.ListenPort
-
+	rootCmd.AddCommand(updatedbCmd)
 }

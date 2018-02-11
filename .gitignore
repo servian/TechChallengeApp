@@ -13,4 +13,8 @@
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 
+# Build distribution folder
 dist/
+
+# Output Binary
+TechTestApp
