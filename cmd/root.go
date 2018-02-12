@@ -35,8 +35,25 @@ var cfg *daemon.Config
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "TechTestApp",
-	Short: "",
-	Long:  ``,
+	Short: "Application used to test potential candidates at Vibrato",
+	Long: `
+   /*.                       ,//                                                                               
+ ##%&&%%%&%            .&&%%%%%%#(                                                                             
+  */****%&%%,         *%&&&/(((((                                                                              
+   ,***/*(%%#,       ,%%%&*((#((                                                                               
+    ,,*/**(((#*     /#%%&//###*                                                                                
+     ,//*//(((//   (#%%(//.%%,         */     ,(    */    *((((,     ,((((/         /      (((((((     *(##(.  
+      ,//*//(((/* (#%%#//,,%,           (*   .#     */    */   (*    ,(   .#       *(*        #.     .#.    *( 
+       .#(*(((#/%%#%%##/**/.             (* .#      */    *(((#/     ,(**/(/      *( (,       #.     (.      (*
+         ##*,((%%%#%/((//(                ((#       */    */   ,(    ,( .#*      *(   ((      #.     //      #.
+         .%(/,*#%%%*/((((                  (,       */    *(///#*    ,(   *(    .#     (*     #.      ,#/**((  
+           %(/,,*#/#(((*                                                                                       
+            /**,,(#(//,                                                                                        
+             ***,(###,                                                                                         
+
+This application is used as part of testing potential candiates at Vibrato.
+
+Please visit http://vibrato.com.au for more details`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -65,6 +82,8 @@ func initConfig() {
 	cfg.UI.DB.DbName = conf.DbName
 	cfg.UI.DB.DbPassword = conf.DbPassword
 	cfg.UI.DB.DbUser = conf.DbUser
+	cfg.UI.DB.DbHost = conf.DbHost
+	cfg.UI.DB.DbPort = conf.DbPort
 	cfg.ListenSpec = conf.ListenHost + ":" + conf.ListenPort
 
 }
