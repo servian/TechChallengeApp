@@ -86,7 +86,7 @@ func AddTask(cfg Config, task model.Task) (model.Task, error) {
 
 	defer db.Close()
 
-	err = db.QueryRow("INSERT INTO public.\"Task\"(Completed, Priority, Title) VALUES($1, $2, $3) returning Id",
+	err = db.QueryRow("INSERT INTO public.\"Tasks\"(\"Completed\", \"Priority\", \"Title\") VALUES($1, $2, $3) returning \"Id\"",
 		task.Complete, task.Priority, task.Title).Scan(&task.ID)
 
 	if err != nil {
@@ -107,7 +107,7 @@ func DeleteTask(cfg Config, task model.Task) error {
 
 	defer db.Close()
 
-	stmt, err := db.Prepare("DELETE FROM public.\"Task\" WHERE Id=$1")
+	stmt, err := db.Prepare("DELETE FROM public.\"Tasks\" WHERE \"Id\"=$1")
 
 	if err != nil {
 		return err
@@ -145,7 +145,7 @@ func UpdateTask(cfg Config, task model.Task) (model.Task, error) {
 
 	defer db.Close()
 
-	stmt, err := db.Prepare("UPDATE pulic.\"Task\" SET Completed=$1, Priority=$2, Title=$3 WHERE Id=$4")
+	stmt, err := db.Prepare("UPDATE pulic.\"Tasks\" SET Completed=$1, Priority=$2, Title=$3 WHERE \"Id\"=$4")
 
 	if err != nil {
 		return task, err

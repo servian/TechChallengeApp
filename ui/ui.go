@@ -23,8 +23,10 @@ package ui
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -50,6 +52,7 @@ func Start(cfg Config, listener net.Listener) {
 	mainRouter.PathPrefix("/js/").Handler(assetHandler(cfg))
 	mainRouter.PathPrefix("/css/").Handler(assetHandler(cfg))
 	mainRouter.PathPrefix("/images/").Handler(assetHandler(cfg))
+	mainRouter.Handle("/api/task/{id:[0-9]+}/", deleteTask(cfg))
 	mainRouter.Handle("/api/task/", allTasksHandler(cfg))
 	mainRouter.Handle("/", indexHandler())
 	http.Handle("/", mainRouter)
@@ -71,6 +74,9 @@ const indexHTML = `
     <meta charset="utf-8">
 	<title>Vibrato Tech Test App</title>
 	<link rel="stylesheet" href="/css/site.css" type="text/css" />
+	<link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
   </head>
   <body>
   	<header>
@@ -127,6 +133,7 @@ func addTask(cfg Config, w http.ResponseWriter, r *http.Request) {
 
 	err := decoder.Decode(&task)
 	if err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), 400)
 		return
 	}
@@ -134,6 +141,7 @@ func addTask(cfg Config, w http.ResponseWriter, r *http.Request) {
 	newTask, err := db.AddTask(cfg.DB, task)
 
 	if err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), 500)
 		return
 	}
@@ -145,4 +153,26 @@ func addTask(cfg Config, w http.ResponseWriter, r *http.Request) {
 
 func updateTask(cfg Config, w http.ResponseWriter, r *http.Request) {
 
+}
+
+func deleteTask(cfg Config) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+
+		id, err := strconv.Atoi(vars["id"])
+
+		if err != nil {
+			fmt.Print(err)
+			http.Error(w, err.Error(), 500)
+			return
+		}
+
+		err = db.DeleteTask(cfg.DB, model.Task{ID: id})
+
+		if err != nil {
+			fmt.Print(err)
+			http.Error(w, err.Error(), 500)
+			return
+		}
+	})
 }
