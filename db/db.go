@@ -22,6 +22,7 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 
 	_ "github.com/lib/pq"
@@ -33,6 +34,13 @@ type Config struct {
 	DbUser     string
 	DbPassword string
 	DbName     string
+	DbHost     string
+	DbPort     string
+}
+
+func getDbInfo(cfg Config) string {
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		cfg.DbHost, cfg.DbPort, cfg.DbUser, cfg.DbPassword, cfg.DbName)
 }
 
 // GetAllTasks lists ass tasks in the database
@@ -40,8 +48,7 @@ func GetAllTasks(cfg Config) ([]model.Task, error) {
 
 	var tasks []model.Task
 
-	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
-		cfg.DbUser, cfg.DbPassword, cfg.DbName)
+	dbinfo := getDbInfo(cfg)
 
 	db, err := sql.Open("postgres", dbinfo)
 
@@ -66,4 +73,89 @@ func GetAllTasks(cfg Config) ([]model.Task, error) {
 	}
 
 	return tasks, nil
+}
+
+func AddTask(cfg Config, task model.Task) (model.Task, error) {
+	dbinfo := getDbInfo(cfg)
+
+	db, err := sql.Open("postgres", dbinfo)
+
+	if err != nil {
+		return task, err
+	}
+
+	defer db.Close()
+
+	err = db.QueryRow("INSERT INTO public.\"Tasks\"(\"Completed\", \"Priority\", \"Title\") VALUES($1, $2, $3) returning \"Id\"",
+		task.Complete, task.Priority, task.Title).Scan(&task.ID)
+
+	if err != nil {
+		return task, err
+	}
+
+	return task, nil
+}
+
+func DeleteTask(cfg Config, task model.Task) error {
+	dbInfo := getDbInfo(cfg)
+
+	db, err := sql.Open("postgres", dbInfo)
+
+	if err != nil {
+		return err
+	}
+
+	defer db.Close()
+
+	stmt, err := db.Prepare("DELETE FROM public.\"Tasks\" WHERE \"Id\"=$1")
+
+	if err != nil {
+		return err
+	}
+
+	res, err := stmt.Exec(task.ID)
+
+	if err != nil {
+		return err
+	}
+
+	affect, err := res.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	if affect < 1 {
+		return errors.New("Nothing was deleted")
+	}
+
+	return nil
+
+}
+
+func UpdateTask(cfg Config, task model.Task) (model.Task, error) {
+
+	dbInfo := getDbInfo(cfg)
+
+	db, err := sql.Open("postgres", dbInfo)
+
+	if err != nil {
+		return task, err
+	}
+
+	defer db.Close()
+
+	stmt, err := db.Prepare("UPDATE pulic.\"Tasks\" SET Completed=$1, Priority=$2, Title=$3 WHERE \"Id\"=$4")
+
+	if err != nil {
+		return task, err
+	}
+
+	_, err = stmt.Exec(task.Complete, task.Priority, task.Title, task.ID)
+
+	if err != nil {
+		return task, nil
+	}
+
+	return task, nil
 }

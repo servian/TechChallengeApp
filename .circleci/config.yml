@@ -148,7 +148,7 @@ jobs:
             if [ -z "${tagvalue}" ]; then
               go get github.com/tcnksm/ghr
 
-              if [ -z "${prerelease}"]; then
+              if [ -z "${prerelease}" ]; then
                 echo "Found pre-release in version, creating pre-release"
                 ghr -u vibrato -prerelease ${version} output
               else
