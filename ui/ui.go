@@ -52,7 +52,7 @@ func Start(cfg Config, listener net.Listener) {
 	mainRouter.PathPrefix("/js/").Handler(assetHandler(cfg))
 	mainRouter.PathPrefix("/css/").Handler(assetHandler(cfg))
 	mainRouter.PathPrefix("/images/").Handler(assetHandler(cfg))
-	mainRouter.Handle("/api/task/{id:[0-9]+}/", deleteTask(cfg))
+	mainRouter.Handle("/api/task/{id:[0-9]+}/", deleteTask(cfg)).Methods("DELETE")
 	mainRouter.Handle("/api/task/", allTasksHandler(cfg))
 	mainRouter.Handle("/", indexHandler())
 	http.Handle("/", mainRouter)
