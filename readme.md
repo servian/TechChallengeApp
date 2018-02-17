@@ -32,7 +32,7 @@ update `conf.toml` with database settings
 
 ## Compile from source
 
-`go get -d github.com/Virato/TechTestApp`
+`go get -d github.com/vibrato/TechTestApp`
 
 run `build.sh`
 
