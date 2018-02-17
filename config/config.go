@@ -32,6 +32,8 @@ type Config struct {
 	DbUser     string
 	DbPassword string
 	DbName     string
+	DbHost     string
+	DbPort     string
 	ListenHost string
 	ListenPort string
 }
