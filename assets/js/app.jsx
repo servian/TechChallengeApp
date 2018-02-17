@@ -71,7 +71,7 @@ class TaskList extends React.Component {
         return(
             <ul className="theList">
             {this.props.tasks.map(task => 
-                <li key={task.Id}><span className="delete" onClick={() => this.delete(task)}><i className="fas fa-trash"></i></span>{task.Title}</li>
+                <li key={task.Id}><span className="delete" onClick={() => this.delete(task)}><i className="fas fa-trash"></i></span><span className="title">{task.Title}</span></li>
             )}
             </ul>
         )

@@ -31,18 +31,21 @@ H1 {
 }
 
 .theList li {
-    padding: 10px;
     background-color: #434343;
     margin-bottom: 2px;
 }
 
-.theList li span {
-    margin-left: 5px;
-    margin-right: 5px;
-    float: right
+.title {
+    padding: 10px;
+    display: inline-block;
 }
 
-.theList li span:hover {
+.theList li .delete {
+    padding: 10px;
+    float: right;
+}
+
+.theList li .delete:hover {
     color: #D91E18;
     cursor: pointer;
 }
@@ -51,17 +54,20 @@ H1 {
     padding: 10px;
     font-size: 16px;
     border: 2px solid #FFF;
-    width: 325px;
+    width: 326px;
+    height: 18px;
  }
 
 .taskForm button {
     padding: 10px;
     font-size: 17px;
-    margin: 10px;
+    margin: 8px;
     margin-right: 0px;
     background-color: rgb(216, 216, 216);
     border: none;
     color: #000000;
+    width: 42px;
+    height: 42px;
 }
 .taskForm button:hover {
     background-color: #2ECC71;

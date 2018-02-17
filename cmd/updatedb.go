@@ -24,6 +24,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/vibrato/TechTestApp/db"
 )
 
 // updatedbCmd represents the updatedb command
@@ -32,10 +33,36 @@ var updatedbCmd = &cobra.Command{
 	Short: "Updates DB",
 	Long:  `Updates DB that has been defined in the configuration file. If no db exist, one will be created`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("updatedb called")
+		err := updateDb(cfg.UI.DB)
+
+		if err != nil {
+			fmt.Println(err)
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(updatedbCmd)
+}
+
+func updateDb(cfg db.Config) error {
+
+	fmt.Println("Dropping and recreating database: " + cfg.DbName)
+	err := db.RebuildDb(cfg)
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Dropping and recreating table: tasks")
+	err = db.CreateTable(cfg)
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Seeding table with data")
+	err = db.SeedData(cfg)
+
+	return err
 }
