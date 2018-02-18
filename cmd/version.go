@@ -32,7 +32,7 @@ var versionCmd = &cobra.Command{
 	Short: "Displays the current version",
 	Long:  `Displays the current version of the application`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Version: 0.1.0-pre-release")
+		fmt.Println("Version: 0.2.0-pre-release")
 	},
 }
 
