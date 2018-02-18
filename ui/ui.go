@@ -103,6 +103,13 @@ func assetHandler(cfg Config) http.Handler {
 
 func healthcheckHandler(cfg Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := db.GetAllTasks(cfg.DB)
+
+		if err != nil {
+			fmt.Fprintf(w, "Error: db connection down")
+			return
+		}
+
 		fmt.Fprintf(w, "OK")
 	})
 }
