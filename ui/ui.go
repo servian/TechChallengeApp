@@ -54,6 +54,7 @@ func Start(cfg Config, listener net.Listener) {
 	mainRouter.PathPrefix("/images/").Handler(assetHandler(cfg))
 	mainRouter.Handle("/api/task/{id:[0-9]+}/", deleteTask(cfg)).Methods("DELETE")
 	mainRouter.Handle("/api/task/", allTasksHandler(cfg))
+	mainRouter.Handle("/healthcheck/", healthcheckHandler(cfg))
 	mainRouter.Handle("/", indexHandler())
 	http.Handle("/", mainRouter)
 
@@ -98,6 +99,12 @@ const indexHTML = `
 func assetHandler(cfg Config) http.Handler {
 	// so not secure!
 	return http.FileServer(cfg.Assets)
+}
+
+func healthcheckHandler(cfg Config) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "OK")
+	})
 }
 
 func indexHandler() http.Handler {
