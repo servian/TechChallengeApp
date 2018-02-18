@@ -14,7 +14,11 @@
 [license-badge]: https://img.shields.io/github/license/vibrato/TechTestApp.svg?style=flat
 [license]: https://github.com/vibrato/TechTestApp/license
 
-This app is a work in progress and not ready yet
+WARNING: This app is a work in progress and not ready yet
+
+Single page application designed to be ran inside a container or on a vm (IaaS) with a postgres database to store data.
+
+It is completely self contained, and should not require any additional dependencies to run.
 
 ## Install
 
@@ -29,6 +33,12 @@ update `conf.toml` with database settings
 `./TechTestApp updatedb` to create a database and seed it with test data
 
 `./TechTestApp serve` will start serving requests
+
+## Interesting endpoints
+
+`/` - root endpoint that will load the SPA
+`/api/tasks/` - api endpoint to create, read, update, and delete tasks 
+`/healthcheck/` - Used to validate the health of the application
 
 ## Compile from source
 
