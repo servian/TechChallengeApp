@@ -37,7 +37,9 @@ update `conf.toml` with database settings
 ## Interesting endpoints
 
 `/` - root endpoint that will load the SPA
-`/api/tasks/` - api endpoint to create, read, update, and delete tasks 
+
+`/api/tasks/` - api endpoint to create, read, update, and delete tasks
+
 `/healthcheck/` - Used to validate the health of the application
 
 ## Compile from source
