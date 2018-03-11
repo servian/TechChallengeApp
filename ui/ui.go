@@ -23,12 +23,15 @@ package ui
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/vibrato/TechTestApp/db"
+	"github.com/vibrato/TechTestApp/model"
 )
 
 // Config configuration for ui package
@@ -49,7 +52,9 @@ func Start(cfg Config, listener net.Listener) {
 	mainRouter.PathPrefix("/js/").Handler(assetHandler(cfg))
 	mainRouter.PathPrefix("/css/").Handler(assetHandler(cfg))
 	mainRouter.PathPrefix("/images/").Handler(assetHandler(cfg))
+	mainRouter.Handle("/api/task/{id:[0-9]+}/", deleteTask(cfg)).Methods("DELETE")
 	mainRouter.Handle("/api/task/", allTasksHandler(cfg))
+	mainRouter.Handle("/healthcheck/", healthcheckHandler(cfg))
 	mainRouter.Handle("/", indexHandler())
 	http.Handle("/", mainRouter)
 
@@ -70,6 +75,9 @@ const indexHTML = `
     <meta charset="utf-8">
 	<title>Vibrato Tech Test App</title>
 	<link rel="stylesheet" href="/css/site.css" type="text/css" />
+	<link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
   </head>
   <body>
   	<header>
@@ -93,6 +101,19 @@ func assetHandler(cfg Config) http.Handler {
 	return http.FileServer(cfg.Assets)
 }
 
+func healthcheckHandler(cfg Config) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := db.GetAllTasks(cfg.DB)
+
+		if err != nil {
+			fmt.Fprintf(w, "Error: db connection down")
+			return
+		}
+
+		fmt.Fprintf(w, "OK")
+	})
+}
+
 func indexHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, indexHTML)
@@ -101,8 +122,71 @@ func indexHandler() http.Handler {
 
 func allTasksHandler(cfg Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		output, _ := db.GetAllTasks(cfg.DB)
-		js, _ := json.Marshal(output)
-		fmt.Fprintf(w, string(js))
+
+		switch r.Method {
+		case ("GET"):
+			getTasks(cfg, w)
+			break
+		case ("POST"):
+			addTask(cfg, w, r)
+		case ("PATCH"):
+			updateTask(cfg, w, r)
+		}
+	})
+}
+
+func getTasks(cfg Config, w http.ResponseWriter) {
+	output, _ := db.GetAllTasks(cfg.DB)
+	js, _ := json.Marshal(output)
+	fmt.Fprintf(w, string(js))
+}
+
+func addTask(cfg Config, w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var task model.Task
+
+	err := decoder.Decode(&task)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	newTask, err := db.AddTask(cfg.DB, task)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	js, _ := json.Marshal(newTask)
+
+	fmt.Fprintf(w, string(js))
+}
+
+func updateTask(cfg Config, w http.ResponseWriter, r *http.Request) {
+
+}
+
+func deleteTask(cfg Config) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+
+		id, err := strconv.Atoi(vars["id"])
+
+		if err != nil {
+			fmt.Print(err)
+			http.Error(w, err.Error(), 500)
+			return
+		}
+
+		err = db.DeleteTask(cfg.DB, model.Task{ID: id})
+
+		if err != nil {
+			fmt.Print(err)
+			http.Error(w, err.Error(), 500)
+			return
+		}
 	})
 }

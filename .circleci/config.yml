@@ -56,7 +56,7 @@ jobs:
 
             export version=$(cat versionfile)
             
-            zip "output/TechTestApp_${version}_linux64.zip" dist/*
+            zip -r "output/TechTestApp_${version}_linux64.zip" dist/*
 
       # build for macos
       - run: 
@@ -81,7 +81,7 @@ jobs:
 
             export version=$(cat versionfile)
 
-            zip "output/TechTestApp_${version}_darwin.zip" dist/*
+            zip -r "output/TechTestApp_${version}_darwin.zip" dist/*
 
       # build windows 64 bit
       - run: 
@@ -110,7 +110,7 @@ jobs:
 
             export version=$(cat versionfile)
 
-            zip "output/TechTestApp_${version}_win64.zip" dist/*
+            zip -r "output/TechTestApp_${version}_win64.zip" dist/*
 
       #build windows 32 bit
       - run: 
@@ -135,7 +135,7 @@ jobs:
 
             export version=$(cat versionfile)
 
-            zip "output/TechTestApp_${version}_win32.zip" dist/*
+            zip -r "output/TechTestApp_${version}_win32.zip" dist/*
             
 
       - run:
@@ -148,7 +148,7 @@ jobs:
             if [ -z "${tagvalue}" ]; then
               go get github.com/tcnksm/ghr
 
-              if [ -z "${prerelease}"]; then
+              if [ -z "${prerelease}" ]; then
                 echo "Found pre-release in version, creating pre-release"
                 ghr -u vibrato -prerelease ${version} output
               else
