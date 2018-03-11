@@ -20,7 +20,7 @@ WARNING: This app is a work in progress and not ready yet
 
 Candidates are provided with this simple web application.
 
-The candidate should then develop a solution to deploy the Latest Release from the GitHub Project to a cloud platform of their choice via an automated process utilising tooling of their choice.
+The candidate should then develop a solution to deploy this application to a cloud platform of their choice via an automated process utilising tooling of their choice.
 
 ## Assessment
 
