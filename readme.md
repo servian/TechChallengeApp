@@ -55,20 +55,20 @@ Candidates will be assessed across the following categories:
 
 #### Coding Style
 
-- Clarity
-- Comments
-- Consistency
+- Clarity of code
+- Comments where relevant
+- Consistency of Coding
 
 #### Security
 
-- Network
-- Secrets
-- Platform Features
+- Network segmentation
+- Secret storage
+- Platform security features
 
 #### Simplicity
 
-- Minimal superfluous dependencies
-- Do not over engineer
+- No superfluous dependencies
+- Do not over engineer the solution
 
 #### Resiliency
 
