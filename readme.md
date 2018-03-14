@@ -14,8 +14,6 @@
 [license-badge]: https://img.shields.io/github/license/vibrato/TechTestApp.svg?style=flat
 [license]: https://github.com/vibrato/TechTestApp/license
 
-WARNING: This app is a work in progress and not ready yet
-
 ## Overview
 
 Candidates are provided with this simple web application.
@@ -105,7 +103,7 @@ update `conf.toml` with database settings
 
 ## Compile from source
 
-`go get -d github.com/vibrato/TechTestApp`
+`go get -d github.com/vibrato/VibratoTechTest`
 
 run `build.sh`
 
