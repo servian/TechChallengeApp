@@ -6,7 +6,7 @@ fi
 
 mkdir -p dist
 
-go build .
+go build -o TechTestApp .
 
 cp TechTestApp dist/
 cp -r assets dist/
