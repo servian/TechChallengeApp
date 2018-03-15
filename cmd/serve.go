@@ -24,8 +24,8 @@ import (
 	"log"
 	"net/http"
 
+	"../daemon"
 	"github.com/spf13/cobra"
-	"github.com/vibrato/TechTestApp/daemon"
 )
 
 // serveCmd represents the serve command

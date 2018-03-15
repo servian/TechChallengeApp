@@ -27,8 +27,8 @@ import (
 
 	"github.com/lib/pq"
 
+	"../model"
 	_ "github.com/lib/pq"
-	"github.com/vibrato/TechTestApp/model"
 )
 
 // Config - configuration for the db package

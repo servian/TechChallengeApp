@@ -24,9 +24,9 @@ import (
 	"fmt"
 	"os"
 
+	"../config"
+	"../daemon"
 	"github.com/spf13/cobra"
-	"github.com/vibrato/TechTestApp/config"
-	"github.com/vibrato/TechTestApp/daemon"
 )
 
 var cfgFile string
