@@ -1,0 +1,10 @@
+VpcCidr: 10.89.32.0/19
+PublicSubnetAz1: 10.89.32.0/23
+PublicSubnetAz2: 10.89.34.0/23
+PublicSubnetAz3: 10.89.36.0/23
+DataSubnetAz1: 10.89.40.0/23
+DataSubnetAz2: 10.89.42.0/23
+DataSubnetAz3: 10.89.44.0/23
+PrivateSubnetAz1: 10.89.48.0/22
+PrivateSubnetAz2: 10.89.52.0/22
+PrivateSubnetAz3: 10.89.56.0/22

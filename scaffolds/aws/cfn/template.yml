@@ -1,0 +1,495 @@
+---
+Description: Network Layout for Environment
+
+Parameters:
+
+  # CIDR inputs are limited to between /16-/28 as those are the AWS limits
+  VpcCidr:
+    Description: CIDR range for whole VPC. e.g. 10.89.0.0/19
+    Type: String
+    AllowedPattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/((1[6-9])|(2[0-8]))
+
+  PublicSubnetAz1: 
+    Description: CIDR range for public subnet in AZ1. e.g. 10.89.0.0/23
+    Type: String
+    AllowedPattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/((1[6-9])|(2[0-8]))
+
+  PublicSubnetAz2: 
+    Description: CIDR range for public subnet in AZ2. e.g. 10.89.2.0/23
+    Type: String
+    AllowedPattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/((1[6-9])|(2[0-8]))
+
+  PublicSubnetAz3:
+    Description: CIDR range for public subnet in AZ3. e.g 10.89.4.0/23
+    Type: String
+    AllowedPattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/((1[6-9])|(2[0-8]))
+
+  DataSubnetAz1:
+    Description: CIDR range for data subnet in AZ1. e.g. 10.89.8.0/23
+    Type: String
+    AllowedPattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/((1[6-9])|(2[0-8]))
+
+  DataSubnetAz2:
+    Description: CIDR range for data subnet in AZ2. e.g. 10.89.10.0/23
+    Type: String
+    AllowedPattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/((1[6-9])|(2[0-8]))
+
+  DataSubnetAz3:
+    Description: CIRD range for data subnet in AZ3. e.g. 10.89.12.0/23
+    Type: String
+    AllowedPattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/((1[6-9])|(2[0-8]))
+
+  PrivateSubnetAz1:
+    Description: CIDR range for private subnet in AZ1. e.g. 10.89.16.0/22
+    Type: String
+    AllowedPattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/((1[6-9])|(2[0-8]))
+
+  PrivateSubnetAz2:
+    Description: CIDR range for private subnet in AZ2. e.g. 10.89.20.0/22
+    Type: String
+    AllowedPattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/((1[6-9])|(2[0-8]))
+
+  PrivateSubnetAz3:
+    Description: CIDR range for private subnet in AZ3. e.g. 10.89.24.0/22
+    Type: String
+    AllowedPattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/((1[6-9])|(2[0-8]))
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-vpc"
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-igw"
+  
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  DHCPOptions:
+    Type: AWS::EC2::DHCPOptions
+    Properties:
+      DomainNameServers:
+      - AmazonProvidedDNS
+      Tags:
+      - Key: Name
+        Value: !Sub "${AWS::StackName}-dhcpoptions"
+  
+  S3Endpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref VPC
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+
+  #############################################################################
+  # Nat Gateways: DO NOT MODIFY
+  #############################################################################
+  
+  NatGateway1EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  NatGateway2EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  NatGateway3EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  NATGateway1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway1EIP.AllocationId
+      SubnetId: !Ref PublicSubnet1
+
+  NATGateway2:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway2EIP.AllocationId
+      SubnetId: !Ref PublicSubnet2
+
+  NATGateway3:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway3EIP.AllocationId
+      SubnetId: !Ref PublicSubnet3
+  
+  #############################################################################
+  # Routes: DO NOT MODIFY
+  #############################################################################
+  
+  # Public Routes
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value:  !Sub "${AWS::StackName}-public"
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation1:
+      Type: AWS::EC2::SubnetRouteTableAssociation
+      Properties:
+        SubnetId: !Ref PublicSubnet1
+        RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnetRouteTableAssociation2:
+      Type: AWS::EC2::SubnetRouteTableAssociation
+      Properties:
+        SubnetId: !Ref PublicSubnet2
+        RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnetRouteTableAssociation3:
+      Type: AWS::EC2::SubnetRouteTableAssociation
+      Properties:
+        SubnetId: !Ref PublicSubnet3
+        RouteTableId: !Ref PublicRouteTable
+
+  # Private Routes
+
+  PrivateRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value:  !Sub "${AWS::StackName}-privateroute-az1"
+
+  PrivateRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value:  !Sub "${AWS::StackName}-privateroute-az1"
+
+  PrivateRouteTable3:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value:  !Sub "${AWS::StackName}-privateroute-az3"
+
+  PrivateRoute1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGateway1
+
+  PrivateRoute2:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGateway2
+
+  PrivateRoute3:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable3
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGateway3
+
+  PrivateSubnetRouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet1
+      RouteTableId: !Ref PrivateRouteTable1
+
+  PrivateSubnetRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet2
+      RouteTableId: !Ref PrivateRouteTable2
+
+  PrivateSubnetRouteTableAssociation3:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet3
+      RouteTableId: !Ref PrivateRouteTable3
+
+  # Data Routes
+
+  DataRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value:  !Sub "${AWS::StackName}-dataroutes-az1"
+
+  DataRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value:  !Sub "${AWS::StackName}-dataroutes-az2"
+
+  DataRouteTable3:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value:  !Sub "${AWS::StackName}-dataroutes-az3"
+
+  DataRoute1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref DataRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGateway1
+
+  DataRoute2:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref DataRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGateway2
+
+  DataRoute3:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref DataRouteTable3
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGateway3
+
+  DataSubnetRouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref DataSubnet1
+      RouteTableId: !Ref DataRouteTable1
+
+  DataSubnetRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref DataSubnet2
+      RouteTableId: !Ref DataRouteTable2
+
+  DataSubnetRouteTableAssociation3:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref DataSubnet3
+      RouteTableId: !Ref DataRouteTable3
+
+  #############################################################################
+  # Subnets: DO NOT MODIFY
+  #############################################################################
+  
+  # Public Subnets
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 0 
+        - !GetAZs ""
+      CidrBlock: !Ref PublicSubnetAz1
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-public-subnet-az1"
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs ""
+      CidrBlock: !Ref PublicSubnetAz2
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-public-subnet-az2"
+
+  PublicSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select 
+        - 2
+        - !GetAZs ""
+      CidrBlock: !Ref PublicSubnetAz3
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-public-subnet-az3"
+
+  # Private Subnets
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 0 
+        - !GetAZs ""
+      CidrBlock: !Ref PrivateSubnetAz1
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-private-subnet-az1"
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs ""
+      CidrBlock: !Ref PrivateSubnetAz2
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-private-subnet-az2"
+
+  PrivateSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select 
+        - 2
+        - !GetAZs ""
+      CidrBlock: !Ref PrivateSubnetAz3
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-private-subnet-az3"
+
+  # Data Subnets
+
+  DataSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 0 
+        - !GetAZs ""
+      CidrBlock: !Ref DataSubnetAz1
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-data-subnet-az1"
+
+  DataSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs ""
+      CidrBlock: !Ref DataSubnetAz2
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-data-subnet-az2"
+
+  DataSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select 
+        - 2
+        - !GetAZs ""
+      CidrBlock: !Ref DataSubnetAz3
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-data-subnet-az3"
+
+Outputs:
+
+  VpcId:
+    Description: A reference to the created VPC
+    Value: !Ref VPC
+    Export:
+        Name: !Sub "${AWS::StackName}-VpcId"
+
+  VpcCidr:
+    Description: A reference to the created VPC
+    Value: !GetAtt VPC.CidrBlock
+    Export:
+        Name: !Sub "${AWS::StackName}-VpcCidr"
+
+  SubnetPublicAz1:
+    Description: A reference to the created public subnet in az1
+    Value: !Ref PublicSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-SubnetPublicAz1"
+  
+  SubnetPublicAz2:
+    Description: A reference to the created public subnet in az2
+    Value: !Ref PublicSubnet2
+    Export:
+      Name: !Sub "${AWS::StackName}-SubnetPublicAz2"
+  
+  SubnetPublicAz3:
+    Description: A reference to the created public subnet in az3
+    Value: !Ref PublicSubnet3
+    Export:
+      Name: !Sub "${AWS::StackName}-SubnetPublicAz3"
+
+  SubnetPrivateAz1:
+    Description: A reference to the created private subnet in az1
+    Value: !Ref PrivateSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-SubnetPrivateAz1"
+  
+  SubnetPrivateAz2:
+    Description: A reference to the created private subnet in az2
+    Value: !Ref PrivateSubnet2
+    Export:
+      Name: !Sub "${AWS::StackName}-SubnetPrivateAz2"
+  
+  SubnetPrivateAz3:
+    Description: A reference to the created private subnet in az3
+    Value: !Ref PrivateSubnet3
+    Export:
+      Name: !Sub "${AWS::StackName}-SubnetPrivateAz3"
+
+  SubnetDataAz1:
+    Description: A reference to the created data subnet in az1
+    Value: !Ref DataSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-SubnetDataAz1"
+  
+  SubnetDataAz2:
+    Description: A reference to the created data subnet in az2
+    Value: !Ref DataSubnet2
+    Export:
+      Name: !Sub "${AWS::StackName}-SubnetDataAz2"
+  
+  SubnetDataAz3:
+    Description: A reference to the created data subnet in az3
+    Value: !Ref DataSubnet3
+    Export:
+      Name: !Sub "${AWS::StackName}-SubnetDataAz3"
