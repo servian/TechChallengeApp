@@ -29,9 +29,9 @@ import (
 	"strconv"
 	"time"
 
-	"../db"
-	"../model"
 	"github.com/gorilla/mux"
+	"github.com/vibrato/TechTestApp/db"
+	"github.com/vibrato/TechTestApp/model"
 )
 
 // Config configuration for ui package

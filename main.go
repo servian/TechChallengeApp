@@ -20,7 +20,7 @@
 
 package main
 
-import "./cmd"
+import "github.com/vibrato/TechTestApp/cmd"
 
 func main() {
 	cmd.Execute()
