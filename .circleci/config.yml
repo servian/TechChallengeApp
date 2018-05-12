@@ -140,6 +140,7 @@ jobs:
       - run:
           name: Package up scaffolding
           command: |
+            export version=$(cat versionfile)
             zip -r "output/scaffolds_${version}.zip" scaffolds
 
       - run:
@@ -153,11 +154,11 @@ jobs:
               go get github.com/tcnksm/ghr
 
               if [ -z "${prerelease}" ]; then
-                echo "Found pre-release in version, creating pre-release"
-                ghr -u vibrato -prerelease ${version} output
-              else
                 echo "No pre-release in version, creating release"
                 ghr -u vibrato ${version} output
+              else
+                echo "Found pre-release in version, creating pre-release"
+                ghr -u vibrato -prerelease ${version} output
               fi
             fi
 
