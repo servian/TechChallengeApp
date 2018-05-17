@@ -13,6 +13,8 @@ RUN ./build.sh \
 
 FROM alpine:latest
 
-COPY --from=build /TechTestApp /TechTestApp
+WORKDIR /TechTestApp
 
-ENTRYPOINT [ "/TechTestApp/TechTestApp" ]
+COPY --from=build /TechTestApp .
+
+ENTRYPOINT [ "./TechTestApp" ]
