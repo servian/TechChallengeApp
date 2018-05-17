@@ -1,0 +1,19 @@
+[[constraint]]
+  name = "github.com/BurntSushi/toml"
+  version = "0.3.0"
+
+[[constraint]]
+  name = "github.com/gorilla/mux"
+  version = "1.6.2"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/lib/pq"
+
+[[constraint]]
+  name = "github.com/spf13/cobra"
+  version = "0.0.3"
+
+[prune]
+  go-tests = true
+  unused-packages = true
