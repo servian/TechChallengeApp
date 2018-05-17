@@ -103,8 +103,20 @@ update `conf.toml` with database settings
 
 ## Compile from source
 
+### Requires
+
+#### dep
+
+`curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh`
+
+### Process
+
 `go get -d github.com/vibrato/VibratoTechTest`
 
 run `build.sh`
 
 the `dist` folder contains the compiled web package
+
+### Docker build
+
+`docker build . -t techtestapp:latest`

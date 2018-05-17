@@ -16,5 +16,8 @@
 # Build distribution folder
 dist/
 
+# Vendor folder
+/vendor
+
 # Output Binary
 TechTestApp

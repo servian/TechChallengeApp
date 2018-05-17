@@ -6,6 +6,8 @@ fi
 
 mkdir -p dist
 
+dep ensure
+
 go build -o TechTestApp .
 
 cp TechTestApp dist/
