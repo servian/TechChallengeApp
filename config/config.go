@@ -21,9 +21,7 @@
 package config
 
 import (
-	"io/ioutil"
-
-	"github.com/BurntSushi/toml"
+	"github.com/spf13/viper"
 )
 
 // internalConfig wraps the config values as the toml library was
@@ -38,25 +36,40 @@ type Config struct {
 	ListenPort string
 }
 
-// LoadConfig loads the configuration from file,
-// and falls back to default calues if file
-// could not be be loaded
-func LoadConfig(path string) (Config, error) {
-	var conf = Config{}
+func LoadConfig() (*Config, error) {
+	var conf = &Config{}
 
-	bytes, err := ioutil.ReadFile(path)
+	v := viper.New()
+
+	v.SetConfigName("conf")
+	v.SetConfigType("toml")
+	v.AddConfigPath(".")
+
+	v.SetEnvPrefix("VTT")
+	v.AutomaticEnv()
+
+	v.SetDefault("DbUser", "postgres")
+	v.SetDefault("DbPassword", "postgres")
+	v.SetDefault("DbName", "postgres")
+	v.SetDefault("DbPort", "postgres")
+	v.SetDefault("DbHost", "localhost")
+
+	v.SetDefault("ListenHost", "127.0.0.1")
+	v.SetDefault("ListenPort", "3000")
+
+	err := v.ReadInConfig() // Find and read the config file
 
 	if err != nil {
-		return conf, err
+		return nil, err
 	}
 
-	tomlcontent := string(bytes)
-
-	_, err = toml.Decode(tomlcontent, &conf)
-
-	if err != nil {
-		return conf, err
-	}
+	conf.DbUser = v.GetString("DbUser")
+	conf.DbPassword = v.GetString("DbPassword")
+	conf.DbName = v.GetString("DbName")
+	conf.DbHost = v.GetString("DbHost")
+	conf.DbPort = v.GetString("DbPort")
+	conf.ListenHost = v.GetString("ListenHost")
+	conf.ListenPort = v.GetString("ListenPort")
 
 	return conf, nil
 }

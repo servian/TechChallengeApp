@@ -71,7 +71,7 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	conf, err := config.LoadConfig("conf.toml")
+	conf, err := config.LoadConfig()
 
 	if err != nil {
 		fmt.Print(err)
