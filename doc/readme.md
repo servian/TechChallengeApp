@@ -62,6 +62,12 @@ update `conf.toml` with database settings
 └── ui          # Web UI, routing, connectivity
 ```
 
+## Application Architecture
+
+![architecture](images/architecture.png)
+
+The application itself is a React based single page application (SPA) with an API backend and a postgres database used for data persistence. It's been designed to be completely stateless and will deploy into most types of environments, be it container based or VM based.
+
 ## Build from source
 
 ### Reqirements

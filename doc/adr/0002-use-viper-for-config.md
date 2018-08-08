@@ -1,4 +1,4 @@
-# 2. User viper for config
+# 2. Use viper for config
 
 Date: 2018-08-08
 
