@@ -4,7 +4,7 @@ This scaffold will deploy the network layer in AWS using cloudformation.
 
 ## Requirements
 
-stackup - https://github.com/realestate-com-au/stackup
+stackup -[https://github.com/realestate-com-au/stackup](https://github.com/realestate-com-au/stackup)
 
 ## Instructions
 
@@ -18,7 +18,7 @@ To remove run `teardown.sh` from the scaffolding directory
 
 A VPC with networking, routing and nats.
 
-The VPC is laid out with 3 layers, public, private, and data. 
+The VPC is laid out with 3 layers, public, private, and data.
 
 > The template assumes 3 AZs, so if you are deploying somewhere with less it will need to be updated.
 

@@ -68,6 +68,12 @@ update `conf.toml` with database settings
 
 The application itself is a React based single page application (SPA) with an API backend and a postgres database used for data persistence. It's been designed to be completely stateless and will deploy into most types of environments, be it container based or VM based.
 
+## Deploying into the cloud - scaffolds
+
+The scaffolding folder contains some base infrastructure that can be used to help deploying the solution. It will provide a base layer that can be expected to normally be already set up before an application deployment will be started.
+
+Currently there is an AWS three layer network solution available. Details can be found in the [readme](scaffolds/aws/cfn/readme.md) in the scaffolding folder. This contains all the information required to deploy the scaffold.
+
 ## Build from source
 
 ### Reqirements
