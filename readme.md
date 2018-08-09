@@ -16,107 +16,18 @@
 
 ## Overview
 
-Candidates are provided with this simple web application.
+This is the Vibrato techtest application, it is used as a simple application to help meassure a candidates technical capability and fit with Vibrato. The application itself is a simple GTD Golang application that is backed by a Postgres database.
 
-The candidate should then develop a solution to deploy this application to a cloud platform of their choice via an automated process utilising tooling of their choice.
+The technical test Vibrato sends out to potential candidates is focused on deploying this application into a cloud envirment of choice.
 
-## Assessment
+More details about the application can be found in the [document folder](doc/readme.md)
 
-Candidates should assume that the solution will be deployed to an empty cloud subscription with no existing infrastructure in place.
+## Taking the test
 
-There *should not* be a requirement for Vibrato to access a candidate's cloud services account to deploy this solution.
+For more information about taking the test and joining Vibrato's amazing team, please head over to our [recruitment page](https://vibrato.recruitee.com/) and apply there. Our recruitment team will reach out to you about the details of the test and be able to answer any questions you have about Vibrato or the test itself.
 
-Demonstrate regular commits and good git workflow practices.
+Information about the assessment is available in the [assessment.md file](ASSESSMENT.md)
 
-There is no time limit for this test.
+## Found an issue?
 
-Candidates should provide documentation on their solution, including:
-
-- Pre requisites for your deployment solution.
-- High level architectural overview of your deployment.
-- Process instructions for provisioning your solution.
-
-## Assessment Grading Criteria
-
-### Key Criteria
-
-Candidates should take care to ensure that thier submission meets the following criteria:
-
-- Must be able to start from a cloned git repo.
-- Must document any pre-requisites clearly.
-- Must be contained within a GitHub project.
-- Must deploy via an automated process.
-
-### Grading
-
-Candidates will be assessed across the following categories:
-
-#### Coding Style
-
-- Clarity of code
-- Comments where relevant
-- Consistency of Coding
-
-#### Security
-
-- Network segmentation
-- Secret storage
-- Platform security features
-
-#### Simplicity
-
-- No superfluous dependencies
-- Do not over engineer the solution
-
-#### Resiliency
-
-- Auto scaling and highly available frontend
-- Highly available Database
-
-## Tech Test Application
-
-Single page application designed to be ran inside a container or on a vm (IaaS) with a postgres database to store data.
-
-It is completely self contained, and should not require any additional dependencies to run.
-
-## Install
-
-1. Download latest binary from release
-2. unzip into desired location
-3. and you should be good to go
-
-## Start server
-
-update `conf.toml` with database settings
-
-`./TechTestApp updatedb` to create a database and seed it with test data
-
-`./TechTestApp serve` will start serving requests
-
-## Interesting endpoints
-
-`/` - root endpoint that will load the SPA
-
-`/api/tasks/` - api endpoint to create, read, update, and delete tasks
-
-`/healthcheck/` - Used to validate the health of the application
-
-## Compile from source
-
-### Requires
-
-#### dep
-
-`curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh`
-
-### Process
-
-`go get -d github.com/vibrato/VibratoTechTest`
-
-run `build.sh`
-
-the `dist` folder contains the compiled web package
-
-### Docker build
-
-`docker build . -t techtestapp:latest`
+If you've found an issue with the application, the documentation, or anything else, we are happy to take contributions. Please raise an issue in the [github repository](https://github.com/vibrato/TechTestApp/issues) and read through the contribution rules found the [CONTRIBUTING.md](CONTRIBUTING.md) file for the details.
