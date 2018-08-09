@@ -46,7 +46,7 @@ update `conf.toml` with database settings
 
 ## Repository structure
 
-``` python
+``` sh
 .
 ├── assets      # Asset directory for the application
 │   ├── css     # Contains all the css files for the web site
@@ -67,12 +67,6 @@ update `conf.toml` with database settings
 ![architecture](images/architecture.png)
 
 The application itself is a React based single page application (SPA) with an API backend and a postgres database used for data persistence. It's been designed to be completely stateless and will deploy into most types of environments, be it container based or VM based.
-
-## Deploying into the cloud - scaffolds
-
-The scaffolding folder contains some base infrastructure that can be used to help deploying the solution. It will provide a base layer that can be expected to normally be already set up before an application deployment will be started.
-
-Currently there is an AWS three layer network solution available. Details can be found in the [readme](scaffolds/aws/cfn/readme.md) in the scaffolding folder. This contains all the information required to deploy the scaffold.
 
 ## Build from source
 
@@ -118,11 +112,11 @@ Releases are deployed and managed through github, it's an automated process that
 
 To create a new release, update `../cmd/version.go` with the new version and merge that into the master branch.
 
-The commit message on the merge, will be the releas message, so make sure it contains the release notes.
+The commit message on the merge, will be the release message, so make sure it contains the release notes.
 
 A tag will be created on the master branch if the build and release is successful.
 
-We use semver for versioning, `major.minor.patch[-pre-release]` and the CI solution has been configured to take note of the `-pre-release` tag of the version and upload it as a pre-release in git if it's included. So to release a new full release, make sure to not include `-pre-release` and visa versa.
+We use semver for versioning, `major.minor.patch[-pre-release]` and the CI solution has been configured to take note of the `-pre-release` tag of the version and upload it as a pre-release in git if it's included. So to release a new full release, make sure to not include `-pre-release` and vice versa.
 
 Builds will be produced for:
 

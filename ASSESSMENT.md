@@ -22,7 +22,7 @@ Candidates should take care to ensure that thier submission meets the following 
 
 - Must be able to start from a cloned git repo.
 - Must document any pre-requisites clearly.
-- Must be contained within a GitHub project.
+- Must be contained within a GitHub repository.
 - Must deploy via an automated process.
 
 ### Grading
@@ -37,7 +37,7 @@ Candidates will be assessed across the following categories:
 
 #### Security
 
-- Network segmentation
+- Network segmentation (if applicable to the implementation)
 - Secret storage
 - Platform security features
 
