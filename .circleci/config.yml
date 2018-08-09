@@ -136,12 +136,6 @@ jobs:
             export version=$(cat versionfile)
 
             zip -r "output/TechTestApp_${version}_win32.zip" dist/*
-            
-      - run:
-          name: Package up scaffolding
-          command: |
-            export version=$(cat versionfile)
-            zip -r "output/scaffolds_${version}.zip" scaffolds
 
       - run:
           name: Release if new version
