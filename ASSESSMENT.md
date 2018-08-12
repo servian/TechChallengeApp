@@ -44,7 +44,7 @@ Candidates will be assessed across the following categories:
 #### Simplicity
 
 - No superfluous dependencies
-- Do not over engineer the solution
+- Do not overengineer the solution
 
 #### Resiliency
 

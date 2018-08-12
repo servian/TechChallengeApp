@@ -16,6 +16,17 @@
 
 The Vibrato techtest app is a golang application used for testing candidates applying to work with Vibrato.
 
+## Documentation structure
+
+[readme.md](readme.md) - this file
+[config.md](config.md) - how to configure the application
+
+### Architecture Design Records (ADR)
+
+Architectural decisions are recorded in the `adr` folder, details on why can be found in the [first entry](adr/0001-record-architecture-decisions.md)
+
+Naming convention: `####-<decision title>` where the first 4 digits are iterated by 1 for each record.
+
 ## Tech Test Application
 
 Single page application designed to be ran inside a container or on a vm (IaaS) with a postgres database to store data.
@@ -30,7 +41,7 @@ It is completely self contained, and should not require any additional dependenc
 
 ## Start server
 
-update `conf.toml` with database settings
+update `conf.toml` with database settings (details on how to configure the application can be found in [config.md](config.md))
 
 `./TechTestApp updatedb` to create a database and seed it with test data
 
@@ -58,7 +69,6 @@ update `conf.toml` with database settings
 ├── db          # Contains the data layet and db connectivity logic
 ├── doc         # Documentation folder
 ├── model       # Data model for the application
-├── scaffolds   # Scaffolds for deplying the application onto the cloud
 └── ui          # Web UI, routing, connectivity
 ```
 
