@@ -24,4 +24,4 @@ Example:
 * `DbPort` - port to connect to the database server on
 * `DbHost` - host to connect to, ip or dns entry
 * `ListenHost` - listener configuration for the application, 0.0.0.0 for all IP, or specify ip to listen on
-* `ListenPort` - port to bind on the local server 
+* `ListenPort` - port to bind on the local server
