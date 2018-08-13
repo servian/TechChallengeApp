@@ -31,7 +31,7 @@ jobs:
             mkdir output
             go build -v -o TechTestApp .
             ls
-            ./TechTestApp version | sed -e 's/Version: /v./' > versionfile
+            ./TechTestApp --version | sed -e 's/TechTestApp version /v./' > versionfile
 
 
       - run: 

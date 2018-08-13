@@ -120,7 +120,7 @@ Continuous integration is managed through circleci and the build on the master b
 
 Releases are deployed and managed through github, it's an automated process that is executed through the CI solution
 
-To create a new release, update `../cmd/version.go` with the new version and merge that into the master branch.
+To create a new release, update `../cmd/root.go` with the new version and merge that into the master branch.
 
 The commit message on the merge, will be the release message, so make sure it contains the release notes.
 
