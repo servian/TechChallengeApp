@@ -8,12 +8,12 @@ Accepted
 
 ## Context
 
-Context here...
+Application configuration can be overridden by command line flags and environment variables. Is this something we want to take advantage of?
 
 ## Decision
 
-Decision here...
+No, configuration will be limited to the configuration file for sake of simplicity and having a single way to configure the application.
 
 ## Consequences
 
-Consequences here...
+Command line parameters and environment variables will be ignored and not taken into account when starting the application
