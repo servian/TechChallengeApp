@@ -47,7 +47,7 @@ func getDbInfo(cfg Config) string {
 
 // RebuildDb drops the database and recreates it
 func RebuildDb(cfg Config) error {
-	dbinfo := fmt.Sprintf("host=%s port=%s user=%s password=%s sslmode=disable",
+	dbinfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=postgres sslmode=disable",
 		cfg.DbHost, cfg.DbPort, cfg.DbUser, cfg.DbPassword)
 
 	db, err := sql.Open("postgres", dbinfo)

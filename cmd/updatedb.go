@@ -41,21 +41,26 @@ var updatedbCmd = &cobra.Command{
 	},
 }
 
+var skipCreateDbOption bool
+
 func init() {
 	rootCmd.AddCommand(updatedbCmd)
+	updatedbCmd.Flags().BoolVarP(&skipCreateDbOption, "skip-create-db", "s", false, "Use to skip the creation of the database")
 }
 
 func updateDb(cfg db.Config) error {
 
-	fmt.Println("Dropping and recreating database: " + cfg.DbName)
-	err := db.RebuildDb(cfg)
+	if !skipCreateDbOption {
+		fmt.Println("Dropping and recreating database: " + cfg.DbName)
+		err := db.RebuildDb(cfg)
 
-	if err != nil {
-		return err
+		if err != nil {
+			return err
+		}
 	}
 
 	fmt.Println("Dropping and recreating table: tasks")
-	err = db.CreateTable(cfg)
+	err := db.CreateTable(cfg)
 
 	if err != nil {
 		return err
