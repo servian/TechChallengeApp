@@ -43,7 +43,7 @@ It is completely self contained, and should not require any additional dependenc
 
 update `conf.toml` with database settings (details on how to configure the application can be found in [config.md](config.md))
 
-`./TechTestApp updatedb` to create a database and seed it with test data
+`./TechTestApp updatedb` to create a database, tables, and seed it with test data. Use `-s` to skip creating the database.
 
 `./TechTestApp serve` will start serving requests
 
