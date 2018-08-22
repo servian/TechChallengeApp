@@ -1,6 +1,6 @@
 # TechTestApp - Configuration
 
-This doc outlines how to configure the application using the config file. All configuration of the application happens through the configuration file at this point. This was done to keep the application simple and easy to deploy.
+This doc outlines how to configure the application using the config file. The main way to configure the application is through the configuration file, but it is possible to override the settings using environment variables.
 
 ## Configuration file
 
@@ -25,3 +25,11 @@ Example:
 * `DbHost` - host to connect to, ip or dns entry
 * `ListenHost` - listener configuration for the application, 0.0.0.0 for all IP, or specify ip to listen on
 * `ListenPort` - port to bind on the local server
+
+## Environment Variables
+
+The application will look for environment variables that are able to override the configuration defined in the `conf.toml` file. These environment varaibles are prefixed with `VTT` and follow this pattern `VTT_<conf value>`. e.g. `VTT_LISTENPORT`.
+
+Environment variables has precedence over configuration from the `conf.toml` file
+
+More details on each of the configuration values can be found in the section on the configuration file.
