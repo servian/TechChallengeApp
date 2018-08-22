@@ -54,7 +54,7 @@ var rootCmd = &cobra.Command{
 This application is used as part of testing potential candiates at Vibrato.
 
 Please visit http://vibrato.com.au for more details`,
-	Version: "0.3.2",
+	Version: "0.3.3",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
