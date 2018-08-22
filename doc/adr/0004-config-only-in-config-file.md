@@ -4,7 +4,7 @@ Date: 2018-08-12
 
 ## Status
 
-Accepted
+Superceded by [6. environment variables overrides config file](0006-environment-variables-overrides-config-file.md)
 
 ## Context
 
