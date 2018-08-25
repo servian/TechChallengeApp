@@ -21,6 +21,8 @@
 package config
 
 import (
+	"strings"
+
 	"github.com/spf13/viper"
 )
 
@@ -63,13 +65,13 @@ func LoadConfig() (*Config, error) {
 		return nil, err
 	}
 
-	conf.DbUser = v.GetString("DbUser")
-	conf.DbPassword = v.GetString("DbPassword")
-	conf.DbName = v.GetString("DbName")
-	conf.DbHost = v.GetString("DbHost")
-	conf.DbPort = v.GetString("DbPort")
-	conf.ListenHost = v.GetString("ListenHost")
-	conf.ListenPort = v.GetString("ListenPort")
+	conf.DbUser = strings.TrimSpace(v.GetString("DbUser"))
+	conf.DbPassword = strings.TrimSpace(v.GetString("DbPassword"))
+	conf.DbName = strings.TrimSpace(v.GetString("DbName"))
+	conf.DbHost = strings.TrimSpace(v.GetString("DbHost"))
+	conf.DbPort = strings.TrimSpace(v.GetString("DbPort"))
+	conf.ListenHost = strings.TrimSpace(v.GetString("ListenHost"))
+	conf.ListenPort = strings.TrimSpace(v.GetString("ListenPort"))
 
 	return conf, nil
 }
