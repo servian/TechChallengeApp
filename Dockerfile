@@ -23,4 +23,4 @@ COPY conf.toml ./conf.toml
 
 COPY --from=build /TechTestApp TechTestApp
 
-ENTRYPOINT [ "./TechTestApp" ]
+ENTRYPOINT [ "./TechTestApp",  "serve" ]
