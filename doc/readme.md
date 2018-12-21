@@ -133,3 +133,5 @@ Builds will be produced for:
 * MacOS (amd64)
 * Linux (x86/amd64)
 * Windows (x86/amd64)
+
+### Note: If you are setting up the database using RDS, do not run the `./TechTestApp updatedb` command. Instead run `./TechTestApp updatedb -s` 
