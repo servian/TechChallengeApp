@@ -20,9 +20,23 @@
 
 package model
 
+// A task
+// swagger:model
 type Task struct {
-	ID       int
-	Priority int
-	Title    string
-	Complete bool
+	// the id of the task
+	// required: true
+	// min: 0
+	ID int `json:"id"`
+
+	// Where the task fits in the list
+	// required: true
+	// min: 0
+	Priority int `json:"priority"`
+
+	// The task name or description
+	// required: true
+	Title string `json:"title"`
+
+	// Is the task finished
+	Complete bool `json:"complete"`
 }

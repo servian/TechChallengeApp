@@ -18,6 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+// Vibrato Tech Test Application
+//
+// This application is used as part of the Vibrato Technical Assessment.
+//
+//     Version: 1.0
+//     Contact: Thomas Winsnes<tom@vibrato.com.au> https://www.vibrato.com.au
+//
+// swagger:meta
 package main
 
 import "github.com/vibrato/TechTestApp/cmd"
