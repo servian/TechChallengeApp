@@ -7,10 +7,10 @@ class TaskContainer extends React.Component {
 
         this.state ={
             tasks: [{
-                Id: 0, 
-                Title: "Loading...", 
-                Completed: false, 
-                Priority: 0
+                id: 0,
+                title: "Loading...",
+                completed: false,
+                priority: 0
             }]
         };
     }
@@ -30,22 +30,22 @@ class TaskContainer extends React.Component {
     deleteTask(task) {
 
         console.log(task)
-        
+
         var filteredTasks = this.state.tasks.filter(function (item) {
-            return (item.ID !== task.ID);
+            return (item.id !== task.id);
           });
 
         console.log(filteredTasks)
-        
-        this.setState({tasks: filteredTasks}); 
 
-        fetch("/api/task/" + task.ID + "/", {
+        this.setState({tasks: filteredTasks});
+
+        fetch("/api/task/" + task.id + "/", {
             method: "DELETE",
         })
 
 
     }
-    
+
     render() {
 
       return (
@@ -70,8 +70,8 @@ class TaskList extends React.Component {
     render() {
         return(
             <ul className="theList">
-            {this.props.tasks.map(task => 
-                <li key={task.Id}><span className="delete" onClick={() => this.delete(task)}><i className="fas fa-trash"></i></span><span className="title">{task.Title}</span></li>
+            {this.props.tasks.map(task =>
+                <li key={task.id}><span className="delete" onClick={() => this.delete(task)}><i className="fas fa-trash"></i></span><span className="title">{task.title}</span></li>
             )}
             </ul>
         )
@@ -86,10 +86,10 @@ class TaskForm extends React.Component {
     }
 
     state = {
-        Title: "",
-        Priority: 1000,
-        Completed: false,
-        Id: 0,
+        title: "",
+        priority: 1000,
+        completed: false,
+        id: 0,
     };
 
     onChange = (e) => {
@@ -104,7 +104,7 @@ class TaskForm extends React.Component {
         event.preventDefault();
 
         const data = this.state
-        
+
         console.log(data)
 
         if (data.Title === "") {
@@ -119,7 +119,7 @@ class TaskForm extends React.Component {
         .then(data => this.props.onAddTask(data))
         .then(o => this.setState({Title: ""}));
     }
-    
+
     render() {
 		return (
 			<form onSubmit={this.handleSubmit} className="taskForm">
@@ -132,4 +132,4 @@ class TaskForm extends React.Component {
 
 
 ReactDOM.render( <TaskContainer/>, document.querySelector("#root"));
-  
+

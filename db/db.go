@@ -69,7 +69,7 @@ func RebuildDb(cfg Config) error {
 	}
 
 	query = fmt.Sprintf(`CREATE DATABASE %s
-WITH 
+WITH
 OWNER = %s
 ENCODING = 'UTF8'
 LC_COLLATE = 'en_US.utf8'
@@ -194,7 +194,7 @@ func getSeedTasks() []model.Task {
 	return tasks
 }
 
-// GetAllTasks lists ass tasks in the database
+// GetAllTasks lists all tasks in the database
 func GetAllTasks(cfg Config) ([]model.Task, error) {
 
 	var tasks []model.Task
