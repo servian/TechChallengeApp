@@ -1,14 +1,13 @@
 FROM golang:alpine AS build
 
-RUN apk add --no-cache curl git gcc linux-headers musl-dev
+RUN apk add --no-cache curl git alpine-sdk
 
 RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
-ARG GO_SWAGGER_VERSION=0.18.0
 ARG SWAGGER_UI_VERSION=3.20.9
 
-RUN curl -sfL -o /usr/local/bin/swagger https://github.com/go-swagger/go-swagger/releases/download/v$GO_SWAGGER_VERSION/swagger_linux_amd64 \
-    && chmod +x /usr/local/bin/swagger \
+RUN go get -d -v github.com/go-swagger/go-swagger \
+    && go install github.com/go-swagger/go-swagger/cmd/swagger \
     && curl -sfL https://github.com/swagger-api/swagger-ui/archive/v$SWAGGER_UI_VERSION.tar.gz | tar xz -C /tmp/ \
     && mv /tmp/swagger-ui-$SWAGGER_UI_VERSION /tmp/swagger \
     && sed -i 's#"https://petstore\.swagger\.io/v2/swagger\.json"#"./swagger.json"#g' /tmp/swagger/dist/index.html
