@@ -28,11 +28,11 @@ spec:
               containerPort: 3000
               protocol: TCP
           env:
-{{- include "techtestapp.environment" . | indent 12 }}
             - name: VTT_LISTENHOST
               value: "0.0.0.0"
-            - name: VTT_LISTENPORT:
+            - name: VTT_LISTENPORT
               value: 3000
+{{ include "techtestapp.environment" . | indent 12 }}
           livenessProbe:
             httpGet:
               path: /

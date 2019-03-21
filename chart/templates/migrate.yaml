@@ -23,7 +23,7 @@ spec:
             - updatedb
             - "--skip-create-db"
           env:
-{{- include "techtestapp.environment" . | indent 12 }}
+{{ include "techtestapp.environment" . | indent 12 }}
       restartPolicy: Never
     {{- with .Values.nodeSelector }}
       nodeSelector:

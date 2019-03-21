@@ -24,6 +24,10 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 {{- end -}}
 
+{{- define "techtestapp.postgresql.fullname" -}}
+{{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{/*
 Create chart name and version as used by the chart label.
 */}}
@@ -34,14 +38,14 @@ Create chart name and version as used by the chart label.
 {{- define "techtestapp.environment" -}}
 {{- if .Values.postgresql.enabled -}}
 - name: VTT_DBUSER
-  value: "{{ .Values.posgresql.postgresqlUsername }}"
+  value: "{{ .Values.postgresql.postgresqlUsername }}"
 - name: VTT_DBNAME
   value: "{{ .Values.postgresql.postgresqlDatabase }}"
 - name: VTT_DBPASSWORD
   value: "{{ .Values.postgresql.postgresqlPassword }}"
 - name: VTT_DBHOST
   value: {{ template "techtestapp.postgresql.fullname" . }}
-{{- else }}
+{{- else -}}
 
-{{- end -}
+{{- end -}}
 {{- end -}}
