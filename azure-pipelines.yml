@@ -14,4 +14,12 @@ variables:
 
 steps:
 - script: docker build -f Dockerfile -t $(imageName) .
-  displayName: 'docker build'
+  displayName: 'Build Image'
+
+- task: Docker@0
+  displayName: 'Push Image'
+  inputs:
+    azureSubscription: 'Microsoft Azure Sponsorship (02ca0539-ff27-4fe9-88d5-c6907c6374c4)'
+    azureContainerRegistry: '{"loginServer":"chrisfowlesaksdemo.azurecr.io", "id" : "/subscriptions/02ca0539-ff27-4fe9-88d5-c6907c6374c4/resourceGroups/chrisfowles-aks-experiment/providers/Microsoft.ContainerRegistry/registries/chrisfowlesaksdemo"}'
+    action: 'Push an image'
+    includeLatestTag: true
