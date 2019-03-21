@@ -20,7 +20,7 @@ spec:
         - name: db-migrate
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           command:
-            - TechTestApp
+            - ./TechTestApp
             - updatedb
             - "--skip-create-db"
           env:
