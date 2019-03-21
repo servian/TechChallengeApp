@@ -1,0 +1,5 @@
+apiVersion: v1
+appVersion: "1.0"
+description: Vibrato Tech Test App Helm Chart
+name: techtestapp
+version: 0.1.0
