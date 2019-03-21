@@ -31,7 +31,7 @@ spec:
             - name: VTT_LISTENHOST
               value: "0.0.0.0"
             - name: VTT_LISTENPORT
-              value: 3000
+              value: "3000"
 {{ include "techtestapp.environment" . | indent 12 }}
           livenessProbe:
             httpGet:
