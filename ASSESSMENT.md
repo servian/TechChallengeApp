@@ -2,7 +2,7 @@
 
 Candidates should assume that the solution will be deployed to an empty cloud subscription with no existing infrastructure in place.
 
-There *should not* be a requirement for Vibrato to access a candidate's cloud services account to deploy this solution.
+There *should not* be a requirement for Servian to access a candidate's cloud services account to deploy this solution.
 
 Demonstrate regular commits and good git workflow practices.
 
@@ -89,7 +89,7 @@ update `conf.toml` with database settings
 
 ### Process
 
-`go get -d github.com/vibrato/VibratoTechTest`
+`go get -d github.com/Servian/TechTestApp`
 
 run `build.sh`
 

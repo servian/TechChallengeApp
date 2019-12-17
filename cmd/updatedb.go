@@ -1,4 +1,4 @@
-// Copyright © 2018 Thomas Winsnes <tom@vibrato.com.au>
+// Copyright © 2018 Servian
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/servian/TechTestApp/db"
 	"github.com/spf13/cobra"
-	"github.com/vibrato/TechTestApp/db"
 )
 
 // updatedbCmd represents the updatedb command

@@ -1,4 +1,4 @@
-// Copyright © 2018 Thomas Winsnes <tom@vibrato.com.au>
+// Copyright © 2018 Servian
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ const indexHTML = `
 <html>
   <head>
     <meta charset="utf-8">
-	<title>Vibrato Tech Test App</title>
+	<title>Servian Tech Test App</title>
 	<link rel="stylesheet" href="/css/site.css" type="text/css" />
 	<link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">

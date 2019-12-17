@@ -1,4 +1,4 @@
-// Copyright © 2018 Thomas Winsnes <tom@vibrato.com.au>
+// Copyright © 2018 Servian
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/servian/TechTestApp/daemon"
 	"github.com/spf13/cobra"
-	"github.com/vibrato/TechTestApp/daemon"
 )
 
 // serveCmd represents the serve command

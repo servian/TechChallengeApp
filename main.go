@@ -1,4 +1,4 @@
-// Copyright © 2018 Thomas Winsnes <tom@vibrato.com.au>
+// Copyright © 2018 Servian
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@
 // swagger:meta
 package main
 
-import "github.com/vibrato/TechTestApp/cmd"
+import "github.com/servian/TechTestApp/cmd"
 
 func main() {
 	cmd.Execute()

@@ -1,4 +1,4 @@
-// Copyright © 2018 Thomas Winsnes <tom@vibrato.com.au>
+// Copyright © 2018 Servian
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/vibrato/TechTestApp/db"
+	"github.com/servian/TechTestApp/db"
 )
 
 // Config configuration for ui package

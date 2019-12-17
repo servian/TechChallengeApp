@@ -1,4 +1,4 @@
-// Copyright © 2018 Thomas Winsnes <tom@vibrato.com.au>
+// Copyright © 2018 Servian
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/servian/TechTestApp/config"
+	"github.com/servian/TechTestApp/daemon"
 	"github.com/spf13/cobra"
-	"github.com/vibrato/TechTestApp/config"
-	"github.com/vibrato/TechTestApp/daemon"
 )
 
 var cfgFile string
@@ -35,25 +35,21 @@ var cfg *daemon.Config
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "TechTestApp",
-	Short: "Application used to test potential candidates at Vibrato",
+	Short: "Application used to test potential candidates at Servian",
 	Long: `
-   /*.                       ,//                                                                               
- ##%&&%%%&%            .&&%%%%%%#(                                                                             
-  */****%&%%,         *%&&&/(((((                                                                              
-   ,***/*(%%#,       ,%%%&*((#((                                                                               
-    ,,*/**(((#*     /#%%&//###*                                                                                
-     ,//*//(((//   (#%%(//.%%,         */     ,(    */    *((((,     ,((((/         /      (((((((     *(##(.  
-      ,//*//(((/* (#%%#//,,%,           (*   .#     */    */   (*    ,(   .#       *(*        #.     .#.    *( 
-       .#(*(((#/%%#%%##/**/.             (* .#      */    *(((#/     ,(**/(/      *( (,       #.     (.      (*
-         ##*,((%%%#%/((//(                ((#       */    */   ,(    ,( .#*      *(   ((      #.     //      #.
-         .%(/,*#%%%*/((((                  (,       */    *(///#*    ,(   *(    .#     (*     #.      ,#/**((  
-           %(/,,*#/#(((*                                                                                       
-            /**,,(#(//,                                                                                        
-             ***,(###,                                                                                         
+.:ooooool,      .:odddddl;.      .;ooooc. .l,          ;c.    ::.      'coddddoc'         ,looooooc.                  
+'kk;....';,    .lOx:'...,cxkc.   .dOc....  .xO'        ,0d.   .kk.    ,xko;....;okx,     .xkl,....;dOl.                
+:Xl           .xO,         :0d.  ;Kl        ,0o       .dO'    .kk.   :0d.        .d0:   .xO'        lK:                
+.oOxc,.       lKl...........oK:  :Kc         l0;      :Kc     .kk.  .Ok.          .kO.  '0d         '0d                
+  .;ldddo;.   oXkdddddddddddxx,  :Kc         .kk.    .Ox.     .kk.  '0d            d0'  '0d         '0d                
+	   .cOk.  lKc                :Kc          :0l    o0;      .kk.  .Ok.          .k0'  '0d         '0d                
+		 cXc  .xO;         ..    :Kc          .d0'  ;0o       .kk.   :0d.        .dN0'  '0d         '0d                
+,c,....'cOx.   .lOxc,...':dkc.   :Kc           'Ox',kk.       .kk.    ,xko;'..';okk00,  '0d         '0d   ';;;;;;;;;;,.
+'looooool;.      .;ldddddo:.     'l'            .lool.         ::       'coddddoc'.;l.  .l;         .c;  .cxxxxxxxxxxo.
 
-This application is used as part of testing potential candiates at Vibrato.
+This application is used as part of testing potential candiates at Sevian.
 
-Please visit http://vibrato.com.au for more details`,
+Please visit http://Servian.com for more details`,
 	Version: "0.5.0",
 }
 
