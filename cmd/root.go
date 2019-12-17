@@ -37,19 +37,15 @@ var rootCmd = &cobra.Command{
 	Use:   "TechTestApp",
 	Short: "Application used to test potential candidates at Servian",
 	Long: `
-   /*.                       ,//                                                                               
- ##%&&%%%&%            .&&%%%%%%#(                                                                             
-  */****%&%%,         *%&&&/(((((                                                                              
-   ,***/*(%%#,       ,%%%&*((#((                                                                               
-    ,,*/**(((#*     /#%%&//###*                                                                                
-     ,//*//(((//   (#%%(//.%%,         */     ,(    */    *((((,     ,((((/         /      (((((((     *(##(.  
-      ,//*//(((/* (#%%#//,,%,           (*   .#     */    */   (*    ,(   .#       *(*        #.     .#.    *( 
-       .#(*(((#/%%#%%##/**/.             (* .#      */    *(((#/     ,(**/(/      *( (,       #.     (.      (*
-         ##*,((%%%#%/((//(                ((#       */    */   ,(    ,( .#*      *(   ((      #.     //      #.
-         .%(/,*#%%%*/((((                  (,       */    *(///#*    ,(   *(    .#     (*     #.      ,#/**((  
-           %(/,,*#/#(((*                                                                                       
-            /**,,(#(//,                                                                                        
-             ***,(###,                                                                                         
+.:ooooool,      .:odddddl;.      .;ooooc. .l,          ;c.    ::.      'coddddoc'         ,looooooc.                  
+'kk;....';,    .lOx:'...,cxkc.   .dOc....  .xO'        ,0d.   .kk.    ,xko;....;okx,     .xkl,....;dOl.                
+:Xl           .xO,         :0d.  ;Kl        ,0o       .dO'    .kk.   :0d.        .d0:   .xO'        lK:                
+.oOxc,.       lKl...........oK:  :Kc         l0;      :Kc     .kk.  .Ok.          .kO.  '0d         '0d                
+  .;ldddo;.   oXkdddddddddddxx,  :Kc         .kk.    .Ox.     .kk.  '0d            d0'  '0d         '0d                
+	   .cOk.  lKc                :Kc          :0l    o0;      .kk.  .Ok.          .k0'  '0d         '0d                
+		 cXc  .xO;         ..    :Kc          .d0'  ;0o       .kk.   :0d.        .dN0'  '0d         '0d                
+,c,....'cOx.   .lOxc,...':dkc.   :Kc           'Ox',kk.       .kk.    ,xko;'..';okk00,  '0d         '0d   ';;;;;;;;;;,.
+'looooool;.      .;ldddddo:.     'l'            .lool.         ::       'coddddoc'.;l.  .l;         .c;  .cxxxxxxxxxxo.
 
 This application is used as part of testing potential candiates at Sevian.
 
