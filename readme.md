@@ -5,7 +5,7 @@
 [![GoReportCard][report-badge]][report]
 [![License][license-badge]][license]
 
-[circleci-badge]: https://circleci.com/gh/servian/TechTestApp.svg?style=svg&circle-token=8dfd03c6c2a5dc5555e2f1a84c36e33bc58ad0aa
+[circleci-badge]: https://circleci.com/gh/servian/TechTestApp.svg?style=shield&circle-token=8dfd03c6c2a5dc5555e2f1a84c36e33bc58ad0aa
 [circleci]: https://circleci.com/gh/servian/TechTestApp
 [release-badge]: http://img.shields.io/github/release/servian/TechTestApp/all.svg?style=flat
 [release]:https://github.com/Servian/TechTestApp/releases
