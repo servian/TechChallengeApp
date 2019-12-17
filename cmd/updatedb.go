@@ -23,8 +23,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/servian/TechTestApp/db"
 	"github.com/spf13/cobra"
-	"github.com/vibrato/TechTestApp/db"
 )
 
 // updatedbCmd represents the updatedb command

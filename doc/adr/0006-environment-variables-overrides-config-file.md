@@ -10,7 +10,7 @@ Supercedes [4. config only in config file](0004-config-only-in-config-file.md)
 
 ## Context
 
-In some environments the port and other variables are only available on startup, and will have to be overriden. See https://github.com/vibrato/TechTestApp/issues/21
+In some environments the port and other variables are only available on startup, and will have to be overriden. See https://github.com/servian/TechTestApp/issues/21
 
 ## Decision
 

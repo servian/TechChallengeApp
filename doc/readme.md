@@ -100,7 +100,7 @@ If building using docker you need to have docker installed on your local machine
 
 Download the application using go get:
 
-`go get -d github.com/vibrato/VibratoTechTest`
+`go get -d github.com/servian/TechTestApp`
 
 run `build.sh` to download all the dependencies and compile the application
 

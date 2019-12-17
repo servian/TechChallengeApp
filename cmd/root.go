@@ -24,9 +24,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/servian/TechTestApp/config"
+	"github.com/servian/TechTestApp/daemon"
 	"github.com/spf13/cobra"
-	"github.com/vibrato/TechTestApp/config"
-	"github.com/vibrato/TechTestApp/daemon"
 )
 
 var cfgFile string
@@ -35,7 +35,7 @@ var cfg *daemon.Config
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "TechTestApp",
-	Short: "Application used to test potential candidates at Vibrato",
+	Short: "Application used to test potential candidates at Servian",
 	Long: `
    /*.                       ,//                                                                               
  ##%&&%%%&%            .&&%%%%%%#(                                                                             
@@ -51,9 +51,9 @@ var rootCmd = &cobra.Command{
             /**,,(#(//,                                                                                        
              ***,(###,                                                                                         
 
-This application is used as part of testing potential candiates at Vibrato.
+This application is used as part of testing potential candiates at Sevian.
 
-Please visit http://vibrato.com.au for more details`,
+Please visit http://Servian.com for more details`,
 	Version: "0.5.0",
 }
 

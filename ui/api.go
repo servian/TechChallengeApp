@@ -28,8 +28,8 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/vibrato/TechTestApp/db"
-	"github.com/vibrato/TechTestApp/model"
+	"github.com/servian/TechTestApp/db"
+	"github.com/servian/TechTestApp/model"
 )
 
 // TaskID parameter.
