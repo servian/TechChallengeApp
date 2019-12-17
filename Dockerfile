@@ -12,9 +12,9 @@ RUN go get -d -v github.com/go-swagger/go-swagger \
     && mv /tmp/swagger-ui-$SWAGGER_UI_VERSION /tmp/swagger \
     && sed -i 's#"https://petstore\.swagger\.io/v2/swagger\.json"#"./swagger.json"#g' /tmp/swagger/dist/index.html
 
-WORKDIR $GOPATH/src/github.com/vibrato/TechTestApp
+WORKDIR $GOPATH/src/github.com/servian/TechTestApp
 
-COPY Gopkg.toml Gopkg.lock $GOPATH/src/github.com/vibrato/TechTestApp/
+COPY Gopkg.toml Gopkg.lock $GOPATH/src/github.com/servian/TechTestApp/
 
 RUN dep ensure -vendor-only -v
 
