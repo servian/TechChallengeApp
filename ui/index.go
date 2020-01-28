@@ -47,7 +47,7 @@ const indexHTML = `
   </head>
   <body>
   	<header>
-    	<img src="/images/servian_logo.svg" width="197" height="30"/>
+    	<img src="/images/servian_logo.png" width="197" height="30"/>
     </header>
     <div id='root'></div>
 	<footer>
