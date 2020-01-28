@@ -47,11 +47,11 @@ const indexHTML = `
   </head>
   <body>
   	<header>
-    	<img src="/images/VIBRATO_Logo_dark-cropped-200.png" width="100" height="85"/>
+    	<img src="/images/servian_logo.svg" width="197" height="30"/>
     </header>
     <div id='root'></div>
 	<footer>
-        &COPY; Vibrato
+        &COPY; Servian
 	</footer>
 	<script src="` + cdnReact + `"></script>
     <script src="` + cdnReactDom + `"></script>

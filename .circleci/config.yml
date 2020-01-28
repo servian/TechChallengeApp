@@ -149,10 +149,10 @@ jobs:
 
               if [ -z "${prerelease}" ]; then
                 echo "No pre-release in version, creating release"
-                ghr -u vibrato ${version} output
+                ghr -u servian ${version} output
               else
                 echo "Found pre-release in version, creating pre-release"
-                ghr -u vibrato -prerelease ${version} output
+                ghr -u servian -prerelease ${version} output
               fi
             fi
 
