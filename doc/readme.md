@@ -39,13 +39,24 @@ It is completely self contained, and should not require any additional dependenc
 2. unzip into desired location
 3. and you should be good to go
 
+## Database setup
+
+This application is backed by a postgres db. Use the `updatedb` command to create the database, tables, and seed with test data
+
+### Supported versions
+
+Tested against:
+
+* PostgreSQL 9.6
+* PostgreSQL 10.7
+
 ## Start server
 
 update `conf.toml` with database settings (details on how to configure the application can be found in [config.md](config.md))
 
-`./TechTestApp updatedb` to create a database, tables, and seed it with test data. Use `-s` to skip creating the database.
+`TechTestApp updatedb` to create a database, tables, and seed it with test data. Use `-s` to skip creating the database and only create tabls and seed data.
 
-`./TechTestApp serve` will start serving requests
+`TechTestApp serve` will start serving requests
 
 ## Interesting endpoints
 
