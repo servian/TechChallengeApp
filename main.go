@@ -1,4 +1,4 @@
-// Copyright © 2018 Servian
+// Copyright © 2020 Servian
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// Vibrato Tech Test Application
+// Servian Tech Test Application
 //
-// This application is used as part of the Vibrato Technical Assessment.
+// This application is used as part of the Servian Technical Assessment.
 //
 //     Version: 1.0
-//     Contact: Thomas Winsnes<tom@vibrato.com.au> https://www.vibrato.com.au
+//     Contact: Thomas Winsnes<thomas.winsnes@servian.com> https://www.servian.com
 //
 // swagger:meta
 package main

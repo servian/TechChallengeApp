@@ -1,4 +1,4 @@
-// Copyright © 2018 Servian
+// Copyright © 2020 Servian
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -47,11 +47,11 @@ const indexHTML = `
   </head>
   <body>
   	<header>
-    	<img src="/images/VIBRATO_Logo_dark-cropped-200.png" width="100" height="85"/>
+    	<img src="/images/servian_logo.png" width="197" height="30"/>
     </header>
     <div id='root'></div>
 	<footer>
-        &COPY; Vibrato
+        &COPY; Servian
 	</footer>
 	<script src="` + cdnReact + `"></script>
     <script src="` + cdnReactDom + `"></script>
