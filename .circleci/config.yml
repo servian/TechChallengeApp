@@ -23,6 +23,9 @@ jobs:
 
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - 2d:f7:c5:7f:db:b3:3d:0f:af:6a:30:98:6c:bd:1d:ff
 
       - run:
           name: Setup
