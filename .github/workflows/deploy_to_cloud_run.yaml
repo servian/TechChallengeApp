@@ -52,5 +52,8 @@ jobs:
           --quiet \
           --region "$RUN_REGION" \
           --image "gcr.io/$PROJECT_ID/$SOLUTION_NAME-image:$GITHUB_SHA" \
+          --port 80 \
+          --update-env-vars VTT_DBHOST=${{ secrets.RUN_SQL_HOST }},VTT_DBUSER=${{ secrets.RUN_SQL_USER }},VTT_DBPASSWORD=${{ secrets.RUN_SQL_PASSWORD }},VTT_DBNAME=${{ secrets.RUN_SQL_DB }},VTT_DBPORT=${{ secrets.RUN_SQL_PORT }},VTT_LISTENPORT=80,VTT_LISTENHOST=0.0.0.0 \
           --platform "managed" \
-          --allow-unauthenticated
+          --allow-unauthenticated \
+          --command=["./entrypoint.sh"]

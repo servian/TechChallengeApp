@@ -33,7 +33,7 @@ services:
       - VTT_DBPORT=5432
       - VTT_LISTENPORT=81
       - VTT_LISTENHOST=0.0.0.0   
-    entrypoint: sh ./local_entrypoint.sh
+    entrypoint: sh ./entrypoint.sh
     ports:
       - 81:81   
     depends_on:

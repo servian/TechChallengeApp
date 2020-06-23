@@ -33,8 +33,8 @@ COPY assets ./assets
 COPY conf.toml ./conf.toml
 
 #custom shell script as entrypoint
-COPY local_entrypoint.sh ./local_entrypoint.sh
-RUN chmod +x ./local_entrypoint.sh
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 COPY --from=build /tmp/swagger/dist ./assets/swagger
 COPY --from=build /swagger.json ./assets/swagger/swagger.json
