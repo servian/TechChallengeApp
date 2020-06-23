@@ -1,0 +1,41 @@
+---
+version: "3.5"
+networks:
+  assessment:
+services:
+  postgresdb:
+    image: postgres
+    networks:
+      - assessment
+    environment:
+      - POSTGRES_USER=postgres      
+      - POSTGRES_PASSWORD=postgres
+    restart: unless-stopped      
+  adminer:
+    image: adminer
+    networks:
+      - assessment    
+    ports:
+      - 8080:8080
+    restart: unless-stopped      
+  servian:
+    build:
+      context: D:\Private\GIT\TechTestApp\Dockerfile     #replace with your own local path container the Dockerfile
+      dockerfile: Dockerfile        
+    image: integrationrebel/servian-rbrauwers            #name of your image
+    networks:
+      - assessment
+    environment:
+      - VTT_DBHOST=postgresdb                       
+      - VTT_DBUSER=postgres
+      - VTT_DBPASSWORD=postgres
+      - VTT_DBNAME=techtestlab
+      - VTT_DBPORT=5432
+      - VTT_LISTENPORT=81
+      - VTT_LISTENHOST=0.0.0.0   
+    entrypoint: sh ./local_entrypoint.sh
+    ports:
+      - 81:81   
+    depends_on:
+        - postgresdb        
+    restart: unless-stopped  
