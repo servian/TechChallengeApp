@@ -22,3 +22,6 @@ dist/
 
 # Output Binary
 TechTestApp
+
+# Visual Studio Dir
+/.vs
