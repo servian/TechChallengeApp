@@ -2,8 +2,6 @@ FROM golang:alpine AS build
 
 RUN apk add --no-cache curl git alpine-sdk
 
-RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-
 ARG SWAGGER_UI_VERSION=3.20.9
 
 RUN go get -d -v github.com/go-swagger/go-swagger \
@@ -16,9 +14,9 @@ RUN go get -d -v github.com/go-swagger/go-swagger \
 
 WORKDIR $GOPATH/src/github.com/servian/TechTestApp
 
-COPY Gopkg.toml Gopkg.lock $GOPATH/src/github.com/servian/TechTestApp/
+COPY go.mod go.sum $GOPATH/src/github.com/servian/TechTestApp/
 
-RUN dep ensure -vendor-only -v
+RUN go mod tidy
 
 COPY . .
 
