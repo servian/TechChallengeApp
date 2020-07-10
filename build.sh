@@ -6,7 +6,7 @@ fi
 
 mkdir -p dist
 
-dep ensure
+go mod tidy
 
 go build -o TechTestApp .
 
