@@ -123,6 +123,15 @@ To build a docker image with the application installed on it
 
 `docker build . -t techtestapp:latest`
 
+
+### Pull Image from Github packages
+
+Go to the [packages](https://github.com/servian/TechTestApp/packages) section for an already built docker image. 
+To pull a ready built docker image with the application installed on it, [setup](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) docker to auth to Github then:
+
+`docker pull docker.pkg.github.com/servian/techtestapp/techtestapp:latest`
+
+
 ## Continuous Integration
 
 Continuous integration is managed through circleci and the build on the master branch will create a new release when a new version is defined.
