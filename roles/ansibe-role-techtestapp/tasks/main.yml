@@ -1,0 +1,117 @@
+---
+# Create techtestapp on aws
+
+### Database (RDS and database itself)
+
+- name: Security group for ec2 instance(s)
+  ec2_group:
+    region: "{{ aws_region }}"
+    name: "sec-db-techtestapp"
+    description: "Security group for techtestapp ec2 instances"
+    vpc_id: "{{ vpc_id }}"
+    purge_rules: true
+    rules:
+      - proto: tcp
+        from_port: 5432
+        to_port: 5432
+        group_id: "{{ sec_group_instance.group_id }}"
+        rule_desc: "db access for app"
+    tags:
+      Name: "sec-db-techtestapp"
+  register: sec_group_rds_instance
+  tags:
+    - sec_group_db
+    - db
+
+- name: Create RDS Instance
+  rds_instance:
+    instance_name: "{{ aws_rds_instance_name }}"
+    engine: postgres
+    storage_encrypted: True
+    allocated_storage: 10
+    db_instance_class: "{{ db_instance_type }}"
+    username: "{{ db_user }}"
+    password: "{{ db_password }}"
+    db_security_groups: sec-db-techtestapp
+    tags:
+      Environment: test
+      Application: TechTestApp
+  tags:
+    - db
+
+- name: Get RDS detail
+  rds_instance_facts:
+    region: "{{ aws_region }}"
+    db_instance_identifier: "{{ aws_rds_instance_name }}"
+  register: rds
+  tags:
+    - db
+
+- name: Database user for app
+  postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: ALL
+    db: "{{ db_name }}"
+    state: present
+    login_host: "{{ rds.instances[0].endpoint.address }}"
+    login_user: "{{ aws_rds_instance_username }}"
+    login_password: "{{ aws_rds_instance_password }}"
+  tags:
+    - db
+
+### App Deployment to EC2 Machine
+
+- name: Create EC2 for app deployment
+  ec2:
+    key_name: "{{ ec2_key }}"
+    instance_type: "{{ ec2_instance }}"
+    image: "{{ ami_id }}"
+    wait: yes
+    group: webserver
+    count: 1
+    vpc_subnet_id: "{{ app_subnet_id }}"
+    assign_public_ip: yes
+  tags:
+    - app
+
+- name: Security group for ec2 instance(s)
+  ec2_group:
+    region: "{{ aws_region }}"
+    name: "sec-techtestapp"
+    description: "Security group for techtestapp ec2 instances"
+    vpc_id: "{{ vpc_id }}"
+    purge_rules: true
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: "{{ my_cidr_block }}"
+        rule_desc: "ssh access if required"
+      - proto: tcp
+        from_port: 3000
+        to_port: 3000
+        cidr_ip: "{{ my_cidr_block }}"
+        rule_desc: "allow port access to app"
+    tags:
+      Name: "sec-techtestapp"
+  register: sec_group_instance
+  tags:
+    - sec_group
+    - app
+
+- name: Create EC2 for app deployment
+  ec2:
+    region: "{{ aws_region }}"
+    instance_type: "{{ instance_type|default('t2.micro') }}"
+    image: "{{ ami_id }}"
+    vpc_subnet_id: "{{ vpc_id }}"
+    key_name: "{{ aws_key_pair_name }}"
+    assign_public_ip: true
+    group: sec-techtestapp
+    instance_tags:
+      Name: app_server
+      Env: test
+    user_data: "{{ lookup('template', '../files/userdata.sh.j2') }}"
+    wait: true
+    register: ec2

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "Install docker"
+yum -y install docker
+
+docker run -e DbUser="{{ db_user }}" -e DbPassword="{{ db_password }}" -e DbName="{{ db_name }}" -e DbPort="{{ db_port }}" -e DbHost="{{ rds.instances[0].endpoint.address }}" -e ListenHost="localhost" -e ListenPort="3000" techtestapp:latest updatedb
+docker run --restart=always techtestapp:latest serve

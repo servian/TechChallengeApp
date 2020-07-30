@@ -1,0 +1,12 @@
+# defaults file for techtestapp
+---
+
+create_or_destroy: create
+docker_tag_to_use: latest
+db_name: app
+db_host: localhost
+db_user: postgres
+aws_rds_instance_name: postgres
+db_password: mysecretpassword
+db_port: 5432
+
