@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// Servian Tech Test Application
+// Servian Tech Challenge Application
 //
 // This application is used as part of the Servian Technical Assessment.
 //
@@ -28,7 +28,7 @@
 // swagger:meta
 package main
 
-import "github.com/servian/TechTestApp/cmd"
+import "github.com/servian/TechChallengeApp/cmd"
 
 func main() {
 	cmd.Execute()

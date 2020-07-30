@@ -39,7 +39,7 @@ const indexHTML = `
 <html>
   <head>
     <meta charset="utf-8">
-	<title>Servian Tech Test App</title>
+	<title>Servian Tech Challenge App</title>
 	<link rel="stylesheet" href="/css/site.css" type="text/css" />
 	<link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">

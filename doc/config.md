@@ -1,4 +1,4 @@
-# TechTestApp - Configuration
+# TechChallengeApp - Configuration
 
 This doc outlines how to configure the application using the config file. The main way to configure the application is through the configuration file, but it is possible to override the settings using environment variables.
 

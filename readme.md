@@ -1,18 +1,18 @@
-# Servian DevOps Tech Challenge - TechTest App
+# Servian DevOps Tech Challenge - Tech Challenge App
 
 [![Build Status][circleci-badge]][circleci]
 [![Release][release-badge]][release]
 [![GoReportCard][report-badge]][report]
 [![License][license-badge]][license]
 
-[circleci-badge]: https://circleci.com/gh/servian/TechTestApp.svg?style=shield&circle-token=8dfd03c6c2a5dc5555e2f1a84c36e33bc58ad0aa
-[circleci]: https://circleci.com/gh/servian/TechTestApp
-[release-badge]: http://img.shields.io/github/release/servian/TechTestApp/all.svg?style=flat
-[release]:https://github.com/Servian/TechTestApp/releases
-[report-badge]: https://goreportcard.com/badge/github.com/Servian/TechTestApp
-[report]: https://goreportcard.com/report/github.com/Servian/TechTestApp
-[license-badge]: https://img.shields.io/github/license/Servian/TechTestApp.svg?style=flat
-[license]: https://github.com/Servian/TechTestApp/license
+[circleci-badge]: https://circleci.com/gh/servian/TechChallengeApp.svg?style=shield&circle-token=8dfd03c6c2a5dc5555e2f1a84c36e33bc58ad0aa
+[circleci]: https://circleci.com/gh/servian/TechChallengeApp
+[release-badge]: http://img.shields.io/github/release/servian/TechChallengeApp/all.svg?style=flat
+[release]:https://github.com/Servian/TechChallengeApp/releases
+[report-badge]: https://goreportcard.com/badge/github.com/Servian/TechChallengeApp
+[report]: https://goreportcard.com/report/github.com/Servian/TechChallengeApp
+[license-badge]: https://img.shields.io/github/license/Servian/TechChallengeApp.svg?style=flat
+[license]: https://github.com/Servian/TechChallengeApp/license
 
 ## Overview
 
@@ -30,4 +30,4 @@ Information about the assessment is available in the [assessment.md file](ASSESS
 
 ## Found an issue?
 
-If you've found an issue with the application, the documentation, or anything else, we are happy to take contributions. Please raise an issue in the [github repository](https://github.com/Servian/TechTestApp/issues) and read through the contribution rules found the [CONTRIBUTING.md](CONTRIBUTING.md) file for the details.
+If you've found an issue with the application, the documentation, or anything else, we are happy to take contributions. Please raise an issue in the [github repository](https://github.com/Servian/TechChallengeApp/issues) and read through the contribution rules found the [CONTRIBUTING.md](CONTRIBUTING.md) file for the details.
