@@ -1,0 +1,5 @@
+---
+- name: "Deploy TechTestApp to AWS"
+  include_role:
+    name: techtestapp
+  tags: techtestapp
