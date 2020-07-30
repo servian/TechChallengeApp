@@ -8,10 +8,10 @@ mkdir -p dist
 
 go mod tidy
 
-go build -o TechTestApp .
+go build -o TechChallengeApp .
 
-cp TechTestApp dist/
+cp TechChallengeApp dist/
 cp -r assets dist/
 cp conf.toml dist/
 
-rm TechTestApp
+rm TechChallengeApp

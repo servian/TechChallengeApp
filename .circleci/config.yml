@@ -4,7 +4,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /go/src/github.com/servian/TechTestApp
+    working_directory: /go/src/github.com/servian/TechChallengeApp
     docker:
       - image: circleci/golang:latest
 
@@ -17,7 +17,7 @@ jobs:
       - run: go test -v -race -cover ./...
 
   deploy:
-    working_directory: /go/src/github.com/servian/TechTestApp
+    working_directory: /go/src/github.com/servian/TechChallengeApp
     docker:
       - image: circleci/golang:latest
 
@@ -29,9 +29,9 @@ jobs:
           command: |
             go get -v -t -d ./...
             mkdir output
-            go build -v -o TechTestApp .
+            go build -v -o TechChallengeApp .
             ls
-            ./TechTestApp --version | sed -e 's/TechTestApp version /v./' > versionfile
+            ./TechChallengeApp --version | sed -e 's/TechChallengeApp version /v./' > versionfile
 
 
       - run: 
@@ -46,17 +46,17 @@ jobs:
             
             mkdir -p dist
             
-            go build -v -o TechTestApp .
+            go build -v -o TechChallengeApp .
             
-            cp TechTestApp dist/
+            cp TechChallengeApp dist/
             cp -r assets dist/
             cp conf.toml dist/
             
-            rm TechTestApp
+            rm TechChallengeApp
 
             export version=$(cat versionfile)
             
-            zip -r "output/TechTestApp_${version}_linux64.zip" dist/*
+            zip -r "output/TechChallengeApp_${version}_linux64.zip" dist/*
 
       # build for macos
       - run: 
@@ -71,17 +71,17 @@ jobs:
             
             mkdir -p dist
             
-            go build -v -o TechTestApp .
+            go build -v -o TechChallengeApp .
             
-            cp TechTestApp dist/
+            cp TechChallengeApp dist/
             cp -r assets dist/
             cp conf.toml dist/
             
-            rm TechTestApp
+            rm TechChallengeApp
 
             export version=$(cat versionfile)
 
-            zip -r "output/TechTestApp_${version}_darwin.zip" dist/*
+            zip -r "output/TechChallengeApp_${version}_darwin.zip" dist/*
 
       # build windows 64 bit
       - run: 
@@ -100,17 +100,17 @@ jobs:
             
             mkdir -p dist
             
-            go build -v -o TechTestApp.exe .
+            go build -v -o TechChallengeApp.exe .
             
-            cp TechTestApp.exe dist/
+            cp TechChallengeApp.exe dist/
             cp -r assets dist/
             cp conf.toml dist/
             
-            rm TechTestApp.exe
+            rm TechChallengeApp.exe
 
             export version=$(cat versionfile)
 
-            zip -r "output/TechTestApp_${version}_win64.zip" dist/*
+            zip -r "output/TechChallengeApp_${version}_win64.zip" dist/*
 
       #build windows 32 bit
       - run: 
@@ -125,17 +125,17 @@ jobs:
             
             mkdir -p dist
             
-            go build -v -o TechTestApp.exe .
+            go build -v -o TechChallengeApp.exe .
             
-            cp TechTestApp.exe dist/
+            cp TechChallengeApp.exe dist/
             cp -r assets dist/
             cp conf.toml dist/
             
-            rm TechTestApp.exe
+            rm TechChallengeApp.exe
 
             export version=$(cat versionfile)
 
-            zip -r "output/TechTestApp_${version}_win32.zip" dist/*
+            zip -r "output/TechChallengeApp_${version}_win32.zip" dist/*
 
       - run:
           name: Release if new version

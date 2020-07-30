@@ -6,7 +6,7 @@ There *should not* be a requirement for Servian to access a candidate's cloud se
 
 Demonstrate regular commits and good git workflow practices.
 
-There is no time limit for this test.
+There is no time limit for this challenge.
 
 Candidates should provide documentation on their solution, including:
 
@@ -51,7 +51,7 @@ Candidates will be assessed across the following categories:
 - Auto scaling and highly available frontend
 - Highly available Database
 
-## Tech Test Application
+## Tech Challenge Application
 
 Single page application designed to be ran inside a container or on a vm (IaaS) with a postgres database to store data.
 
@@ -67,9 +67,9 @@ It is completely self contained, and should not require any additional dependenc
 
 update `conf.toml` with database settings
 
-`./TechTestApp updatedb` to create a database and seed it with test data
+`./TechChallengeApp updatedb` to create a database and seed it with test data
 
-`./TechTestApp serve` will start serving requests
+`./TechChallengeApp serve` will start serving requests
 
 ## Interesting endpoints
 
@@ -89,7 +89,7 @@ update `conf.toml` with database settings
 
 ### Process
 
-`go get -d github.com/Servian/TechTestApp`
+`go get -d github.com/Servian/TechChallengeApp`
 
 run `build.sh`
 
@@ -97,4 +97,4 @@ the `dist` folder contains the compiled web package
 
 ### Docker build
 
-`docker build . -t techtestapp:latest`
+`docker build . -t techchallengeapp:latest`

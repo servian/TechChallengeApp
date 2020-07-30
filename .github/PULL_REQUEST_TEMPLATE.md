@@ -2,7 +2,7 @@
 
 Please explain the changes you made here.
 
-Fixes: https://github.com/servian/TechTestApp/issues/{issue number}
+Fixes: https://github.com/servian/TechChallengeApp/issues/{issue number}
 
 ### Checklist
 

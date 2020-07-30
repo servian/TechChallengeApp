@@ -1,20 +1,20 @@
-# TechTestApp
+# TechChallengeApp
 
 [![Build Status][circleci-badge]][circleci]
 [![Release][release-badge]][release]
 [![GoReportCard][report-badge]][report]
 [![License][license-badge]][license]
 
-[circleci-badge]: https://circleci.com/gh/servian/TechTestApp.svg?style=shield&circle-token=8dfd03c6c2a5dc5555e2f1a84c36e33bc58ad0aa
-[circleci]: https://circleci.com/gh/servian/TechTestApp
-[release-badge]: http://img.shields.io/github/release/servian/TechTestApp/all.svg?style=flat
-[release]:https://github.com/servian/TechTestApp/releases
-[report-badge]: https://goreportcard.com/badge/github.com/servian/TechTestApp
-[report]: https://goreportcard.com/report/github.com/servian/TechTestApp
-[license-badge]: https://img.shields.io/github/license/servian/TechTestApp.svg?style=flat
-[license]: https://github.com/servian/TechTestApp/license
+[circleci-badge]: https://circleci.com/gh/servian/TechChallengeApp.svg?style=shield&circle-token=8dfd03c6c2a5dc5555e2f1a84c36e33bc58ad0aa
+[circleci]: https://circleci.com/gh/servian/TechChallengeApp
+[release-badge]: http://img.shields.io/github/release/servian/TechChallengeApp/all.svg?style=flat
+[release]:https://github.com/servian/TechChallengeApp/releases
+[report-badge]: https://goreportcard.com/badge/github.com/servian/TechChallengeApp
+[report]: https://goreportcard.com/report/github.com/servian/TechChallengeApp
+[license-badge]: https://img.shields.io/github/license/servian/TechChallengeApp.svg?style=flat
+[license]: https://github.com/servian/TechChallengeApp/license
 
-The Servian techtest app is a golang application used for testing candidates applying to work with Servian.
+The Servian tech challenge app is a golang application used for challenging candidates applying to work with Servian.
 
 ## Documentation structure
 
@@ -27,7 +27,7 @@ Architectural decisions are recorded in the `adr` folder, details on why can be 
 
 Naming convention: `####-<decision title>` where the first 4 digits are iterated by 1 for each record.
 
-## Tech Test Application
+## Tech Challenge Application
 
 Single page application designed to be ran inside a container or on a vm (IaaS) with a postgres database to store data.
 
@@ -54,9 +54,9 @@ Tested against:
 
 update `conf.toml` with database settings (details on how to configure the application can be found in [config.md](config.md))
 
-`TechTestApp updatedb` to create a database, tables, and seed it with test data. Use `-s` to skip creating the database and only create tabls and seed data.
+`TechChallengeApp updatedb` to create a database, tables, and seed it with test data. Use `-s` to skip creating the database and only create tabls and seed data.
 
-`TechTestApp serve` will start serving requests
+`TechChallengeApp serve` will start serving requests
 
 ## Interesting endpoints
 
@@ -111,7 +111,7 @@ If building using docker you need to have docker installed on your local machine
 
 Download the application using go get:
 
-`go get -d github.com/servian/TechTestApp`
+`go get -d github.com/servian/TechChallengeApp`
 
 run `build.sh` to download all the dependencies and compile the application
 
@@ -121,15 +121,15 @@ the `dist` folder contains the compiled web package
 
 To build a docker image with the application installed on it
 
-`docker build . -t techtestapp:latest`
+`docker build . -t techchallengeapp:latest`
 
 
 ### Pull Image from Github packages
 
-Go to the [packages](https://github.com/servian/TechTestApp/packages) section for an already built docker image. 
+Go to the [packages](https://github.com/servian/TechChallengeApp/packages) section for an already built docker image. 
 To pull a ready built docker image with the application installed on it, [setup](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) docker to auth to Github then:
 
-`docker pull docker.pkg.github.com/servian/techtestapp/techtestapp:latest`
+`docker pull docker.pkg.github.com/servian/techchallengeapp/techchallengeapp:latest`
 
 
 ## Continuous Integration
@@ -155,4 +155,4 @@ Builds will be produced for:
 * Windows (x86/amd64)
 
 #### Note
-* If you are setting up the database using RDS, do not run the `./TechTestApp updatedb` command. Instead run `./TechTestApp updatedb -s` 
+* If you are setting up the database using RDS, do not run the `./TechChallengeApp updatedb` command. Instead run `./TechChallengeApp updatedb -s` 
