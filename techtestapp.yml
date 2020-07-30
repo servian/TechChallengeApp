@@ -1,5 +1,5 @@
 ---
 - name: "Deploy TechTestApp to AWS"
   include_role:
-    name: techtestapp
+    name: ansibe-role-techtestapp
   tags: techtestapp
