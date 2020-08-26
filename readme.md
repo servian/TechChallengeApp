@@ -16,7 +16,7 @@
 
 ## Overview
 
-This is the Servian DevOps Tech challenge. It uses a simple application to help meassure a candidates technical capability and fit with Servian. The application itself is a simple GTD Golang application that is backed by a Postgres database.
+This is the Servian DevOps Tech challenge. It uses a simple application to help measure a candidate's technical capability and fit with Servian. The application itself is a simple GTD Golang application that is backed by a Postgres database.
 
 Servian provides the Tech Challenge to potential candidates, which focuses on deploying this application into a cloud environment of choice.
 
@@ -24,7 +24,7 @@ More details about the application can be found in the [document folder](doc/rea
 
 ## Taking the challenge
 
-For more information about taking the challege and joining Servians's amazing team, please head over to our [recruitment page](https://www.servian.com/careers/) and apply there. Our recruitment team will reach out to you about the details of the test and be able to answer any questions you have about Servian or the test itself.
+For more information about taking the challenge and joining Servians's amazing team, please head over to our [recruitment page](https://www.servian.com/careers/) and apply there. Our recruitment team will reach out to you about the details of the test and be able to answer any questions you have about Servian or the test itself.
 
 Information about the assessment is available in the [assessment.md file](ASSESSMENT.md)
 

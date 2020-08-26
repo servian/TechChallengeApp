@@ -28,7 +28,7 @@ Example:
 
 ## Environment Variables
 
-The application will look for environment variables that are able to override the configuration defined in the `conf.toml` file. These environment varaibles are prefixed with `VTT` and follow this pattern `VTT_<conf value>`. e.g. `VTT_LISTENPORT`.
+The application will look for environment variables that are able to override the configuration defined in the `conf.toml` file. These environment variables are prefixed with `VTT` and follow this pattern `VTT_<conf value>`. e.g. `VTT_LISTENPORT`.
 
 Environment variables has precedence over configuration from the `conf.toml` file
 
