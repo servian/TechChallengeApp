@@ -18,7 +18,7 @@ Candidates should provide documentation on their solution, including:
 
 ### Key Criteria
 
-Candidates should take care to ensure that thier submission meets the following criteria:
+Candidates should take care to ensure that their submission meets the following criteria:
 
 - Must be able to start from a cloned git repo.
 - Must document any pre-requisites clearly.

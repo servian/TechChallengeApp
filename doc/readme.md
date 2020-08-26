@@ -54,7 +54,7 @@ Tested against:
 
 update `conf.toml` with database settings (details on how to configure the application can be found in [config.md](config.md))
 
-`TechChallengeApp updatedb` to create a database, tables, and seed it with test data. Use `-s` to skip creating the database and only create tabls and seed data.
+`TechChallengeApp updatedb` to create a database, tables, and seed it with test data. Use `-s` to skip creating the database and only create tables and seed data.
 
 `TechChallengeApp serve` will start serving requests
 
@@ -72,12 +72,12 @@ update `conf.toml` with database settings (details on how to configure the appli
 .
 ├── assets      # Asset directory for the application
 │   ├── css     # Contains all the css files for the web site
-│   ├── images  # Contains all the images for teh web site
+│   ├── images  # Contains all the images for the web site
 │   └── js      # Contains all the react javascript files
 ├── cmd         # Command line UI logic is managed in this location
-├── config      # Contains the configuration logic for he application
-├── daemon      # Contains the logic of the daemon that runs and controll the app
-├── db          # Contains the data layet and db connectivity logic
+├── config      # Contains the configuration logic for the application
+├── daemon      # Contains the logic of the daemon that runs and control the app
+├── db          # Contains the data layer and db connectivity logic
 ├── doc         # Documentation folder
 ├── model       # Data model for the application
 └── ui          # Web UI, routing, connectivity
@@ -91,11 +91,11 @@ The application itself is a React based single page application (SPA) with an AP
 
 ## Build from source
 
-### Reqirements
+### Requirements
 
 #### Golang
 
-Application is build using golang, this can be installed in many ways, go to [golang](https://golang.org/) to download the version that suits you.
+Application is built using golang, this can be installed in many ways, go to [golang](https://golang.org/) to download the version that suits you.
 
 #### dep
 
