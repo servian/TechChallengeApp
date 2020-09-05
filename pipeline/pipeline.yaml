@@ -31,7 +31,7 @@ stages:
       inputs:
         repository: $(imageName)
         command: build
-        Dockerfile: '$(Build.Repository.LocalPath)/Dockerfile'
+        Dockerfile: '$(Build.Repository.LocalPath)/dist/Dockerfile'
 
     - publish: $(Build.Repository.LocalPath)/dist
       artifact: drop
