@@ -25,18 +25,3 @@ stages:
         failOnStandardError: false
     - publish: $(Build.Repository.LocalPath)/dist
       artifact: drop
-
-- stage: Deploy
-  variables:
-  - group: TechChallengeApp
-  dependsOn: ['Build']
-  jobs:
-  - deployment: Deploy
-    pool:
-        vmImage: 'ubuntu-latest'
-    environment: Deploy-AKS
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - template: 'templates/deploy.aks.yaml'
