@@ -1,0 +1,42 @@
+name: $(Date:yyyyMMdd).$(Rev:r)
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+     - doc
+     - ReadME.md
+
+stages:
+- stage: Build
+  variables:
+  - group: TechChallengeApp
+  jobs:
+  - job: 'Build'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: ShellScript@2
+      inputs:
+        scriptPath: '$(Build.Repository.LocalPath)/build.sh'
+        failOnStandardError: false
+    - publish: $(Build.Repository.LocalPath)/dist
+      artifact: drop
+
+- stage: Deploy
+  variables:
+  - group: TechChallengeApp
+  dependsOn: ['Build']
+  jobs:
+  - deployment: Deploy
+    pool:
+        vmImage: 'ubuntu-latest'
+    environment: Deploy-AKS
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - template: 'templates/deploy.aks.yaml'
