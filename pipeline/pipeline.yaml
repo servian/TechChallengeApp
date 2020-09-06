@@ -33,6 +33,7 @@ stages:
         repository: $(imageName)
         Dockerfile: '$(Build.Repository.LocalPath)/Dockerfile'
         containerRegistry: acrServiceConnection
-
-    - publish: $(Build.Repository.LocalPath)
-      artifact: drop
+    - task: PublishPipelineArtifact@1
+      inputs:
+        artifactName: 'manifests'
+        path: 'manifests'
