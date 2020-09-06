@@ -32,6 +32,12 @@ stages:
         repository: $(imageName)
         command: build
         Dockerfile: '$(Build.Repository.LocalPath)/Dockerfile'
+    - task: Docker@2
+      displayName: Push an image to container registry
+      inputs:
+        command: push
+        repository: $(imageName)
+        containerRegistry: $(acrServiceCinnection)
 
     - publish: $(Build.Repository.LocalPath)
       artifact: drop
