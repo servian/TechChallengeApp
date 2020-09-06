@@ -37,7 +37,7 @@ stages:
       inputs:
         command: push
         repository: $(imageName)
-        containerRegistry: acrServiceCinnection
+        containerRegistry: acrServiceConnection
 
     - publish: $(Build.Repository.LocalPath)
       artifact: drop
