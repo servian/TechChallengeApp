@@ -51,11 +51,6 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: ShellScript@2
-      displayName: Run DB Migration
-      inputs:
-        scriptPath: '$(Build.Repository.LocalPath)/build.sh'
-        failOnStandardError: true
     - task: Bash@3
       displayName: Run DB Migration
       inputs:
