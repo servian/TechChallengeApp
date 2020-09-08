@@ -43,7 +43,6 @@ stages:
     - publish: $(Build.Repository.LocalPath)/dist
       artifact: drop
 
-  stages:
 - stage: Deploy
   variables:
   - group: TechChallengeApp
