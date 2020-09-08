@@ -1,7 +1,6 @@
 name: $(Date:yyyyMMdd).$(Rev:r)
 
 variables:
-  - group: TechChallengeApp
   - name: imageName
     value: 'pipelines-golang-docker'
 
