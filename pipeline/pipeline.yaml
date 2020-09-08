@@ -51,6 +51,8 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+    - download: current
+      artifact: drop
     - task: Bash@3
       displayName: Run DB Migration
       inputs:
