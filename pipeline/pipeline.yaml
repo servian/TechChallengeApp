@@ -1,7 +1,8 @@
 name: $(Date:yyyyMMdd).$(Rev:r)
 
 variables:
-  imageName: 'pipelines-golang-docker'
+  - group: TechChallengeApp
+    imageName: 'pipelines-golang-docker'
 
 trigger:
   batch: true
