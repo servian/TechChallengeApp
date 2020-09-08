@@ -57,7 +57,8 @@ stages:
       displayName: Run DB Migration
       inputs:
         targetType: 'inline'
-        script: ./TechChallengeApp updatedb
+        script: ./TechChallengeApp
         workingDirectory: '$(Pipeline.Workspace)/drop'
+        arguments: updatedb
         failOnStderr: false
 
