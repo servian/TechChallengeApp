@@ -62,8 +62,6 @@ func RebuildDb(cfg Config) error {
 	lastPosition := strings.LastIndex( cfg.DbUser, "@" )
 	owner := cfg.DbUser[0:lastPosition]
 
-	fmt.Println(owner)
-
 	query := "DROP DATABASE IF EXISTS " + cfg.DbName
 
 	fmt.Println(query)
