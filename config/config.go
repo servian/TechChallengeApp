@@ -47,7 +47,7 @@ func LoadConfig() (*Config, error) {
 	v.SetConfigType("toml")
 	v.AddConfigPath(".")
 
-	v.SetEnvPrefix("VTT")
+	v.SetEnvPrefix("VTT_")
 	v.AutomaticEnv()
 
 	v.SetDefault("DbUser", "postgres")
