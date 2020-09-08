@@ -1,4 +1,4 @@
-"DbUser" = $(VTT_DbUser)
+"DbUser" = "#{VTT_DbUser}"
 "DbPassword" = ""
 "DbName" = "app"
 "DbPort" = "5432"
