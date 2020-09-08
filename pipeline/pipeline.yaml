@@ -25,7 +25,7 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - task: qetza.replacetokens.replacetokens-task.replacetokens@3
-      displayName: 'Replace Secure Credential Value in Json'
+      displayName: 'Replace Secure Credential Value in TOML file'
       inputs:
           rootDirectory: '$(Build.Repository.LocalPath)'
           targetFiles: '**/conf.toml'
