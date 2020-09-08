@@ -58,6 +58,8 @@ func RebuildDb(cfg Config) error {
 
 	defer db.Close()
 
+	owner := (strings.Split(cfg.DbUser , "@"))[0]
+
 	query := "DROP DATABASE IF EXISTS " + cfg.DbName
 
 	fmt.Println(query)
@@ -70,13 +72,12 @@ func RebuildDb(cfg Config) error {
 
 	query = fmt.Sprintf(`CREATE DATABASE %s
 WITH
-OWNER = anup
+OWNER = %s
 ENCODING = 'UTF8'
 LC_COLLATE = 'en_US.utf8'
 LC_CTYPE = 'en_US.utf8'
-TABLESPACE = pg_default
 CONNECTION LIMIT = -1
-TEMPLATE template0;`, cfg.DbName)
+TEMPLATE template0;`, cfg.DbName, owner)
 
 	fmt.Println(query)
 
