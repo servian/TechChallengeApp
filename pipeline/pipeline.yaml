@@ -62,14 +62,10 @@ stages:
     steps:
     - download: current
       artifact: drop
-    - task: Kubernetes@1
-      displayName: kubectl apply
+    - task: KubernetesManifest@0
+      displayName: Create imagePullSecret
       inputs:
-        connectionType: Kubernetes Service Connection
-        kubernetesServiceEndpoint: AKS-Service-Connection
-        command: apply
-        useConfigurationFile: true
-        configuration: '$(Pipeline.Workspace)/drop/aksmanifest.yaml'
-        useClusterAdmin: true
-        containerRegistryType: Azure Container Registry
-        azureContainerRegistry: acrServiceConnection
+        action: createSecret
+        secretName: $(imagePullSecret)
+        namespace: 'default'
+        dockerRegistryEndpoint: acrServiceConnection
