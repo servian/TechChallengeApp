@@ -33,6 +33,17 @@ stages:
       inputs:
         scriptPath: '$(Build.Repository.LocalPath)/build.sh'
         failOnStandardError: false
+    - task: Bash@3
+      displayName: Run DB Migration
+      inputs:
+        targetType: 'inline'
+        script: TechChallengeApp.exe updatedb
+        workingDirectory: '$(Build.Repository.LocalPath)/dist'
+        failOnStderr: false
+  - job: 'Build'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
     - task: Docker@2
       displayName: Build and Push an image to container registry
       inputs:
