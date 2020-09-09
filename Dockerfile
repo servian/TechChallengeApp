@@ -12,7 +12,7 @@ RUN go get -d -v github.com/go-swagger/go-swagger \
     && mv /tmp/swagger-ui-$SWAGGER_UI_VERSION /tmp/swagger \
     && sed -i 's#"https://petstore\.swagger\.io/v2/swagger\.json"#"./swagger.json"#g' /tmp/swagger/dist/index.html
 
-WORKDIR $GOPATH/src/github.com/servian/TechChallengeApp
+WORKDIR $GOPATH/src/github.com/DevOpsExplorer/TechChallengeApp
 
 COPY go.mod go.sum $GOPATH/src/github.com/DevOpsExplorer/TechChallengeApp/
 
