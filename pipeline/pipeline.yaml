@@ -56,7 +56,7 @@ stages:
 
 - stage: Deploy
   jobs:
-  - job: 'Deploy to AKS'
+  - job: 'DeploytoAKS'
     pool:
       vmImage: 'ubuntu-latest'
     steps:
