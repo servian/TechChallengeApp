@@ -68,4 +68,5 @@ stages:
         connectionType: Kubernetes Service Connection
         kubernetesServiceEndpoint: AKS-Service-Connection
         command: apply
-        arguments: -f '$(Pipeline.Workspace)/drop/aksmanifest.yaml'
+        useConfigurationFile: true
+        configuration: '$(Pipeline.Workspace)/drop/aksmanifest.yaml'
