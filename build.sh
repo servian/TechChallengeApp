@@ -8,7 +8,7 @@ mkdir -p dist
 
 go mod tidy
 
-go build -o TechChallengeApp .
+go build -o TechChallengeApp.exe .
 
 cp TechChallengeApp dist/
 cp -r assets dist/
