@@ -10,8 +10,8 @@ go mod tidy
 
 go build -o TechChallengeApp.exe .
 
-cp TechChallengeApp dist/
+cp TechChallengeApp.exe dist/
 cp -r assets dist/
 cp conf.toml dist/
 
-rm TechChallengeApp
+rm TechChallengeApp.exe
