@@ -19,7 +19,7 @@ stages:
   variables:
   - group: TechChallengeApp
   jobs:
-  - job: 'Build'
+  - job: 'BuildCode'
     pool:
       vmImage: 'windows-latest'
     steps:
@@ -40,6 +40,7 @@ stages:
         workingDirectory: '$(Build.Repository.LocalPath)/dist'
         failOnStderr: false
   - job: 'BuildDockerImage'
+    dependsOn: ['BuildCode']
     pool:
       vmImage: 'ubuntu-latest'
     steps:
