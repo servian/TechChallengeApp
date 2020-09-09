@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: TechChalangeApp
+  name: tech-chalange-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: TechChalangeApp
+      app: tech-chalange-app
   template:
     metadata:
       labels:
-        app: TechChalangeApp
+        app: tech-chalange-app
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-      - name: TechChalangeApp
+      - name: tech-chalange-app
         image: acrdemoanup.azurecr.io/pipelines-golang-docker:latest
         resources:
           requests:
@@ -30,10 +30,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: TechChalangeApp
+  name: tech-chalange-app
 spec:
   type: LoadBalancer
   ports:
   - port: 3000
   selector:
-    app: TechChalangeApp
+    app: tech-chalange-app
