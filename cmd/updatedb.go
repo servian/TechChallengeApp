@@ -23,7 +23,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/DevOpsExplorer/TechChallengeApp/db"
+	"github.com/servian/TechChallengeApp/db"
 	"github.com/spf13/cobra"
 )
 
