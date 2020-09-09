@@ -21,7 +21,7 @@ stages:
   jobs:
   - job: 'Build'
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-latest'
     steps:
     - task: qetza.replacetokens.replacetokens-task.replacetokens@3
       displayName: 'Replace Secure Credential Value in TOML file'
