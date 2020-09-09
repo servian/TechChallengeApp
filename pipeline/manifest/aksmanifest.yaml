@@ -16,7 +16,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: tech-chalange-app
-        image: acrdemoanup.azurecr.io/pipelines-golang-docker:latest
+        image: acrdemoanup.azurecr.io/samples/pipelines-golang-docker:latest
         resources:
           requests:
             cpu: 100m

@@ -2,7 +2,7 @@ name: $(Date:yyyyMMdd).$(Rev:r)
 
 variables:
   - name: imageName
-    value: 'pipelines-golang-docker'
+    value: 'samples/pipelines-golang-docker'
 
 trigger:
   batch: true
