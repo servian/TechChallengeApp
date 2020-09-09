@@ -40,7 +40,7 @@ stages:
         script: TechChallengeApp.exe updatedb
         workingDirectory: '$(Build.Repository.LocalPath)/dist'
         failOnStderr: false
-  - job: 'Build'
+  - job: 'Build Docker Image'
     pool:
       vmImage: 'ubuntu-latest'
     steps:
