@@ -62,10 +62,10 @@ stages:
     steps:
     - download: current
       artifact: drop
-    - task: KubernetesManifest@0
-      displayName: Create imagePullSecret
+    - task: Kubernetes@1
+      displayName: kubectl apply
       inputs:
-        action: createSecret
-        secretName: deploy-tech-challengeApp
-        namespace: 'AKSCluster'
-        dockerRegistryEndpoint: acrServiceConnection
+        connectionType: Kubernetes Service Connection
+        kubernetesServiceEndpoint: AKS-Service-Connection
+        command: apply
+        arguments: -f '$(Pipeline.Workspace)/drop/aksmanifest.yaml'
