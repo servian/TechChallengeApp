@@ -14,7 +14,7 @@ RUN go get -d -v github.com/go-swagger/go-swagger \
 
 WORKDIR $GOPATH/src/github.com/servian/TechChallengeApp
 
-COPY go.mod go.sum $GOPATH/src/github.com/DevOpsExplorer/TechChallengeApp/
+COPY go.mod go.sum $GOPATH/src/github.com/servian/TechChallengeApp/
 
 RUN go mod tidy
 

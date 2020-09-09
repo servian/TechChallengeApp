@@ -29,7 +29,7 @@ import (
 	"github.com/lib/pq"
 
 	_ "github.com/lib/pq"
-	"github.com/DevOpsExplorer/TechChallengeApp/model"
+	"github.com/servian/TechChallengeApp/model"
 )
 
 // Config - configuration for the db package
