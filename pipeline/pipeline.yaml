@@ -70,3 +70,6 @@ stages:
         command: apply
         useConfigurationFile: true
         configuration: '$(Pipeline.Workspace)/drop/aksmanifest.yaml'
+        useClusterAdmin: true
+        containerRegistryType: Azure Container Registry
+        azureContainerRegistry: acrServiceConnection
