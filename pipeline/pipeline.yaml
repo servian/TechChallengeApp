@@ -43,21 +43,3 @@ stages:
     - publish: $(Build.Repository.LocalPath)/dist
       artifact: drop
 
-- stage: Deploy
-  variables:
-  - group: TechChallengeApp
-  jobs:
-  - job: 'Deploy'
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - download: current
-      artifact: drop
-    - task: Bash@3
-      displayName: Run DB Migration
-      inputs:
-        targetType: 'inline'
-        script: sudo ./TechChallengeApp.exe updatedb
-        workingDirectory: '$(Pipeline.Workspace)/drop'
-        failOnStderr: false
-
