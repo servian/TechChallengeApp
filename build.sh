@@ -8,10 +8,10 @@ mkdir -p dist
 
 go mod tidy
 
-go build -o TechChallengeApp.exe .
+go build -o TechChallengeApp.sh .
 
-cp TechChallengeApp.exe dist/
+cp TechChallengeApp.sh dist/
 cp -r assets dist/
 cp conf.toml dist/
 
-rm TechChallengeApp.exe
+rm TechChallengeApp.sh
