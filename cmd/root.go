@@ -24,8 +24,8 @@ import (
   "fmt"
   "os"
 
-  "github.com/servian/TechChallengeApp/config"
-  "github.com/servian/TechChallengeApp/daemon"
+  "github.com/DevOpsExplorer/TechChallengeApp/config"
+  "github.com/DevOpsExplorer/TechChallengeApp/daemon"
   "github.com/spf13/cobra"
 )
 
