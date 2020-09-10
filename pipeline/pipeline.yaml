@@ -57,7 +57,7 @@ stages:
         Dockerfile: '$(Build.Repository.LocalPath)/Dockerfile'
         containerRegistry: acrServiceConnection
         tags: latest
-    - publish: $(Build.Repository.LocalPath)
+    - publish: $(Build.Repository.LocalPath)/pipeline/manifest
       artifact: drop
 
 - stage: Deploy
@@ -75,4 +75,4 @@ stages:
         kubernetesServiceEndpoint: AKS-Service-Connection
         command: apply
         useConfigurationFile: true
-        configuration: '$(Pipeline.Workspace)/drop/pipeline/aksmanifest.yaml'
+        configuration: '$(Pipeline.Workspace)/drop/aksmanifest.yaml'
