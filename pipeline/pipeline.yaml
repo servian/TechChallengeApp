@@ -44,6 +44,11 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+    - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+      displayName: 'Replace Secure Credential Value in TOML file'
+      inputs:
+          rootDirectory: '$(Build.Repository.LocalPath)'
+          targetFiles: '**/conf.toml'
     - task: Docker@2
       displayName: Build and Push an image to container registry
       inputs:
@@ -51,6 +56,7 @@ stages:
         repository: $(imageName)
         Dockerfile: '$(Build.Repository.LocalPath)/Dockerfile'
         containerRegistry: acrServiceConnection
+        tags: latest
     - publish: $(Build.Repository.LocalPath)/pipeline/manifest
       artifact: drop
 
