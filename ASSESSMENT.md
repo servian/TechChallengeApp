@@ -24,6 +24,7 @@ Candidates should take care to ensure that their submission meets the following 
 - Must document any pre-requisites clearly.
 - Must be contained within a GitHub repository.
 - Must deploy via an automated process.
+- Must deploy infrastructure using code.
 
 ### Grading
 
