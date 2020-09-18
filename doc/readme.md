@@ -121,16 +121,14 @@ the `dist` folder contains the compiled web package
 
 To build a docker image with the application installed on it
 
-`docker build . -t techchallengeapp:latest`
+`docker build . -t servian/techchallengeapp:latest`
 
 
-### Pull Image from Github packages
+### Pull Image from Dockerhub:
 
-Go to the [packages](https://github.com/servian/TechChallengeApp/packages) section for an already built docker image. 
-To pull a ready built docker image with the application installed on it, [setup](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) docker to auth to Github then:
+To pull a docker image pre-built
 
-`docker pull docker.pkg.github.com/servian/techchallengeapp/techchallengeapp:latest`
-
+`docker pull servian/techchallengeapp:latest`
 
 ## Continuous Integration
 

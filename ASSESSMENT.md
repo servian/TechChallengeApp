@@ -98,4 +98,4 @@ the `dist` folder contains the compiled web package
 
 ### Docker build
 
-`docker build . -t techchallengeapp:latest`
+`docker build . -t servian/techchallengeapp:latest`
