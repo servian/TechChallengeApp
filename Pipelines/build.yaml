@@ -1,0 +1,42 @@
+name: $(Date:yyyyMMdd).$(Rev:r)
+
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+     - doc
+     - ReadME.md
+
+stages:
+- stage: Build
+  jobs:
+  - job: 'BuildCode'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: ShellScript@2
+      displayName: Build Solution
+      inputs:
+        scriptPath: '$(Build.Repository.LocalPath)/build.sh'
+        failOnStandardError: false
+
+    - task: CmdLine@2
+      displayName: Run DB Migration and feed data
+      inputs:
+        script: ./TechChallengeApp updatedb
+        workingDirectory: '$(Build.Repository.LocalPath)/dist'
+        failOnStderr: false
+
+    - task: Docker@2
+      displayName: Build and Push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: techapp-docker
+        Dockerfile: '$(Build.Repository.LocalPath)/Dockerfile'
+        containerRegistry: acrServiceConnection
+        tags: latest
+  
