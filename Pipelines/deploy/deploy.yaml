@@ -1,0 +1,21 @@
+parameters:
+  artifactsRoot: ''
+  deploymentMode: 'Incremental'
+  environmentName: ''
+  storageName: ''
+  serviceConnection: ''
+  resourceGroupLocation: 'Australia Southeast'
+  resourceGroup: ''
+  csmFileLink: ''
+  csmParametersFileLink: ''
+  subscriptionId: ''
+
+steps:
+  - task: Kubernetes@1
+    displayName: kubectl apply
+    inputs:
+      connectionType: Kubernetes Service Connection
+      kubernetesServiceEndpoint: techappaksserviceconnection
+      command: apply
+      useConfigurationFile: true
+      configuration: '$(Pipeline.Workspace)/templates/manifest.yaml'

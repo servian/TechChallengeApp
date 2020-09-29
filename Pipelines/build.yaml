@@ -39,4 +39,33 @@ stages:
         Dockerfile: '$(Build.Repository.LocalPath)/Dockerfile'
         containerRegistry: techappacrserviceconnection
         tags: latest
+
+    - publish: $(Build.Repository.LocalPath)/Pipelines
+      artifact: drop
+
+- stage: Deploy
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  dependsOn: ['Build']
+  jobs:
+  - deployment: Production
+    pool:
+        vmImage: 'ubuntu-latest'
+    environment: Production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - template: '/deploy/deploy.yaml'
+            parameters:
+              artifactsRoot: ''
+              serviceConnection: ''
+              environmentName: 'Prod'
+              subscriptionId: ''
+              resourceGroup: ''
+              csmFileLink: ''
+              csmParametersFileLink: ''
+
+
   
