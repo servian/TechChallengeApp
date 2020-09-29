@@ -57,7 +57,7 @@ stages:
           steps:
           - download: current
             artifact: drop
-          - template: '/deploy/deploy.yaml'
+          - template: 'deploy/deploy.yaml'
             parameters:
               artifactsRoot: ''
               serviceConnection: ''
