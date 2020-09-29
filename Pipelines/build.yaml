@@ -37,6 +37,6 @@ stages:
         command: buildAndPush
         repository: techapp-docker
         Dockerfile: '$(Build.Repository.LocalPath)/Dockerfile'
-        containerRegistry: acrServiceConnection
+        containerRegistry: techappacrserviceconnection
         tags: latest
   
