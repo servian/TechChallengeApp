@@ -18,4 +18,4 @@ steps:
       kubernetesServiceEndpoint: techappaksserviceconnection
       command: apply
       useConfigurationFile: true
-      configuration: '$(Pipeline.Workspace)/templates/manifest.yaml'
+      configuration: '$(Pipeline.Workspace)/drop/templates/manifest.yaml'
