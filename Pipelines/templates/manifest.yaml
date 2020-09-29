@@ -17,6 +17,8 @@ spec:
       containers:
       - name: techchallenge-aks
         image: techappacr.azurecr.io/techapp-docker:latest
+      imagePullSecrets:
+      - name: acrsecret
         resources:
           requests:
             cpu: 100m
