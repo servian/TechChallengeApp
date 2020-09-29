@@ -24,7 +24,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-
+    "strings"
 	"github.com/lib/pq"
 
 	_ "github.com/lib/pq"
@@ -49,7 +49,8 @@ func getDbInfo(cfg Config) string {
 func RebuildDb(cfg Config) error {
 	dbinfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=postgres sslmode=disable",
 		cfg.DbHost, cfg.DbPort, cfg.DbUser, cfg.DbPassword)
-
+	index := strings.LastIndex( cfg.DbUser, "@" )	
+	dbowner := cfg.DbUser[0:index]	
 	db, err := sql.Open("postgres", dbinfo)
 
 	if err != nil {
@@ -57,7 +58,7 @@ func RebuildDb(cfg Config) error {
 	}
 
 	defer db.Close()
-
+    
 	query := "DROP DATABASE IF EXISTS " + cfg.DbName
 
 	fmt.Println(query)
@@ -76,7 +77,7 @@ LC_COLLATE = 'en_US.utf8'
 LC_CTYPE = 'en_US.utf8'
 TABLESPACE = pg_default
 CONNECTION LIMIT = -1
-TEMPLATE template0;`, cfg.DbName, cfg.DbUser)
+TEMPLATE template0;`, cfg.DbName, dbowner)
 
 	fmt.Println(query)
 
