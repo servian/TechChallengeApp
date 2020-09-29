@@ -1,4 +1,4 @@
-"DbUser" = "azureadmin"
+"DbUser" = "azureadmin@postazuresql"
 "DbPassword" = "Welcome@123"
 "DbName" = "app"
 "DbPort" = "5432"
