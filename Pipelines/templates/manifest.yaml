@@ -14,11 +14,11 @@ spec:
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
+      imagePullSecrets:
+       - name: acrsecret
       containers:
       - name: techchallenge-aks
         image: techappacr.azurecr.io/techapp-docker:latest
-      imagePullSecrets:
-      - name: acrsecret
         resources:
           requests:
             cpu: 100m
