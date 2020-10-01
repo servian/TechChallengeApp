@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "registryName": {
+            "value": "$(registryName)"
+        },
+        "registryskuTier": {
+            "value": "$(registryskuTier)"
+        },
+        "databaseServerName": {
+            "value": "$(databaseServerName)"
+        },
+        "administratorLogin": {
+            "value": "$(administratorLogin)"
+        },
+        "databaseSkuCapacity": {
+            "value": "$(databaseSkuCapacity)"
+        },
+        "databaseSkuName": {
+            "value": "$(databaseSkuName)"
+        },
+        "databaseSkuSizeMB": {
+            "value": "$(databaseSkuSizeMB)"
+        },
+        "databaseSkuTier": {
+            "value": "$(databaseSkuTier)"
+        },
+        "databaseskuFamily": {
+            "value": "$(databaseskuFamily)"
+        },
+        "clusterName": {
+            "value": "$(clusterName)"
+        },
+        "dnsPrefix": {
+            "value": "$(dnsPrefix)"
+        },
+        "linuxAdminUsername": {
+            "value": "$(linuxAdminUsername)"
+        },
+        "sshRSAPublicKey": {
+            "value": "$(sshRSAPublicK)"
+        },
+        "servicePrincipalClientId": {
+            "value": "$(servicePrincipalClientId)"
+        },
+        "servicePrincipalClientSecret": {
+            "value": "$(servicePrincipalClientSecret)"
+        },
+        "osType": {
+            "value": "$(osType)"
+        }
+    }
+}
