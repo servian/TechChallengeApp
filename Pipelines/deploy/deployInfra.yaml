@@ -1,5 +1,15 @@
 name: $(Date:yyyyMMdd).$(Rev:r)
 
+variables:
+  - name: deploymentMode
+    value: 'incremental'
+  - name: serviceConnection
+    value: 'techappserviceconnection'
+  - name: subscriptionId
+    value: 'cafbdbed-54ea-4766-abfc-af46b69af45f'
+  - name: resourceGroup
+    value: 'tech-app-rg'
+
 
 trigger:
   batch: true
@@ -10,50 +20,16 @@ trigger:
     exclude:
      - doc
      - ReadME.md
-parameters:
-  artifactsRoot: ''
-  deploymentMode: 'Incremental'
-  environmentName: ''
-  storageName: ''
-  serviceConnection: ''
-  resourceGroupLocation: 'Australia Southeast'
-  resourceGroup: ''
-  csmFileLink: ''
-  csmParametersFileLink: ''
-  subscriptionId: ''
 
 stages:
-- stage: PublishArtifacts
+- stage: Build
   jobs:
-  - job: 'PublishArtifacts'
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - publish: $(Build.Repository.LocalPath)/Pipelines/Infra
-      artifact: drop
-
-- stage: InfraDeploy
-  dependsOn: ['PublishArtifacts']
-  jobs:
-  - deployment: InfraDeploy
-    pool:
-        vmImage: 'ubuntu-latest'
-    environment: Production
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: drop
-          - task: AzureResourceManagerTemplateDeployment@3
-            displayName: 'Deploy ARM templates - ${{ parameters.deploymentMode }}'
-            inputs:
-              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: ${{ parameters.subscriptionId }}
-              resourceGroupName: ${{ parameters.resourceGroup }}
-              location: ${{ parameters.resourceGroupLocation }}
-              csmFile: ${{ parameters.csmFileLink }}
-              csmParametersFile: ${{ parameters.csmParametersFileLink }}
-
-
-            
+    - task: AzureResourceManagerTemplateDeployment@3
+      displayName: 'Deploy ARM templates'
+      inputs:
+        azureResourceManagerConnection: '$(serviceConnection)'
+        subscriptionId: '$(subscriptionId)'
+        resourceGroupName: '$(resourceGroup)'
+        location: 'Australia Southeast'
+        csmFile: '$(Build.Repository.LocalPath)/Pipelines/Infra/azuredeploy.json'
+        csmParametersFile: '$(Build.Repository.LocalPath)/Pipelines/Infra/azuredeploy.parameters.json'
