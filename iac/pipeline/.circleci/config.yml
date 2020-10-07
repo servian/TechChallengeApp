@@ -1,0 +1,164 @@
+version: 2
+
+references:
+
+base_image: &base_image
+              ubuntu-1604:202007-01
+
+working_directory: &working_directory
+                     ~/example
+
+default_config: &default_config
+  docker:
+    - image: *base_image
+  working_directory: *working_directory
+  environment:
+    BASH_ENV: /root/.bashrc
+
+repo_cache_key: &repo_cache_key
+                  v1-repo-{{ .Branch }}-{{ .Revision }}
+
+
+# Step to restore repository from cache
+restore_repo: &restore_repo
+  restore_cache:
+    key: *repo_cache_key
+
+save_repo: &save_repo
+  save_cache:
+    key: *repo_cache_key
+    paths:
+      - *working_directory
+
+# test docker along with postgre in a container, override the command to run database migration as well locally
+# curl the api's and SPA to see if they are responding as required
+test_docker: &test_docker
+  <<: *default_config
+  steps:
+    - *restore_repo
+    - attach_workspace:
+        at: *working_directory
+    - run:
+        name: Build and push Docker image
+        command: |
+          docker-compose up
+          curl -L http://localhost | grep error
+
+build_docker: &build_docker
+  <<: *default_config
+  steps:
+    - *restore_repo
+    - attach_workspace:
+        at: *working_directory
+    - run:
+        name: Build and push Docker image
+        command: |
+          docker-compose build
+          echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+          docker push ariv3ra/$IMAGE_NAME:$TAG
+
+get_terraform: &get_terraform
+  <<: *default_config
+  steps:
+    - *restore_repo
+    - attach_workspace:
+        at: *working_directory
+    - run:
+        name: get terraform
+        command: |
+          cd iac/terraform/environments
+          make get-terraform
+
+deploy_dev: &deploy_dev
+  <<: *default_config
+  steps:
+    - *restore_repo
+    - attach_workspace:
+        at: *working_directory
+    - run:
+        name: terraform apply dev
+        command: |
+          cd iac/terraform/environments
+          make deploy-dev
+
+
+deploy_prod: &deploy_prod
+  <<: *default_config
+  steps:
+    - *restore_repo
+    - attach_workspace:
+        at: *working_directory
+    - run:
+        name: terraform apply prod
+        command: |
+          cd iac/terraform/environments
+          make deploy-prod
+
+jobs:
+
+  local-test:
+    <<: *default_config
+    steps:
+      - checkout
+      - *save_repo
+      - *test_docker
+
+  build:
+    <<: *default_config
+    steps:
+      - checkout
+      - *save_repo
+      - *build_docker
+
+  plan:
+    <<: *default_config
+    steps:
+      - *restore_repo
+      - run:
+          name: terraform plan dev/prod
+          command: |
+            cd iac/terraform/environments
+            make plan-dev
+            make plan-prod
+      - persist_to_workspace:
+          root: iac/terraform/environments/dev
+          paths:
+            - terraform.plan
+      - persist_to_workspace:
+          root: iac/terraform/environments/prod
+          paths:
+            - terraform.plan
+
+  apply:
+    <<: *deploy_dev
+  apply-with-approval:
+    <<: *deploy_prod
+
+workflows:
+  version: 2
+  build_plan_approve_apply:
+    jobs:
+      - local-test
+      - build
+      - plan:
+          requires:
+            - build
+      - approve:
+          type: approval
+          requires:
+            - plan
+          filters:
+            branches:
+              only: master
+      - apply-with-approval:
+          requires:
+            - approve
+          filters:
+            branches:
+              only: master
+      - apply:
+          requires:
+            - plan
+          filters:
+            branches:
+              only: staging

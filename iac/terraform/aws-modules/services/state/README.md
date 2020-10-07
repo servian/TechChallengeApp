@@ -1,0 +1,1 @@
+# This module creates the s3 bucket and dynamo db to store the terraform state.
