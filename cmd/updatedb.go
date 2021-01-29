@@ -22,6 +22,8 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 
 	"github.com/servian/TechChallengeApp/db"
 	"github.com/spf13/cobra"
@@ -37,6 +39,7 @@ var updatedbCmd = &cobra.Command{
 
 		if err != nil {
 			fmt.Println(err)
+			os.Exit(1)
 		}
 	},
 }
