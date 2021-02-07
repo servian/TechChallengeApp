@@ -47,10 +47,10 @@ var rootCmd = &cobra.Command{
 ,c,....'cOx.   .lOxc,...':dkc.   :Kc           'Ox',kk.       .kk.    ,xko;'..';okk00,  '0d         '0d   ';;;;;;;;;;,.
 'looooool;.      .;ldddddo:.     'l'            .lool.         ::       'coddddoc'.;l.  .l;         .c;  .cxxxxxxxxxxo.
 
-This application is used as part of testing potential candiates at Sevian.
+This application is used as part of challenging potential candiates at Sevian.
 
 Please visit http://Servian.com for more details`,
-  Version: "0.7.0",
+  Version: "0.8.0",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
