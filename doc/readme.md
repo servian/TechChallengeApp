@@ -97,12 +97,6 @@ The application itself is a React based single page application (SPA) with an AP
 
 Application is built using golang, this can be installed in many ways, go to [golang](https://golang.org/) to download the version that suits you.
 
-#### dep
-
-dep is used for dependency management in golang, please download and install dep from the [official source](https://github.com/golang/dep).
-
-Linux / MacOS: `curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh`
-
 #### Docker
 
 If building using docker you need to have docker installed on your local machine. Download from the [docker website](https://www.docker.com/get-started)

@@ -56,13 +56,17 @@ Candidates will be assessed across the following categories:
 
 Single page application designed to be ran inside a container or on a vm (IaaS) with a postgres database to store data.
 
-It is completely self contained, and should not require any additional dependencies to run.
+It is completely self contained, pre-built, and should not require any additional dependencies to run.
 
 ## Install
 
 1. Download latest binary from release
 2. unzip into desired location
 3. and you should be good to go
+
+### Alternativly
+
+`docker pull servian/techchallengeapp:latest`
 
 ## Start server
 
@@ -80,22 +84,6 @@ update `conf.toml` with database settings
 
 `/healthcheck/` - Used to validate the health of the application
 
-## Compile from source
+## Finally
 
-### Requires
-
-#### dep
-
-`curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh`
-
-### Process
-
-`go get -d github.com/Servian/TechChallengeApp`
-
-run `build.sh`
-
-the `dist` folder contains the compiled web package
-
-### Docker build
-
-`docker build . -t servian/techchallengeapp:latest`
+More details about configuring the application can be found in the [document folder](doc/config.md)
