@@ -20,7 +20,7 @@ RUN go mod tidy
 
 COPY . .
 
-RUN go build -o /TechChallengeApp
+RUN go build -ldflags="-s -w" -a -o /TechChallengeApp
 RUN swagger generate spec -o /swagger.json
 
 FROM alpine:latest
