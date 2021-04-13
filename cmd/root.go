@@ -21,12 +21,12 @@
 package cmd
 
 import (
-  "fmt"
-  "os"
+	"fmt"
+	"os"
 
-  "github.com/servian/TechChallengeApp/config"
-  "github.com/servian/TechChallengeApp/daemon"
-  "github.com/spf13/cobra"
+	"github.com/servian/TechChallengeApp/config"
+	"github.com/servian/TechChallengeApp/daemon"
+	"github.com/spf13/cobra"
 )
 
 var cfgFile string
@@ -34,9 +34,9 @@ var cfg *daemon.Config
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-  Use:   "TechChallengeApp",
-  Short: "Application used to test potential candidates at Servian",
-  Long: `
+	Use:   "TechChallengeApp",
+	Short: "Application used to test potential candidates at Servian",
+	Long: `
  .:ooooool,      .:odddddl;.      .;ooooc. .l,          ;c.    ::.      'coddddoc'         ,looooooc.                  
 'kk;....';,    .lOx:'...,cxkc.   .dOc....  .xO'        ,0d.   .kk.    ,xko;....;okx,     .xkl,....;dOl.                
 :Xl           .xO,         :0d.  ;Kl        ,0o       .dO'    .kk.   :0d.        .d0:   .xO'        lK:                
@@ -50,37 +50,37 @@ var rootCmd = &cobra.Command{
 This application is used as part of challenging potential candiates at Sevian.
 
 Please visit http://Servian.com for more details`,
-  Version: "0.8.0",
+	Version: "0.8.0",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-  if err := rootCmd.Execute(); err != nil {
-    fmt.Println(err)
-    os.Exit(1)
-  }
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
 
 func init() {
-  cobra.OnInitialize(initConfig)
+	cobra.OnInitialize(initConfig)
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-  conf, err := config.LoadConfig()
+	conf, err := config.LoadConfig()
 
-  if err != nil {
-    fmt.Print(err)
-    os.Exit(1)
-  }
+	if err != nil {
+		fmt.Print(err)
+		os.Exit(1)
+	}
 
-  cfg = &daemon.Config{}
-  cfg.UI.DB.DbName = conf.DbName
-  cfg.UI.DB.DbPassword = conf.DbPassword
-  cfg.UI.DB.DbUser = conf.DbUser
-  cfg.UI.DB.DbHost = conf.DbHost
-  cfg.UI.DB.DbPort = conf.DbPort
-  cfg.ListenSpec = conf.ListenHost + ":" + conf.ListenPort
+	cfg = &daemon.Config{}
+	cfg.UI.DB.DbName = conf.DbName
+	cfg.UI.DB.DbPassword = conf.DbPassword
+	cfg.UI.DB.DbUser = conf.DbUser
+	cfg.UI.DB.DbHost = conf.DbHost
+	cfg.UI.DB.DbPort = conf.DbPort
+	cfg.ListenSpec = conf.ListenHost + ":" + conf.ListenPort
 
 }
