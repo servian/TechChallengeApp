@@ -103,5 +103,5 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Docker build
         run: |
-          docker build . -t ashokshrm.azurecr.io/TechChallengeApp:${{ github.sha }}
-          docker push ashokshrm.azurecr.io/TechChallengeApp:${{ github.sha }}
+          docker build . -t ashokshrm.azurecr.io/techchallengeapp:${{ github.sha }}
+          docker push ashokshrm.azurecr.io/techchallengeapp:${{ github.sha }}
