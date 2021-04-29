@@ -99,8 +99,8 @@ jobs:
         uses: azure/docker-login@v1
         with:
           login-server: ashokshrm.azurecr.io #mycontainer.azurecr.io
-          username: ${{ secrets.AZUE_USERNAME }}
-          password: ${{ secrets.AZUE_PASSWORD }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Docker build
         run: |
           docker build . -t ashokshrm.azurecr.io/TechChallengeApp:${{ github.sha }}
