@@ -98,10 +98,10 @@ jobs:
       - name: Log into ACR
         uses: azure/docker-login@v1
         with:
-          login-server: ashokshrm.azurecr.io #mycontainer.azurecr.io
+          login-server: ${{ secrets.LOGIN_SERVER }} #mycontainer.azurecr.io
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Docker build
         run: |
-          docker build . -t ashokshrm.azurecr.io/techchallengeapp:${{ github.sha }}
-          docker push ashokshrm.azurecr.io/techchallengeapp:${{ github.sha }}
+          docker build . -t ${{ secrets.LOGIN_SERVER }}/techchallengeapp:${{ github.sha }}
+          docker push ${{ secrets.LOGIN_SERVER }}/techchallengeapp:${{ github.sha }}
