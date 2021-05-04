@@ -24,6 +24,7 @@ RUN go build -ldflags="-s -w" -a -o /TechChallengeApp
 RUN swagger generate spec -o /swagger.json
 
 FROM alpine:latest
+
 WORKDIR /TechChallengeApp
 
 COPY assets ./assets

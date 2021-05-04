@@ -49,7 +49,7 @@ var skipCreateDbOption bool
 func init() {
 	rootCmd.AddCommand(updatedbCmd)
 	updatedbCmd.Flags().BoolVarP(&skipCreateDbOption, "skip-create-db", "s", false, "Use to skip the creation of the database")
-	}
+}
 
 func updateDb(cfg db.Config) error {
 
@@ -72,5 +72,5 @@ func updateDb(cfg db.Config) error {
 	//fmt.Println("Seeding table with data")
 	//err = db.SeedData(cfg)
 
-    return err
+	return err
 }
