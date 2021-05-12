@@ -1,0 +1,558 @@
+{
+   "Description": "CloudFormation Stack for TechChallange App Build consists IAM Roles, Security Groups, RDS DB and Autoscalling Group\n",
+   "Metadata": {
+      "AWS::CloudFormation::Interface": {
+         "ParameterGroups": [
+            {
+               "Label": {
+                  "default": "Mendatory Inputs: VPC and Subnets for LB and App\\DB Resources"
+               },
+               "Parameters": [
+                  "vpcid",
+                  "privatesubnets",
+                  "publicsubnets"
+               ]
+            },
+            {
+               "Label": {
+                  "default": "Public CIDR to be used for LB Access"
+               },
+               "Parameters": [
+                  "publiccidr"
+               ]
+            },
+            {
+               "Label": {
+                  "default": "Optional Parameters: Environment Tags"
+               },
+               "Parameters": [
+                  "env"
+               ]
+            },
+            {
+               "Label": {
+                  "default": "Optional Parameters: Database Parameters"
+               },
+               "Parameters": [
+                  "dbengine",
+                  "dbengineversion",
+                  "dbinstanceclass",
+                  "dbstorage",
+                  "dbname",
+                  "dbuser",
+                  "dbpassword"
+               ]
+            },
+            {
+               "Label": {
+                  "default": "Optional Parameters: Autoscaling Group Parameters"
+               },
+               "Parameters": [
+                  "imageid",
+                  "hostport",
+                  "linuxamiidssm",
+                  "instancetype"
+               ]
+            }
+         ]
+      }
+   },
+   "Parameters": {
+      "env": {
+         "Type": "String",
+         "Default": "dev",
+         "Description": "Environment Name"
+      },
+      "vpcid": {
+         "Type": "AWS::EC2::VPC::Id",
+         "Description": "Select Valid VPC for Deployment"
+      },
+      "publiccidr": {
+         "Type": "String",
+         "Default": "0.0.0.0/0",
+         "Description": "Provide public accecibility CIDR range for LB, It can be private cidr of organization network or users device's public ip"
+      },
+      "publicsubnets": {
+         "Description": "subnet ids for the lb(public subnets), the subnets should be accessible from public ip",
+         "Type": "List<AWS::EC2::Subnet::Id>"
+      },
+      "privatesubnets": {
+         "Description": "subnet ids for DB and Autoscalling group",
+         "Type": "List<AWS::EC2::Subnet::Id>"
+      },
+      "dbuser": {
+         "Type": "String",
+         "Description": "dbuser for the DB and keep the same in asg stack",
+         "Default": "dbadmin"
+      },
+      "dbpassword": {
+         "Type": "String",
+         "NoEcho": "true",
+         "Description": "dbpassword for the DB and keep the same in asg stack",
+         "Default": "AdminPass1"
+      },
+      "dbinstanceid": {
+         "Type": "String",
+         "Default": "devwebdb",
+         "Description": "Provide DB Instance ID and keep the same in asg stack"
+      },
+      "dbname": {
+         "Type": "String",
+         "Default": "webdb",
+         "Description": "Provide DB Name and keep the same in asg stack"
+      },
+      "dbengine": {
+         "Type": "String",
+         "Default": "postgres",
+         "Description": "Provide Valid DB Engine Name"
+      },
+      "dbengineversion": {
+         "Type": "String",
+         "Default": "10.10",
+         "Description": "Provide Valid DB Engine Version"
+      },
+      "dbinstanceclass": {
+         "Type": "String",
+         "Default": "db.t2.micro",
+         "Description": "Provide Valid DB Instance Class"
+      },
+      "dbstorage": {
+         "Type": "String",
+         "Default": "10",
+         "Description": "Provide size of the database (GiB)"
+      },
+      "imageid": {
+         "Description": "The docker image id and tag for techchanllenge app : DONOT CHANGE FOR NOW",
+         "Type": "String",
+         "Default": "praveenkpatidar/techchallenge:7"
+      },
+      "hostport": {
+         "Description": "Host port for container to run",
+         "Type": "String",
+         "Default": "80"
+      },
+      "linuxamiidssm": {
+         "Description": "The SSM Parameter for the AMI ID",
+         "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+         "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+      },
+      "instancetype": {
+         "Type": "String",
+         "Default": "t2.micro"
+      }
+   },
+   "Resources": {
+      "WebASGRole": {
+         "Type": "AWS::IAM::Role",
+         "Properties": {
+            "AssumeRolePolicyDocument": {
+               "Version": "2012-10-17T00:00:00.000Z",
+               "Statement": [
+                  {
+                     "Effect": "Allow",
+                     "Principal": {
+                        "Service": [
+                           "ec2.amazonaws.com"
+                        ]
+                     },
+                     "Action": [
+                        "sts:AssumeRole"
+                     ]
+                  }
+               ]
+            },
+            "Path": "/",
+            "RoleName": null,
+            "ManagedPolicyArns": [
+               "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+            ],
+            "Tags": [
+               {
+                  "Key": "Environment",
+                  "Value": null
+               }
+            ]
+         }
+      },
+      "WebASGInstanceProfile": {
+         "Type": "AWS::IAM::InstanceProfile",
+         "Properties": {
+            "Path": "/",
+            "Roles": [
+               null
+            ]
+         }
+      },
+      "WebElbSg": {
+         "Type": "AWS::EC2::SecurityGroup",
+         "Properties": {
+            "GroupDescription": "Security Group for WebElbSg ",
+            "VpcId": null,
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               }
+            ]
+         }
+      },
+      "WebElbSgIngressExternalHTTP": {
+         "Type": "AWS::EC2::SecurityGroupIngress",
+         "Properties": {
+            "GroupId": null,
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIp": null
+         }
+      },
+      "WebElbSgEgressWebSgHTTP": {
+         "Type": "AWS::EC2::SecurityGroupEgress",
+         "Properties": {
+            "GroupId": null,
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "DestinationSecurityGroupId": null
+         }
+      },
+      "WebASGSg": {
+         "Type": "AWS::EC2::SecurityGroup",
+         "Properties": {
+            "GroupDescription": "Security Group for WebASGSg ",
+            "VpcId": null,
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               }
+            ]
+         }
+      },
+      "WebASGSgIngressWebElbSg": {
+         "Type": "AWS::EC2::SecurityGroupIngress",
+         "Properties": {
+            "GroupId": null,
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "SourceSecurityGroupId": null
+         }
+      },
+      "WebDBSg": {
+         "Type": "AWS::EC2::SecurityGroup",
+         "Properties": {
+            "GroupDescription": "Security Group for WebDBSg ",
+            "VpcId": null,
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               }
+            ]
+         }
+      },
+      "WebDBSgIngressWebDBSg": {
+         "Type": "AWS::EC2::SecurityGroupIngress",
+         "Properties": {
+            "GroupId": null,
+            "IpProtocol": "tcp",
+            "FromPort": 5432,
+            "ToPort": 5432,
+            "SourceSecurityGroupId": null
+         }
+      },
+      "WebLB": {
+         "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+         "Properties": {
+            "Name": null,
+            "Subnets": null,
+            "Scheme": "internet-facing",
+            "SecurityGroups": [
+               null
+            ],
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               },
+               {
+                  "Key": "Role",
+                  "Value": "web-lb"
+               },
+               {
+                  "Key": "Environment",
+                  "Value": null
+               }
+            ]
+         }
+      },
+      "WebLBListener": {
+         "Type": "AWS::ElasticLoadBalancingV2::Listener",
+         "Properties": {
+            "LoadBalancerArn": null,
+            "Port": 80,
+            "Protocol": "HTTP",
+            "DefaultActions": [
+               {
+                  "Type": "forward",
+                  "TargetGroupArn": null
+               }
+            ]
+         }
+      },
+      "WebTargetGroup": {
+         "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+         "Properties": {
+            "Name": null,
+            "VpcId": null,
+            "Port": 80,
+            "Protocol": "HTTP",
+            "Tags": [
+               {
+                  "Key": "Role",
+                  "Value": "web-lb-tg-http"
+               },
+               {
+                  "Key": "Environment",
+                  "Value": null
+               }
+            ]
+         }
+      },
+      "DBSubnetGroup": {
+         "Type": "AWS::RDS::DBSubnetGroup",
+         "Properties": {
+            "DBSubnetGroupDescription": "CloudFormation managed DB subnet group.",
+            "SubnetIds": null
+         }
+      },
+      "WebDB": {
+         "Type": "AWS::RDS::DBInstance",
+         "DeletionPolicy": "Delete",
+         "UpdateReplacePolicy": "Delete",
+         "Properties": {
+            "DBInstanceIdentifier": null,
+            "DBName": null,
+            "DBInstanceClass": null,
+            "AllocatedStorage": null,
+            "Engine": null,
+            "EngineVersion": null,
+            "MasterUsername": null,
+            "MasterUserPassword": null,
+            "DBSubnetGroupName": null,
+            "VPCSecurityGroups": [
+               null
+            ]
+         }
+      },
+      "SNSTopic": {
+         "Type": "AWS::SNS::Topic"
+      },
+      "ASGGroup": {
+         "DependsOn": "WebDB",
+         "Type": "AWS::AutoScaling::AutoScalingGroup",
+         "Properties": {
+            "AutoScalingGroupName": "dev-web-asg",
+            "LaunchConfigurationName": null,
+            "MinSize": "1",
+            "MaxSize": "3",
+            "DesiredCapacity": "1",
+            "VPCZoneIdentifier": null,
+            "HealthCheckType": "EC2",
+            "HealthCheckGracePeriod": 600,
+            "TargetGroupARNs": [
+               null
+            ],
+            "NotificationConfigurations": [
+               {
+                  "TopicARN": null,
+                  "NotificationTypes": [
+                     "autoscaling:EC2_INSTANCE_LAUNCH",
+                     "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+                     "autoscaling:EC2_INSTANCE_TERMINATE",
+                     "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"
+                  ]
+               }
+            ]
+         },
+         "CreationPolicy": {
+            "ResourceSignal": {
+               "Timeout": "PT15M",
+               "Count": 1
+            }
+         },
+         "UpdatePolicy": {
+            "AutoScalingRollingUpdate": {
+               "MinInstancesInService": 1,
+               "MaxBatchSize": 1,
+               "PauseTime": "PT15M",
+               "WaitOnResourceSignals": true
+            }
+         }
+      },
+      "LaunchConfiguration": {
+         "Type": "AWS::AutoScaling::LaunchConfiguration",
+         "Metadata": {
+            "Comment": "Installing techchanllenge Application",
+            "AWS::CloudFormation::Init": {
+               "config": {
+                  "packages": {
+                     "yum": {
+                        "docker": []
+                     }
+                  },
+                  "files": {
+                     "/techchallenge/conf.toml": {
+                        "content": null,
+                        "mode": "000400",
+                        "owner": "root",
+                        "group": "root"
+                     },
+                     "/etc/cfn/cfn-hup.conf": {
+                        "content": null,
+                        "mode": "000400",
+                        "owner": "root",
+                        "group": "root"
+                     },
+                     "/etc/cfn/hooks.d/cfn-auto-reloader.conf": {
+                        "content": null
+                     }
+                  },
+                  "services": {
+                     "sysvinit": {
+                        "cfn-hup": {
+                           "enabled": true,
+                           "ensureRunning": true,
+                           "files": [
+                              "/etc/cfn/cfn-hup.conf",
+                              "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
+                           ]
+                        }
+                     }
+                  },
+                  "commands": {
+                     "01_run_docker_service": {
+                        "command": "service docker start; chkconfig docker on",
+                        "env": {
+                           "PATH": "usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+                        }
+                     },
+                     "02_run_docker_setup_db": {
+                        "command": null,
+                        "env": {
+                           "PATH": "usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+                        }
+                     },
+                     "03_run_docker_command": {
+                        "command": null,
+                        "env": {
+                           "PATH": "usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+                        }
+                     }
+                  }
+               }
+            }
+         },
+         "Properties": {
+            "ImageId": null,
+            "SecurityGroups": [
+               null
+            ],
+            "InstanceType": null,
+            "IamInstanceProfile": null,
+            "BlockDeviceMappings": [
+               {
+                  "DeviceName": "/dev/xvda",
+                  "Ebs": {
+                     "VolumeSize": 10,
+                     "VolumeType": "gp2",
+                     "Encrypted": true
+                  }
+               }
+            ],
+            "UserData": {
+               "Fn::Base64": null
+            }
+         }
+      },
+      "WebASGScaleUpPolicy": {
+         "Type": "AWS::AutoScaling::ScalingPolicy",
+         "Properties": {
+            "AdjustmentType": "ChangeInCapacity",
+            "AutoScalingGroupName": null,
+            "Cooldown": "60",
+            "ScalingAdjustment": 1
+         }
+      },
+      "WebASGScaleDownPolicy": {
+         "Type": "AWS::AutoScaling::ScalingPolicy",
+         "Properties": {
+            "AdjustmentType": "ChangeInCapacity",
+            "AutoScalingGroupName": null,
+            "Cooldown": "60",
+            "ScalingAdjustment": -1
+         }
+      },
+      "CPUAlarmHigh": {
+         "Type": "AWS::CloudWatch::Alarm",
+         "Properties": {
+            "AlarmDescription": "Scale-up if CPU > 90% for 10 minutes",
+            "MetricName": "CPUUtilization",
+            "Namespace": "AWS/EC2",
+            "Statistic": "Average",
+            "Period": 300,
+            "EvaluationPeriods": 2,
+            "Threshold": 90,
+            "AlarmActions": [
+               null
+            ],
+            "Dimensions": [
+               {
+                  "Name": "AutoScalingGroupName",
+                  "Value": null
+               }
+            ],
+            "ComparisonOperator": "GreaterThanThreshold"
+         }
+      },
+      "CPUAlarmLow": {
+         "Type": "AWS::CloudWatch::Alarm",
+         "Properties": {
+            "AlarmDescription": "Scale-down if CPU < 70% for 10 minutes",
+            "MetricName": "CPUUtilization",
+            "Namespace": "AWS/EC2",
+            "Statistic": "Average",
+            "Period": 300,
+            "EvaluationPeriods": 2,
+            "Threshold": 70,
+            "AlarmActions": [
+               null
+            ],
+            "Dimensions": [
+               {
+                  "Name": "AutoScalingGroupName",
+                  "Value": null
+               }
+            ],
+            "ComparisonOperator": "LessThanThreshold"
+         }
+      }
+   },
+   "Outputs": {
+      "WebASGRole": {
+         "Description": "The InstanceProfileNameForServer",
+         "Value": null
+      },
+      "WebLBDNS": {
+         "Description": "DNS Name to be accesses with HTTP",
+         "Value": null
+      },
+      "devwebdbid": {
+         "Value": null
+      },
+      "devwebdbendpoint": {
+         "Value": null
+      }
+   }
+}

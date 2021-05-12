@@ -1,0 +1,413 @@
+{
+   "AWSTemplateFormatVersion": "2010-09-09",
+   "Description": "Amazon Sample VPC - Private and Public subnets",
+   "Parameters": {
+      "env": {
+         "Type": "String",
+         "Default": "dev"
+      },
+      "VpcBlock": {
+         "Type": "String",
+         "Default": "192.168.0.0/16",
+         "Description": "The CIDR range for the VPC. This should be a valid private (RFC 1918) CIDR range."
+      },
+      "PublicSubnet01Block": {
+         "Type": "String",
+         "Default": "192.168.0.0/18",
+         "Description": "CidrBlock for public subnet 01 within the VPC"
+      },
+      "PublicSubnet02Block": {
+         "Type": "String",
+         "Default": "192.168.64.0/18",
+         "Description": "CidrBlock for public subnet 02 within the VPC"
+      },
+      "PrivateSubnet01Block": {
+         "Type": "String",
+         "Default": "192.168.128.0/18",
+         "Description": "CidrBlock for private subnet 01 within the VPC"
+      },
+      "PrivateSubnet02Block": {
+         "Type": "String",
+         "Default": "192.168.192.0/18",
+         "Description": "CidrBlock for private subnet 02 within the VPC"
+      }
+   },
+   "Metadata": {
+      "AWS::CloudFormation::Interface": {
+         "ParameterGroups": [
+            {
+               "Label": {
+                  "default": "Worker Network Configuration"
+               },
+               "Parameters": [
+                  "VpcBlock",
+                  "PublicSubnet01Block",
+                  "PublicSubnet02Block",
+                  "PrivateSubnet01Block",
+                  "PrivateSubnet02Block"
+               ]
+            }
+         ]
+      }
+   },
+   "Resources": {
+      "VPC": {
+         "Type": "AWS::EC2::VPC",
+         "Properties": {
+            "CidrBlock": null,
+            "EnableDnsSupport": true,
+            "EnableDnsHostnames": true,
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               }
+            ]
+         }
+      },
+      "InternetGateway": {
+         "Type": "AWS::EC2::InternetGateway"
+      },
+      "VPCGatewayAttachment": {
+         "Type": "AWS::EC2::VPCGatewayAttachment",
+         "Properties": {
+            "InternetGatewayId": null,
+            "VpcId": null
+         }
+      },
+      "PublicRouteTable": {
+         "Type": "AWS::EC2::RouteTable",
+         "Properties": {
+            "VpcId": null,
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": "Public Subnets"
+               },
+               {
+                  "Key": "Network",
+                  "Value": "Public"
+               }
+            ]
+         }
+      },
+      "PrivateRouteTable01": {
+         "Type": "AWS::EC2::RouteTable",
+         "Properties": {
+            "VpcId": null,
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": "Private Subnet AZ1"
+               },
+               {
+                  "Key": "Network",
+                  "Value": "Private01"
+               }
+            ]
+         }
+      },
+      "PrivateRouteTable02": {
+         "Type": "AWS::EC2::RouteTable",
+         "Properties": {
+            "VpcId": null,
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": "Private Subnet AZ2"
+               },
+               {
+                  "Key": "Network",
+                  "Value": "Private02"
+               }
+            ]
+         }
+      },
+      "PublicRoute": {
+         "DependsOn": "VPCGatewayAttachment",
+         "Type": "AWS::EC2::Route",
+         "Properties": {
+            "RouteTableId": null,
+            "DestinationCidrBlock": "0.0.0.0/0",
+            "GatewayId": null
+         }
+      },
+      "PrivateRoute01": {
+         "DependsOn": [
+            "VPCGatewayAttachment",
+            "NatGateway01"
+         ],
+         "Type": "AWS::EC2::Route",
+         "Properties": {
+            "RouteTableId": null,
+            "DestinationCidrBlock": "0.0.0.0/0",
+            "NatGatewayId": null
+         }
+      },
+      "PrivateRoute02": {
+         "DependsOn": [
+            "VPCGatewayAttachment",
+            "NatGateway02"
+         ],
+         "Type": "AWS::EC2::Route",
+         "Properties": {
+            "RouteTableId": null,
+            "DestinationCidrBlock": "0.0.0.0/0",
+            "NatGatewayId": null
+         }
+      },
+      "NatGateway01": {
+         "DependsOn": [
+            "NatGatewayEIP1",
+            "PublicSubnet01",
+            "VPCGatewayAttachment"
+         ],
+         "Type": "AWS::EC2::NatGateway",
+         "Properties": {
+            "AllocationId": null,
+            "SubnetId": null,
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               }
+            ]
+         }
+      },
+      "NatGateway02": {
+         "DependsOn": [
+            "NatGatewayEIP2",
+            "PublicSubnet02",
+            "VPCGatewayAttachment"
+         ],
+         "Type": "AWS::EC2::NatGateway",
+         "Properties": {
+            "AllocationId": null,
+            "SubnetId": null,
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               }
+            ]
+         }
+      },
+      "NatGatewayEIP1": {
+         "DependsOn": [
+            "VPCGatewayAttachment"
+         ],
+         "Type": "AWS::EC2::EIP",
+         "Properties": {
+            "Domain": "vpc"
+         }
+      },
+      "NatGatewayEIP2": {
+         "DependsOn": [
+            "VPCGatewayAttachment"
+         ],
+         "Type": "AWS::EC2::EIP",
+         "Properties": {
+            "Domain": "vpc"
+         }
+      },
+      "PublicSubnet01": {
+         "Type": "AWS::EC2::Subnet",
+         "Metadata": {
+            "Comment": "Subnet 01"
+         },
+         "Properties": {
+            "MapPublicIpOnLaunch": true,
+            "AvailabilityZone": {
+               "Fn::Select": [
+                  "0",
+                  {
+                     "Fn::GetAZs": {
+                        "Ref": "AWS::Region"
+                     }
+                  }
+               ]
+            },
+            "CidrBlock": {
+               "Ref": "PublicSubnet01Block"
+            },
+            "VpcId": {
+               "Ref": "VPC"
+            },
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               },
+               {
+                  "Key": "kubernetes.io/role/elb",
+                  "Value": 1
+               },
+               {
+                  "Key": null,
+                  "Value": 1
+               }
+            ]
+         }
+      },
+      "PublicSubnet02": {
+         "Type": "AWS::EC2::Subnet",
+         "Metadata": {
+            "Comment": "Subnet 02"
+         },
+         "Properties": {
+            "MapPublicIpOnLaunch": true,
+            "AvailabilityZone": {
+               "Fn::Select": [
+                  "1",
+                  {
+                     "Fn::GetAZs": {
+                        "Ref": "AWS::Region"
+                     }
+                  }
+               ]
+            },
+            "CidrBlock": {
+               "Ref": "PublicSubnet02Block"
+            },
+            "VpcId": {
+               "Ref": "VPC"
+            },
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               },
+               {
+                  "Key": "kubernetes.io/role/elb",
+                  "Value": 1
+               }
+            ]
+         }
+      },
+      "PrivateSubnet01": {
+         "Type": "AWS::EC2::Subnet",
+         "Metadata": {
+            "Comment": "Subnet 03"
+         },
+         "Properties": {
+            "AvailabilityZone": {
+               "Fn::Select": [
+                  "0",
+                  {
+                     "Fn::GetAZs": {
+                        "Ref": "AWS::Region"
+                     }
+                  }
+               ]
+            },
+            "CidrBlock": {
+               "Ref": "PrivateSubnet01Block"
+            },
+            "VpcId": {
+               "Ref": "VPC"
+            },
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               },
+               {
+                  "Key": "kubernetes.io/role/internal-elb",
+                  "Value": 1
+               }
+            ]
+         }
+      },
+      "PrivateSubnet02": {
+         "Type": "AWS::EC2::Subnet",
+         "Metadata": {
+            "Comment": "Private Subnet 02"
+         },
+         "Properties": {
+            "AvailabilityZone": {
+               "Fn::Select": [
+                  "1",
+                  {
+                     "Fn::GetAZs": {
+                        "Ref": "AWS::Region"
+                     }
+                  }
+               ]
+            },
+            "CidrBlock": {
+               "Ref": "PrivateSubnet02Block"
+            },
+            "VpcId": {
+               "Ref": "VPC"
+            },
+            "Tags": [
+               {
+                  "Key": "Name",
+                  "Value": null
+               },
+               {
+                  "Key": "kubernetes.io/role/internal-elb",
+                  "Value": 1
+               }
+            ]
+         }
+      },
+      "PublicSubnet01RouteTableAssociation": {
+         "Type": "AWS::EC2::SubnetRouteTableAssociation",
+         "Properties": {
+            "SubnetId": null,
+            "RouteTableId": null
+         }
+      },
+      "PublicSubnet02RouteTableAssociation": {
+         "Type": "AWS::EC2::SubnetRouteTableAssociation",
+         "Properties": {
+            "SubnetId": null,
+            "RouteTableId": null
+         }
+      },
+      "PrivateSubnet01RouteTableAssociation": {
+         "Type": "AWS::EC2::SubnetRouteTableAssociation",
+         "Properties": {
+            "SubnetId": null,
+            "RouteTableId": null
+         }
+      },
+      "PrivateSubnet02RouteTableAssociation": {
+         "Type": "AWS::EC2::SubnetRouteTableAssociation",
+         "Properties": {
+            "SubnetId": null,
+            "RouteTableId": null
+         }
+      },
+      "ControlPlaneSecurityGroup": {
+         "Type": "AWS::EC2::SecurityGroup",
+         "Properties": {
+            "GroupDescription": "Cluster communication with worker nodes",
+            "VpcId": null
+         }
+      }
+   },
+   "Outputs": {
+      "SubnetIds": {
+         "Description": "Subnets IDs in the VPC",
+         "Value": null
+      },
+      "PrivateSubnetIds": {
+         "Description": "Subnets IDs in the VPC",
+         "Value": null
+      },
+      "PublicSubnetIds": {
+         "Description": "Subnets IDs in the VPC",
+         "Value": null
+      },
+      "SecurityGroups": {
+         "Description": "Security group for the cluster control plane communication with worker nodes",
+         "Value": null
+      },
+      "VpcId": {
+         "Description": "The VPC Idc",
+         "Value": null
+      }
+   }
+}

@@ -104,6 +104,7 @@ func CreateTable(cfg Config) error {
 
 	defer tx.Rollback()
 
+	/* No more dropping table as it should create one time only when DB intiated by first server
 	query := "DROP TABLE IF EXISTS tasks CASCADE"
 
 	fmt.Println(query)
@@ -112,9 +113,10 @@ func CreateTable(cfg Config) error {
 
 	if err != nil {
 		return err
-	}
+	}*/
 
-	query = "CREATE TABLE tasks ( id SERIAL PRIMARY KEY, completed boolean NOT NULL, priority integer NOT NULL, title text NOT NULL)"
+	// Updating below query to Create only if not exists
+    	query := "CREATE TABLE IF NOT EXISTS tasks ( id SERIAL PRIMARY KEY, completed boolean NOT NULL, priority integer NOT NULL, title text NOT NULL)"
 
 	fmt.Println(query)
 

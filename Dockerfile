@@ -28,10 +28,12 @@ FROM alpine:latest
 WORKDIR /TechChallengeApp
 
 COPY assets ./assets
-COPY conf.toml ./conf.toml
+COPY conf.toml /opt/conf.toml
 
 COPY --from=build /tmp/swagger/dist ./assets/swagger
 COPY --from=build /swagger.json ./assets/swagger/swagger.json
 COPY --from=build /TechChallengeApp TechChallengeApp
+
+EXPOSE 3000
 
 ENTRYPOINT [ "./TechChallengeApp" ]

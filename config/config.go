@@ -45,7 +45,7 @@ func LoadConfig() (*Config, error) {
 
 	v.SetConfigName("conf")
 	v.SetConfigType("toml")
-	v.AddConfigPath(".")
+	v.AddConfigPath("/opt/")
 
 	v.SetEnvPrefix("VTT")
 	v.AutomaticEnv()
@@ -56,7 +56,7 @@ func LoadConfig() (*Config, error) {
 	v.SetDefault("DbPort", "postgres")
 	v.SetDefault("DbHost", "localhost")
 
-	v.SetDefault("ListenHost", "127.0.0.1")
+	v.SetDefault("ListenHost", "localhost")
 	v.SetDefault("ListenPort", "3000")
 
 	err := v.ReadInConfig() // Find and read the config file
