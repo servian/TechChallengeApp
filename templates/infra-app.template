@@ -1,0 +1,328 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Resources to run application 
+Parameters:
+  TemplateRepoURL:
+    Description: URL of S3 bucket with templates
+    Type: String
+  NetworkStack:
+    Description: The stack name to import network config from
+    Type: String
+  CidrBlock1:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for Subnet1.
+    Type: String
+  CidrBlock2:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for Subnet2.
+    Type: String
+  CidrBlock3:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for Subnet3.
+    Type: String
+  RegionShort:
+    Type: String
+    Description: Regional suffix for resources
+    AllowedValues:
+     - apse2
+     - apse1
+  CompanyName:
+    Type: String
+    Description: Company wide prefix
+    Default: "alpha"
+  Service:
+    Type: String
+    Description: Service suffix for name tag mainly
+  ServicePort:
+    Type: Number
+    MinValue: 1024
+    MaxValue: 65535
+  Domain:
+    Type: String
+    Description: Domain name the service would operate under
+    Default: examples.ifm.tools
+  Image:
+    Type: String
+    Description: Docker image for application
+    Default: "servian/techchallengeapp:latest"
+  MinContainers:
+    Type: Number
+    Description: Minimum number of running container instances
+    Default: 2
+  MaxContainers: 
+    Type: Number
+    Description: Maximum number of running container instances
+    Default: 10
+
+Resources:
+  ServicePrivateNetwork:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub 
+        - "${TemplateRepoURL}/infra-private-network.template"
+        - TemplateRepoURL: !Ref TemplateRepoURL
+      Parameters: 
+        NetworkStack: !Ref NetworkStack
+        CidrBlock1: !Ref CidrBlock1
+        CidrBlock2: !Ref CidrBlock2
+        CidrBlock3: !Ref CidrBlock3
+        RegionShort: !Ref RegionShort
+        CompanyName: !Ref CompanyName
+        Service: !Ref Service
+      Tags: 
+        - Key: Name
+          Value: service-network
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ['/', ["/ecs", !Ref Service, "taskdef"]]
+
+  FargateCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName:  !Join ['-', [!Ref CompanyName, 'fc', !Ref RegionShort]]
+
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Join ['-', [!Ref CompanyName, "taskdef", !Ref Service, !Ref RegionShort]]
+      # awsvpc is required for Fargate
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: "256"
+      Memory: 0.5GB
+      ExecutionRoleArn: !GetAtt ExecutionRole.Arn
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: !Ref Service
+          Image: !Ref Image
+          PortMappings:
+            - ContainerPort: !Ref ServicePort
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-region: !Ref AWS::Region
+              awslogs-group: !Ref LogGroup
+              awslogs-stream-prefix: ecs
+
+# Cluster level role, to manage infra related tasks
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Join ['', [!Ref Service, ExecutionRole]]
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+# Container level role (what container can do)
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Join ['', [!Ref Service, TaskRole]]
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      # ManagedPolicyArns:
+      #   -
+      # 
+      # OR
+      #
+      # Policies:
+      #   -
+
+  AutoScalingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Join ['', [!Ref Service, AutoScalingRole]]
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceAutoscaleRole'
+
+  AutoScalingTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MinCapacity: !Ref MinContainers
+      MaxCapacity: !Ref MaxContainers
+      ResourceId: !Join ['/', [service, !Ref FargateCluster, !GetAtt FargateService.Name]]
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+      # "The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that allows Application Auto Scaling to modify your scalable target."
+      RoleARN: !GetAtt AutoScalingRole.Arn
+  
+  AutoScalingPolicy:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: !Join ['/', [!Ref Service, AutoScalingPolicy]]
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId: !Ref AutoScalingTarget
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        ScaleInCooldown: 10
+        ScaleOutCooldown: 10
+        TargetValue: 50
+
+  FargateService:
+    Type: AWS::ECS::Service
+    DependsOn:
+      - Listener
+    Properties: 
+      ServiceName: !Ref Service
+      Cluster: !Ref FargateCluster
+      TaskDefinition: !Ref TaskDefinition
+      DeploymentConfiguration:
+        MinimumHealthyPercent: 100
+        MaximumPercent: 200
+      DesiredCount: 2
+      HealthCheckGracePeriodSeconds: 30
+      LaunchType: FARGATE
+      NetworkConfiguration: 
+        AwsvpcConfiguration:
+          Subnets:
+            - !GetAtt ServicePrivateNetwork.Outputs.PS1ID
+            - !GetAtt ServicePrivateNetwork.Outputs.PS2ID
+            - !GetAtt ServicePrivateNetwork.Outputs.PS3ID
+          SecurityGroups:
+            - !Ref ServiceSecurityGroup
+      LoadBalancers:
+        - ContainerName: !Ref Service
+          ContainerPort: !Ref ServicePort
+          TargetGroupArn: !Ref ServiceTargetGroup
+
+  ServiceTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties: 
+      Name: !Join ['-', [!Ref CompanyName, 'tg', !Ref Service, !Ref ServicePort, !Ref RegionShort]]
+      Port: !Ref ServicePort
+      HealthCheckIntervalSeconds: 5
+      HealthCheckPort: !Ref ServicePort
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 2
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      Protocol: HTTP
+      TargetType: ip
+      TargetGroupAttributes:
+          - Key: deregistration_delay.timeout_seconds
+            Value: "60"
+      VpcId: 
+        Fn::ImportValue:
+          !Sub 
+          - ${NetworkStack}-vpcid
+          - NetworkStack: !Ref NetworkStack
+  
+#  DNSRecord:
+#    Type: AWS::Route53::RecordSetGroup
+#    Properties:
+#      HostedZoneName: !Join ["",[!Ref Domain, "."]]
+#      Comment: Service LB registration
+#      RecordSets:
+#      - Name: !Join ["",["app", ".",!Ref Domain, "."]]
+#        Type: A
+#        AliasTarget:
+#            # HostedZoneId: !GetAtt LoadBalancer.CanonicalHostedZoneID
+#          DNSName: !GetAtt LoadBalancer.DNSName
+
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Join [".",[!Ref Service, !Ref Domain]]
+      ValidationMethod: DNS
+      SubjectAlternativeNames:
+        - !Join [".",["app", !Ref Domain]]
+  
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      IpAddressType: ipv4
+      Scheme: internet-facing
+      Type: application             
+      Subnets:
+        - !Select ["0", !Split [",", !ImportValue "infra-network-dmz-subnet-ids"]] #FIXME: hardcoded parent stack
+        - !Select ["1", !Split [",", !ImportValue "infra-network-dmz-subnet-ids"]]
+        - !Select ["2", !Split [",", !ImportValue "infra-network-dmz-subnet-ids"]]
+      SecurityGroups:
+        - Ref: LoadBalancerSecurityGroup 
+
+  Listener:
+    Type: "AWS::ElasticLoadBalancingV2::Listener"
+    Properties:
+     LoadBalancerArn: !Ref LoadBalancer
+     Port: 443
+     SslPolicy: ELBSecurityPolicy-FS-1-2-2019-08
+     Certificates:
+       - CertificateArn: !Ref Certificate
+     Protocol: "HTTPS"
+     DefaultActions:
+        - TargetGroupArn: !Ref ServiceTargetGroup
+          Type: forward
+
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${Service}-lb-sec-grp"
+      GroupDescription: !Sub "Security group for load balancer in front of ${Service}"  
+      VpcId: 
+        Fn::ImportValue:
+          !Sub 
+          - ${NetworkStack}-vpcid
+          - NetworkStack: !Ref NetworkStack
+      Tags:
+        - Key: Name
+          Value: !Join ['/', [!Ref CompanyName, 'sg', 'loadbalancer', !Ref Service, !Ref RegionShort]]
+
+  SecGroupLoadBalancerAllEgress:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: All egress from LoadBalancer
+      IpProtocol: "-1"
+      CidrIp: "0.0.0.0/0" 
+      GroupId: !GetAtt LoadBalancerSecurityGroup.GroupId
+
+  ServiceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${Service}-sec-grp"
+      GroupDescription: A security group for container instances running application
+      VpcId: 
+        Fn::ImportValue:
+          !Sub 
+          - ${NetworkStack}-vpcid
+          - NetworkStack: !Ref NetworkStack
+      Tags:
+        - Key: Name
+          Value: !Join ['/', [!Ref CompanyName, 'sg', !Ref Service, !Ref RegionShort]]
+  
+  SecGroupIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Allow LB to application flow
+      IpProtocol: tcp
+      FromPort: !Ref ServicePort
+      ToPort: !Ref ServicePort
+      SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
+      GroupId: !GetAtt ServiceSecurityGroup.GroupId
+
+  SecGroupApplicationAllEgress:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: All egress from application instance(s)
+      IpProtocol: "-1"
+      CidrIp: "0.0.0.0/0" 
+      GroupId: !GetAtt ServiceSecurityGroup.GroupId
