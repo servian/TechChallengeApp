@@ -1,0 +1,268 @@
+# Template creates VPC and infrastructure to enable basic network connectivity
+
+# This template does not support regions with more or less than 3 AZ yet. 
+# To support those regions we'll need to figure out conditional provision
+# of resources. 
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: VPC stack across 3 regions with DMZ
+Mappings:
+  GlobalMap:
+    us-east-1:
+      RegionShort: 'usea1'
+    us-east-2: 
+      RegionShort: 'usea2'
+    us-west-1:
+      RegionShort: 'uswe1'
+    us-west-2:
+      RegionShort: 'uswe2'
+    ca-central-1:
+      RegionShort: 'cace1'
+    eu-central-1:
+      RegionShort: 'euce1'
+    eu-west-1:
+      RegionShort: 'euwe1'
+    eu-west-2:
+      RegionShort: 'euwe2'
+    eu-west-3:
+      RegionShort: 'euwe3'
+    eu-north-1:
+      RegionShort: 'euno1'
+    ap-east-1:
+      RegionShort: 'apea1'
+    ap-northeast-1:
+      RegionShort: 'apne1'
+    ap-northeast-2:
+      RegionShort: 'apne2'
+    ap-northeast-3:
+      RegionShort: 'apne3'
+    ap-southeast-1:
+      RegionShort: 'apse1'
+    ap-southeast-2:
+      RegionShort: 'apse2'
+    ap-south-1:
+      RegionShort: 'apso1'
+    me-south-1:
+      RegionShort: 'meso1'
+    sa-east-1:
+      RegionShort: 'saea1'
+
+Parameters:
+  CidrBlockVPC:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for VPC.
+    Type: String
+  
+  DMZCidrBlock1:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for DMZ1.
+    Type: String
+
+  DMZCidrBlock2:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for DMZ2.
+    Type: String
+    
+  DMZCidrBlock3:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for DMZ3.
+    Type: String
+  
+  CompanyName:
+    Type: String
+    Description: Company wide prefix
+
+Resources:
+  ClouwdWatchFlowLogsGroup:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: !Sub "${AWS::StackName}-flow-logs"
+      RetentionInDays: 14
+
+  GatewayAttachement:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  InternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'igw', !FindInMap [GlobalMap, !Ref "AWS::Region", 'RegionShort']]]
+
+  NatElasticIP:
+    Type: "AWS::EC2::EIP"
+    DependsOn: GatewayAttachement
+    Properties:
+      Domain: vpc
+
+  NatGateway:
+    Type: "AWS::EC2::NatGateway"
+    Properties:
+      AllocationId: !GetAtt NatElasticIP.AllocationId
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'nat', !FindInMap [GlobalMap, !Ref "AWS::Region", 'RegionShort']]]
+
+  PublicRoute:
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref PublicRoutingTable
+
+  PublicRoutingTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'rtb-public', !FindInMap [GlobalMap, !Ref "AWS::Region", 'RegionShort']]]
+      VpcId: !Ref VPC
+
+  PublicSubnet1:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select 
+        - 0
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      CidrBlock: !Ref DMZCidrBlock1
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'sbn-public', !FindInMap [GlobalMap, !Ref "AWS::Region", 'RegionShort']]]
+      VpcId: !Ref VPC
+
+  PublicSubnet2:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select 
+        - 1
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      CidrBlock: !Ref DMZCidrBlock2
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'sbn-public', !FindInMap [GlobalMap, !Ref "AWS::Region", 'RegionShort']]]
+      VpcId: !Ref VPC
+
+  PublicSubnet3:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select 
+        - 2
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      CidrBlock: !Ref DMZCidrBlock3
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'sbn-public', !FindInMap [GlobalMap, !Ref "AWS::Region", 'RegionShort']]]
+      VpcId: !Ref VPC
+
+  PublicSubnetRTA2a:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref PublicRoutingTable
+      SubnetId: !Ref PublicSubnet1
+
+  PublicSubnetRTA2b:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref PublicRoutingTable
+      SubnetId: !Ref PublicSubnet2
+
+  PublicSubnetRTA2c:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref PublicRoutingTable
+      SubnetId: !Ref PublicSubnet3
+
+  VPC:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      CidrBlock: !Ref CidrBlockVPC
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'vpc', !FindInMap [GlobalMap, !Ref "AWS::Region", 'RegionShort']]]
+
+  VpcFlowLog:
+    Type: "AWS::EC2::FlowLog"
+    Properties:
+      DeliverLogsPermissionArn: !GetAtt VpcFlowLogRole.Arn
+      LogGroupName: FlowLogsGroup
+      ResourceId: !Ref VPC
+      ResourceType: VPC
+      TrafficType: REJECT
+
+  VpcFlowLogPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - "logs:CreateLogGroup"
+              - "logs:CreateLogStream"
+              - "logs:PutLogEvents"
+              - "logs:DescribeLogGroups"
+              - "logs:DescribeLogStreams"
+            Resource: "*"
+      PolicyName: !Join ['-', [!Ref CompanyName, 'role-vpc-flowlog', !FindInMap [GlobalMap, !Ref "AWS::Region", 'RegionShort']]]
+      Roles:
+        - Ref: VpcFlowLogRole
+
+  VpcFlowLogRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: vpc-flow-logs.amazonaws.com
+            Action: "sts:AssumeRole"
+
+Outputs:
+  Vpc:
+    Description: Id of VPC
+    Value: !Ref VPC
+    Export:
+      Name: !Sub "${AWS::StackName}-vpcid"
+
+  NatGatewayIP:
+    Description: IP address of NAT Gateway
+    Value: !Ref NatElasticIP
+    Export:
+      Name: !Sub "${AWS::StackName}-eip"
+
+  NatGatewayId:
+    Description: "Id of NAT gateway, will be useful when we'll start to link other resources"
+    Value: !Ref NatGateway
+    Export:
+      Name: !Sub "${AWS::StackName}-nat"
+
+  PublicSubnetsIDs:
+    Description: IDs of DMZ subnets
+    Value: !Join
+      - ","
+      - - Ref: PublicSubnet1
+        - Ref: PublicSubnet2
+        - Ref: PublicSubnet3
+    Export:
+      Name: !Sub "${AWS::StackName}-dmz-subnet-ids"
+
+  PublicSubnetsCIDRs:
+    Description: CIDRs of DMZ subnets
+    Value: !Join
+      - ","
+      - - Ref: DMZCidrBlock1
+        - Ref: DMZCidrBlock2
+        - Ref: DMZCidrBlock3
+    Export:
+      Name: !Sub "${AWS::StackName}-dmz-subnet-ips"
