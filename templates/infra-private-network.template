@@ -1,0 +1,137 @@
+# This template does not support regions with more or less than 3 AZ yet. 
+# To support those regions we'll need to figure out conditional provision
+# of resources. 
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: That meant to be used as a low level template to create private subents for the service
+Parameters:
+  NetworkStack:
+    Description: The stack name to import network config from
+    Type: String
+  CompanyName:
+    Type: String
+    Description: Company wide prefix
+  Service:
+    Type: String
+    Description: Service suffix for name tag mainly
+  CidrBlock1:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for Subnet1.
+    Type: String
+  CidrBlock2:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for Subnet2.
+    Type: String
+  CidrBlock3:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for Subnet3.
+    Type: String
+  RegionShort:
+    Type: String
+    Description: Regional suffix for resources
+    AllowedValues:
+     - apse2
+     - apse1
+Resources:
+  PrivateSubnet1:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select 
+        - 0
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      CidrBlock: !Ref CidrBlock1
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'sbn', !Ref Service, !Ref RegionShort]]
+      VpcId: 
+        Fn::ImportValue:
+          !Sub 
+          - ${NetworkStack}-vpcid
+          - NetworkStack: !Ref NetworkStack
+
+  PrivateSubnet2:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select 
+        - 1
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      CidrBlock: !Ref CidrBlock2
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'sbn', !Ref Service, !Ref RegionShort]]
+      VpcId: 
+        Fn::ImportValue:
+          !Sub 
+          - ${NetworkStack}-vpcid
+          - NetworkStack: !Ref NetworkStack
+
+  PrivateSubnet3:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select 
+        - 2
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      CidrBlock: !Ref CidrBlock3
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'sbn', !Ref Service, !Ref RegionShort]]
+      VpcId: 
+        Fn::ImportValue:
+          !Sub 
+          - ${NetworkStack}-vpcid
+          - NetworkStack: !Ref NetworkStack
+
+  ServiceRoutingTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'rtb', !Ref Service, !Ref RegionShort]]
+      VpcId: 
+        Fn::ImportValue:
+          !Sub 
+          - ${NetworkStack}-vpcid
+          - NetworkStack: !Ref NetworkStack
+
+  PrivateSubnetRTA1:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref ServiceRoutingTable
+      SubnetId: !Ref PrivateSubnet1
+
+  PrivateSubnetRTA2:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref ServiceRoutingTable
+      SubnetId: !Ref PrivateSubnet2
+
+  PrivateSubnetRTA3:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref ServiceRoutingTable
+      SubnetId: !Ref PrivateSubnet3
+
+  ServiceRouting:
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: 
+        Fn::ImportValue:
+          !Sub 
+          - ${NetworkStack}-nat
+          - NetworkStack: !Ref NetworkStack
+      RouteTableId: !Ref ServiceRoutingTable
+
+Outputs:
+  PS1ID:
+    Description: Private subnet id
+    Value: !Ref PrivateSubnet1
+  PS2ID:
+    Description: Private subnet id
+    Value: !Ref PrivateSubnet2
+  PS3ID:
+    Description: Private subnet id
+    Value: !Ref PrivateSubnet3
