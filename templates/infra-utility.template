@@ -1,0 +1,226 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Utility stack where we define the common messaging mech, buckets and such"
+Mappings:
+  LBAWSAccountMap:
+    us-east-1:
+      AccountId: "127311923021"
+      RegionShort: "usea1"
+    us-east-2: 
+      AccountId: "033677994240"
+      RegionShort: "usea2"
+    us-west-1:
+      AccountId: "027434742980"
+      RegionShort: "uswe1"
+    us-west-2:
+      AccountId: "797873946194"
+      RegionShort: "uswe2"
+    ca-central-1:
+      AccountId: "985666609251"
+      RegionShort: "cace1"
+    eu-central-1:
+      AccountId: "054676820928"
+      RegionShort: "euce1"
+    eu-west-1:
+      AccountId: "156460612806"
+      RegionShort: "euwe1"
+    eu-west-2:
+      AccountId: "652711504416"
+      RegionShort: "euwe2"
+    eu-west-3:
+      AccountId: "009996457667"
+      RegionShort: "euwe3"
+    eu-north-1:
+      AccountId: "897822967062"
+      RegionShort: "euno1"
+    ap-east-1:
+      AccountId: "754344448648"
+      RegionShort: "apea1"
+    ap-northeast-1:
+      AccountId: "582318560864"
+      RegionShort: "apne1"
+    ap-northeast-2:
+      AccountId: "600734575887"
+      RegionShort: "apne2"
+    ap-northeast-3:
+      AccountId: "383597477331"
+      RegionShort: "apne3"
+    ap-southeast-1:
+      AccountId: "114774131450"
+      RegionShort: "apse1"
+    ap-southeast-2:
+      AccountId: "783225319266"
+      RegionShort: "apse2"
+    ap-south-1:
+      AccountId: "718504428378"
+      RegionShort: "apso1"
+    me-south-1:
+      AccountId: "076674570225"
+      RegionShort: "meso1"
+    sa-east-1:
+      AccountId: "507241528517"
+      RegionShort: "saea1"
+
+Resources:
+  CfnRepository:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      Tags:
+        - Key: Scope
+          Value: "global"
+        - Key: Purpose
+          Value: "CloudFormationRepostory"
+        - Key: SafeToDelete
+          Value: "No"
+
+  ArchiveLogs:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: LogDeliveryWrite # This is OK as we intent to use this bucket only for logging
+      LifecycleConfiguration:
+        Rules:
+        - Id: Transition90daysRetain7yrs
+          Status: Enabled
+          ExpirationInDays: 2555
+          Transition:
+            TransitionInDays: 90
+            StorageClass: STANDARD_IA
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: Scope
+          Value: "global"
+        - Key: Purpose
+          Value: "S3AcessLogs"
+        - Key: SafeToDelete
+          Value: "No" 
+  
+  ArchiveLogsPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ArchiveLogs
+      PolicyDocument:
+        Statement:
+        - Sid: Enforce HTTPS Connections
+          Action: s3:*
+          Effect: Deny
+          Principal: "*"
+          Resource: !Sub
+            - arn:aws:s3:::${ArchiveLogs}/*
+            - { ArchiveLogs: !Ref ArchiveLogs }
+          Condition:
+            Bool:
+              aws:SecureTransport: false
+        - Sid: Restrict Delete* Actions
+          Action: s3:Delete*
+          Effect: Deny
+          Principal: "*"
+          Resource: !Sub
+            - arn:aws:s3:::${ArchiveLogs}/*
+            - { ArchiveLogs: !Ref ArchiveLogs }
+        - Sid: DenyUnEncryptedObjectUploads
+          Effect: Deny
+          Principal: '*'
+          Action: s3:PutObject
+          Resource: !Sub
+            - arn:aws:s3:::${ArchiveLogs}/*
+            - { ArchiveLogs: !Ref ArchiveLogs }
+          Condition:
+            StringNotEquals:
+              s3:x-amz-server-side-encryption: AES256
+
+  LoadBalancerLogs:
+    Type: AWS::S3::Bucket
+    Properties:
+      LifecycleConfiguration:
+        Rules:
+        - Id: Transition90daysRetain7yrs
+          Status: Enabled
+          ExpirationInDays: 2555
+          Transition:
+            TransitionInDays: 90
+            StorageClass: STANDARD_IA
+      Tags:
+        - Key: Scope
+          Value: "regional"
+        - Key: Purpose
+          Value: "LoadBalancerLogs"
+        - Key: SafeToDelete
+          Value: "No" 
+  
+  LoadBalancerLogsPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref LoadBalancerLogs
+      PolicyDocument:
+        Statement:
+        - Sid: Allow lb log delivery service to fetch the ACLs
+          Effect: Allow
+          Principal:
+            Service: delivery.logs.amazonaws.com
+          Action: s3:GetBucketAcl
+          Resource: !Sub
+            - arn:aws:s3:::${LoadBalancerLogs}
+            - { LoadBalancerLogs: !Ref LoadBalancerLogs }
+
+        - Sid: Allow lb log delivery service to write the logs
+          Effect: Allow
+          Principal:
+            Service: delivery.logs.amazonaws.com
+          Action: s3:PutObject
+          Resource: !Sub
+            - arn:aws:s3:::${LoadBalancerLogs}/AWSLogs/${AWS::AccountId}/*
+            - { LoadBalancerLogs: !Ref LoadBalancerLogs }
+
+        - Sid: Allow lb log delivery service to write logs
+          Effect: Allow
+          Principal:
+            AWS: !Sub
+              - arn:aws:iam::${AWSRegionalAccount}:root
+              - { AWSRegionalAccount: !FindInMap [LBAWSAccountMap, !Ref "AWS::Region", "AccountId"] }
+          Action: s3:PutObject
+          Resource: !Sub
+            - arn:aws:s3:::${LoadBalancerLogs}/AWSLogs/${AWS::AccountId}/*
+            - { LoadBalancerLogs: !Ref LoadBalancerLogs }
+          #Condition:
+          #  StringEquals:
+          #    s3:x-amz-acl: bucket-owner-full-control
+       
+        - Sid: Enforce HTTPS Connections
+          Action: s3:*
+          Effect: Deny
+          Principal: '*'
+          Resource: !Sub
+            - arn:aws:s3:::${LoadBalancerLogs}/*
+            - { LoadBalancerLogs: !Ref LoadBalancerLogs }
+          Condition:
+            Bool:
+              aws:SecureTransport: false
+        
+        - Sid: Restrict Delete Actions
+          Action: s3:Delete*
+          Effect: Deny
+          Principal: '*'
+          Resource: !Sub
+            - arn:aws:s3:::${LoadBalancerLogs}/*
+            - { LoadBalancerLogs: !Ref LoadBalancerLogs }
+
+Outputs:
+  ArchiveLogs:
+    Description: Log bucket to store access logs to other buckets
+    Value: !Ref ArchiveLogs
+    Export:
+      Name: !Sub "${AWS::StackName}-archive-logs-bucket"
+
+  LoadBalancerLogs:
+    Description: Log bucket for Application and Network Load Balancers
+    Value: !Ref LoadBalancerLogs
+    Export:
+      Name: !Sub "${AWS::StackName}-lb-logs-bucket"
+
+  CloudFormationRepository:
+    Description: CloudFormation repository (mirror) synced with the repo
+    Value: !Ref CfnRepository
+    Export:
+      Name: !Sub "${AWS::StackName}-cloud-formation-repository"
