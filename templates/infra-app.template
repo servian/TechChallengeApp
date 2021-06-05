@@ -5,30 +5,40 @@ Parameters:
   TemplateRepoURL:
     Description: URL of S3 bucket with templates
     Type: String
+    Default: https://infra-utility-cfnrepository-104dtnuvpb4bk.s3-ap-southeast-1.amazonaws.com
   NetworkStack:
     Description: The stack name to import network config from
     Type: String
+    Default: infra-network
+  DataStack:
+    Description: The stack name to import data layer config from
+    Type: String
+    Default: infra-db
   CidrBlock1:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
     Description: CIDR Block for Subnet1.
     Type: String
+    Default: 10.100.0.0/24
   CidrBlock2:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
     Description: CIDR Block for Subnet2.
     Type: String
+    Default: 10.100.1.0/24
   CidrBlock3:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
     Description: CIDR Block for Subnet3.
     Type: String
+    Default: 10.100.2.0/24
   RegionShort:
     Type: String
     Description: Regional suffix for resources
     AllowedValues:
      - apse2
      - apse1
+    Default: apse1
   CompanyName:
     Type: String
     Description: Company wide prefix
@@ -36,10 +46,12 @@ Parameters:
   Service:
     Type: String
     Description: Service suffix for name tag mainly
+    Default: app
   ServicePort:
     Type: Number
     MinValue: 1024
     MaxValue: 65535
+    Default: 3000
   Domain:
     Type: String
     Description: Domain name the service would operate under
@@ -47,7 +59,7 @@ Parameters:
   Image:
     Type: String
     Description: Docker image for application
-    Default: "servian/techchallengeapp:latest"
+    Default: "172173733067.dkr.ecr.ap-southeast-1.amazonaws.com/servian:0.11"
   MinContainers:
     Type: Number
     Description: Minimum number of running container instances
@@ -84,12 +96,117 @@ Resources:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterName:  !Join ['-', [!Ref CompanyName, 'fc', !Ref RegionShort]]
+ 
+  ApplicationDatabaseCredentials:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: "Application user account for database"
+      Name: !Sub "/production/${CompanyName}/data/cluster/appuser"
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "servian_gtd_app"}'
+        GenerateStringKey: "password"
+        PasswordLength: 24
+        ExcludeCharacters: '"@/\'
 
-  TaskDefinition:
+  SecretAttachment:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId: !Ref ApplicationDatabaseCredentials
+      TargetId:
+        Fn::ImportValue:
+            !Sub
+              - ${DataStack}-rds-cluster
+              - DataStack: !Ref DataStack
+      TargetType: AWS::RDS::DBCluster
+
+# Create a user in RDS as per value in the Secrets Manager
+# Supposed to be invoked via orchestrator
+  PostgresTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Join ['-', [!Ref CompanyName, "taskdef", "postgres", !Ref RegionShort]]
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: "256"
+      Memory: 0.5GB
+      ExecutionRoleArn: !GetAtt ExecutionRole.Arn
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: "postgres"
+          Image: "172173733067.dkr.ecr.ap-southeast-1.amazonaws.com/servian:postgres"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-region: !Ref AWS::Region
+              awslogs-group: !Ref LogGroup
+              awslogs-stream-prefix: ecs
+# We are injecting DBUSER and DBPASS into the database as a preliminary
+# step in order to provide access to application
+          Secrets:
+            - Name: ADMINDBUSER
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Fn::ImportValue:
+                        !Sub 
+                          - ${DataStack}-db-secrets
+                          - DataStack: !Ref DataStack
+                    - ":username::"
+            - Name: ADMINDBPASSWORD
+              ValueFrom:
+                Fn::Join:
+                  - ""
+                  - - Fn::ImportValue:
+                        !Sub 
+                          - ${DataStack}-db-secrets
+                          - DataStack: !Ref DataStack
+                    - ":password::"
+            - Name: DBUSER
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:username::"
+            - Name: DBPASS
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:password::"
+            - Name: DBHOST
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:host::"
+            - Name: DBPORT
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:port::"
+  
+  SeedTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Join ['-', [!Ref CompanyName, "taskdef", "seed", !Ref RegionShort]]
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: "256"
+      Memory: 0.5GB
+      ExecutionRoleArn: !GetAtt ExecutionRole.Arn
+      TaskRoleArn: !Ref TaskRole
+      ContainerDefinitions:
+        - Name: "dbseed"
+          Image: !Ref Image
+          Command:
+            - "updatedb"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-region: !Ref AWS::Region
+              awslogs-group: !Ref LogGroup
+              awslogs-stream-prefix: ecs
+          Secrets:
+            - Name: VTT_DBUSER
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:username::"
+            - Name: VTT_DBPASSWORD
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:password::"
+            - Name: VTT_DBHOST
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:host::"
+            - Name: VTT_DBPORT
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:port::"
+  
+  ApplicationTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: !Join ['-', [!Ref CompanyName, "taskdef", !Ref Service, !Ref RegionShort]]
-      # awsvpc is required for Fargate
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
@@ -100,6 +217,8 @@ Resources:
       ContainerDefinitions:
         - Name: !Ref Service
           Image: !Ref Image
+          Command:
+            - "serve"
           PortMappings:
             - ContainerPort: !Ref ServicePort
           LogConfiguration:
@@ -108,12 +227,26 @@ Resources:
               awslogs-region: !Ref AWS::Region
               awslogs-group: !Ref LogGroup
               awslogs-stream-prefix: ecs
+          Secrets:
+            - Name: VTT_DBUSER
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:username::"
+            - Name: VTT_DBPASSWORD
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:password::"
+            - Name: VTT_DBHOST
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:host::"
+            - Name: VTT_DBPORT
+              ValueFrom: !Sub "${ApplicationDatabaseCredentials}:port::"
+          Environment:
+            - Name: VTT_LISTENHOST
+              Value: "0.0.0.0" #FIXME Can we do better here?
+            - Name: VTT_LISTENPORT
+              Value: !Ref ServicePort
 
 # Cluster level role, to manage infra related tasks
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Join ['', [!Ref Service, ExecutionRole]]
+      RoleName: !Join ["", [!Ref Service, ExecutionRole]]
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
@@ -122,6 +255,20 @@ Resources:
             Action: 'sts:AssumeRole'
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+      Policies:
+        - PolicyName: "fetch-db-secrets"
+          PolicyDocument: 
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - secretsmanager:GetSecretValue
+                Resource:
+                  - !Ref ApplicationDatabaseCredentials
+                  - Fn::ImportValue:
+                      !Sub
+                        - ${DataStack}-db-secrets
+                        - DataStack: !Ref DataStack
+
 # Container level role (what container can do)
   TaskRole:
     Type: AWS::IAM::Role
@@ -159,7 +306,7 @@ Resources:
     Properties:
       MinCapacity: !Ref MinContainers
       MaxCapacity: !Ref MaxContainers
-      ResourceId: !Join ['/', [service, !Ref FargateCluster, !GetAtt FargateService.Name]]
+      ResourceId: !Join ['/', [service, !Ref FargateCluster, !GetAtt ApplicationService.Name]]
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
       # "The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that allows Application Auto Scaling to modify your scalable target."
@@ -178,14 +325,14 @@ Resources:
         ScaleOutCooldown: 10
         TargetValue: 50
 
-  FargateService:
+  ApplicationService:
     Type: AWS::ECS::Service
     DependsOn:
       - Listener
     Properties: 
       ServiceName: !Ref Service
       Cluster: !Ref FargateCluster
-      TaskDefinition: !Ref TaskDefinition
+      TaskDefinition: !Ref ApplicationTaskDefinition
       DeploymentConfiguration:
         MinimumHealthyPercent: 100
         MaximumPercent: 200
@@ -227,17 +374,17 @@ Resources:
           - ${NetworkStack}-vpcid
           - NetworkStack: !Ref NetworkStack
   
-#  DNSRecord:
-#    Type: AWS::Route53::RecordSetGroup
-#    Properties:
-#      HostedZoneName: !Join ["",[!Ref Domain, "."]]
-#      Comment: Service LB registration
-#      RecordSets:
-#      - Name: !Join ["",["app", ".",!Ref Domain, "."]]
-#        Type: A
-#        AliasTarget:
-#            # HostedZoneId: !GetAtt LoadBalancer.CanonicalHostedZoneID
-#          DNSName: !GetAtt LoadBalancer.DNSName
+  DNSRecord:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Join ["",[!Ref Domain, "."]]
+      Comment: Service LB registration
+      RecordSets:
+      - Name: !Join ["",["app", ".",!Ref Domain, "."]]
+        Type: A
+        AliasTarget:
+          HostedZoneId: !GetAtt LoadBalancer.CanonicalHostedZoneID
+          DNSName: !GetAtt LoadBalancer.DNSName
 
   Certificate:
     Type: AWS::CertificateManager::Certificate
@@ -287,6 +434,16 @@ Resources:
         - Key: Name
           Value: !Join ['/', [!Ref CompanyName, 'sg', 'loadbalancer', !Ref Service, !Ref RegionShort]]
 
+  SecGroupLoadBalancerHttpsIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: HTTPS from Internet
+      IpProtocol: "tcp"
+      CidrIp: "0.0.0.0/0"
+      FromPort: 443
+      ToPort: 443
+      GroupId: !GetAtt LoadBalancerSecurityGroup.GroupId
+
   SecGroupLoadBalancerAllEgress:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
@@ -325,4 +482,4 @@ Resources:
       Description: All egress from application instance(s)
       IpProtocol: "-1"
       CidrIp: "0.0.0.0/0" 
-      GroupId: !GetAtt ServiceSecurityGroup.GroupId
+      GroupId: !GetAtt ServiceSecurityGroup.GroupId    
