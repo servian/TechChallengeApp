@@ -1,0 +1,42 @@
+version: "3.9"
+   
+services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  seed:
+    image: servian:0.11 
+    command: updatedb
+    environment:
+      - VTT_DBHOST=db
+      - VTT_PORT=5432
+      - VTT_DBUSER=postgres
+      - VTT_DBPASSWORD=postgres
+    restart: on-failure
+    links:
+      - db
+    depends_on:
+      - db
+  app:
+    image: servian:0.11
+    command: serve
+    environment:
+      - VTT_DBHOST=db
+      - VTT_PORT=5432
+      - VTT_DBUSER=postgres
+      - VTT_DBPASSWORD=postgres
+      - VTT_LISTENHOST=0.0.0.0
+      - VTT_LISTENPORT=4000
+    ports:
+      - 4000:4000
+    links:
+      - db
+    depends_on:
+      - db
+      - seed
+
