@@ -1,6 +1,13 @@
 ---
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Utility stack where we define the common messaging mech, buckets and such"
+
+Parameters:
+  RegistryName:
+    Description: "Name for ECR registry"
+    Type: String
+    Default: "servian"
+
 Mappings:
   LBAWSAccountMap:
     us-east-1:
@@ -205,6 +212,15 @@ Resources:
           Resource: !Sub
             - arn:aws:s3:::${LoadBalancerLogs}/*
             - { LoadBalancerLogs: !Ref LoadBalancerLogs }
+    
+# ECR repository for our serviice
+# NOTE: We might use multiple images in this registry, to keep a single registry
+  DockerRegistry:
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: !Ref RegistryName
+      ImageScanningConfiguration: 
+        ScanOnPush: "true"
 
 Outputs:
   ArchiveLogs:
@@ -212,13 +228,16 @@ Outputs:
     Value: !Ref ArchiveLogs
     Export:
       Name: !Sub "${AWS::StackName}-archive-logs-bucket"
-
   LoadBalancerLogs:
     Description: Log bucket for Application and Network Load Balancers
     Value: !Ref LoadBalancerLogs
     Export:
       Name: !Sub "${AWS::StackName}-lb-logs-bucket"
-
+  DockerRegistry:
+    Description: "Service registry URI"
+    Value: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${RegistryName}"
+    Export: 
+      Name: !Sub "${AWS::StackName}-docker-registry-uri"
   CloudFormationRepository:
     Description: CloudFormation repository (mirror) synced with the repo
     Value: !Ref CfnRepository
