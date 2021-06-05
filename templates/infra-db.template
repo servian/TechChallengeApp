@@ -1,0 +1,202 @@
+# Define storage layer components
+# We use Aurora postgres compatable cluster here to 
+# satisfy HA requirement
+#
+# Lacking: 
+#  - CloudWatch (metrics and alerts)
+#  - Encryption at rest
+#   
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Resources to run data layer
+Parameters:
+  TemplateRepoURL:
+    Description: URL of S3 bucket with templates
+    Type: String
+    Default: https://infra-utility-cfnrepository-104dtnuvpb4bk.s3-ap-southeast-1.amazonaws.com
+  NetworkStack:
+    Description: The stack name to import network config from
+    Type: String
+    Default: infra-network
+  CidrBlock1:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for Subnet1.
+    Type: String
+    Default: 10.100.3.0/28
+  CidrBlock2:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for Subnet2.
+    Type: String
+    Default: 10.100.3.16/28
+  CidrBlock3:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: CIDR Block for Subnet3.
+    Type: String
+    Default: 10.100.3.32/28
+  RegionShort:
+    Type: String
+    Description: Regional suffix for resources
+    AllowedValues:
+     - apse2
+     - apse1
+    Default: apse1
+  CompanyName:
+    Type: String
+    Description: Company wide prefix
+    Default: "alpha"
+  Service:
+    Type: String
+    Description: Workload type
+    Default: app
+Resources:
+  DataPrivateNetwork:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub 
+        - "${TemplateRepoURL}/infra-private-network.template"
+        - TemplateRepoURL: !Ref TemplateRepoURL
+      Parameters: 
+        NetworkStack: !Ref NetworkStack
+        CidrBlock1: !Ref CidrBlock1
+        CidrBlock2: !Ref CidrBlock2
+        CidrBlock3: !Ref CidrBlock3
+        RegionShort: !Ref RegionShort
+        CompanyName: !Ref CompanyName
+        Service: !Ref Service
+      Tags: 
+        - Key: Name
+          Value: data-network
+  
+  SubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "Network configuration for DB cluster"
+      DBSubnetGroupName: !Join ["-", [!Ref CompanyName, "sbn", "grp", !Ref RegionShort]]
+      SubnetIds: 
+        - !GetAtt DataPrivateNetwork.Outputs.PS1ID
+        - !GetAtt DataPrivateNetwork.Outputs.PS2ID
+        - !GetAtt DataPrivateNetwork.Outputs.PS3ID
+
+  ClusterAdministratorCredentials:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: "Cluster administrator credentials"
+      Name: !Sub "/production/${CompanyName}/data/cluster/master"
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "servian_adm"}'
+        GenerateStringKey: "password"
+        PasswordLength: 24
+        ExcludeCharacters: '"@/\'
+  
+  RDSCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      MasterUsername: !Join ['', ['{{resolve:secretsmanager:', !Ref ClusterAdministratorCredentials, ':SecretString:username}}' ]]
+      MasterUserPassword: !Join ['', ['{{resolve:secretsmanager:', !Ref ClusterAdministratorCredentials, ':SecretString:password}}' ]]
+      DBClusterIdentifier: !Sub "${CompanyName}-${Service}-aurora-postgresql-cluster"
+      DatabaseName: "app"
+      DBSubnetGroupName: !Ref SubnetGroup
+      Engine: aurora-postgresql
+      EngineVersion: "12.4"
+      DBClusterParameterGroupName: default.aurora-postgresql12
+      EnableCloudwatchLogsExports:
+        - postgresql
+      VpcSecurityGroupIds:
+        - !GetAtt DbClusterSecurityGroup.GroupId
+  
+  RDSDBInstance1:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: !Sub "${CompanyName}-${Service}-aurora-postgresql-1"
+      Engine: aurora-postgresql
+      DBClusterIdentifier: !Ref RDSCluster
+      DBInstanceClass: db.t3.medium
+  
+  RDSDBInstance2:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: !Sub "${CompanyName}-${Service}-aurora-postgresql-2"
+      Engine: aurora-postgresql
+      DBClusterIdentifier: !Ref RDSCluster
+      DBInstanceClass: db.t3.medium
+
+  SecretRDSClusterAttachment:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId: !Ref ClusterAdministratorCredentials
+      TargetId: !Ref RDSCluster
+      TargetType: AWS::RDS::DBCluster
+
+  DbClusterSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${Service}-dbcluster-sec-grp"
+      GroupDescription: "Security group for database cluster"  
+      VpcId: 
+        Fn::ImportValue:
+          !Sub 
+          - ${NetworkStack}-vpcid
+          - NetworkStack: !Ref NetworkStack
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref CompanyName, 'sg', 'dbcluster', !Ref Service, !Ref RegionShort]]
+
+  SecGroupIngressSubnet1:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: "app subnet1 to dbcluster"
+      IpProtocol: tcp
+      FromPort: 3306 #FIXME: hardcoded value
+      ToPort: 3306
+      CidrIp: 10.100.0.0/24
+      GroupId: !GetAtt DbClusterSecurityGroup.GroupId
+
+  SecGroupIngressSubnet2:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: "app subnet2 to dbcluster"
+      IpProtocol: tcp
+      FromPort: 3306
+      ToPort: 3306
+      CidrIp: 10.100.1.0/24
+      GroupId: !GetAtt DbClusterSecurityGroup.GroupId
+
+  SecGroupIngressSubnet3:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: "app subnet3 to dbcluster"
+      IpProtocol: tcp
+      FromPort: 3306
+      ToPort: 3306
+      CidrIp: 10.100.2.0/24
+      GroupId: !GetAtt DbClusterSecurityGroup.GroupId
+
+Outputs:
+  PostgresCluster:
+    Description: "Cluster name for reference in outer templates"
+    Value: !Ref RDSCluster
+    Export:
+      Name: !Sub "${AWS::StackName}-rds-cluster"
+  PostgresEndpointUrl:
+    Description: "Private URL for Aurora cluster"
+    Value: !GetAtt RDSCluster.Endpoint.Address
+    Export:
+      Name: !Sub "${AWS::StackName}-db-endpoint"
+  ROPostgresEndpointUrl:
+    Description: "(Read only) Private URL for Aurora cluster"
+    Value: !GetAtt RDSCluster.ReadEndpoint.Address
+    Export: 
+      Name: !Sub "${AWS::StackName}-db-ro-endpoint"
+  Port:
+    Description: "Port to connect"
+    Value: !GetAtt RDSCluster.Endpoint.Port
+    Export:
+      Name: !Sub "${AWS::StackName}-db-port"
+  ClusterAdministratorCredentials:
+    Description: "Secrets ARN exported"
+    Value: !Ref ClusterAdministratorCredentials
+    Export:
+      Name: !Sub "${AWS::StackName}-db-secrets"
