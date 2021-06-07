@@ -56,10 +56,9 @@ Parameters:
     Type: String
     Description: Domain name the service would operate under
     Default: examples.ifm.tools
-  Image:
+  RegistryURL:
     Type: String
-    Description: Docker image for application
-    Default: "172173733067.dkr.ecr.ap-southeast-1.amazonaws.com/servian:0.11"
+    Description: Registry URL we intend to use within the project
   MinContainers:
     Type: Number
     Description: Minimum number of running container instances
@@ -133,8 +132,8 @@ Resources:
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
       TaskRoleArn: !Ref TaskRole
       ContainerDefinitions:
-        - Name: "postgres"
-          Image: "172173733067.dkr.ecr.ap-southeast-1.amazonaws.com/servian:postgres"
+        - Name: "db"
+          Image: !Sub "${RegistryURL}:db"
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -184,7 +183,7 @@ Resources:
       TaskRoleArn: !Ref TaskRole
       ContainerDefinitions:
         - Name: "dbseed"
-          Image: !Ref Image
+          Image: !Sub "${RegistryURL}:app"
           Command:
             - "updatedb"
           LogConfiguration:
@@ -216,7 +215,7 @@ Resources:
       TaskRoleArn: !Ref TaskRole
       ContainerDefinitions:
         - Name: !Ref Service
-          Image: !Ref Image
+          Image: !Sub "${RegistryURL}:app"
           Command:
             - "serve"
           PortMappings:
