@@ -481,4 +481,32 @@ Resources:
       Description: All egress from application instance(s)
       IpProtocol: "-1"
       CidrIp: "0.0.0.0/0" 
-      GroupId: !GetAtt ServiceSecurityGroup.GroupId    
+      GroupId: !GetAtt ServiceSecurityGroup.GroupId
+
+Outputs:
+  ApplicationSecurityGroup:
+    Description: Application security group
+    Value: !Ref ServiceSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-application-sec-group"
+  PrivateSubnets:
+    Description: list of private subnet ids as JSON
+    Value: !Sub "[\"${ServicePrivateNetwork.Outputs.PS1ID}\", \"${ServicePrivateNetwork.Outputs.PS2ID}\", \"${ServicePrivateNetwork.Outputs.PS3ID}\"]"
+    Export:
+      Name: !Sub "${AWS::StackName}-private-subnets"
+  FargateCluster:
+    Description: Name of Fargate cluster
+    Value: !Ref FargateCluster
+    Export:
+      Name: !Sub "${AWS::StackName}-fargate-cluster"
+  PostgresTask:
+    Description: Reference to data management task
+    Value: !Ref PostgresTaskDefinition
+    Export:
+      Name: !Sub "${AWS::StackName}-postgres-task"
+  SeedTask:
+    Description: Reference to seed task
+    Value: !Ref SeedTaskDefinition
+    Export:
+      Name: !Sub "${AWS::StackName}-seed-task"
+
