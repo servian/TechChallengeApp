@@ -2,9 +2,6 @@
 set -e
 
 PGPASSWORD="$ADMINDBPASSWORD" psql -e -v ON_ERROR_STOP=1 --host "$DBHOST" --username "$ADMINDBUSER" --port "$DBPORT" --dbname postgres <<-EOSQL
-    REASSIGN OWNED BY $DBUSER TO $ADMINDBUSER; -- if anything reassign to admin user
-    DROP OWNED BY $DBUSER; -- drop whatever belongs to app user
-    DROP ROLE IF EXISTS $DBUSER; -- remove the role
     DROP DATABASE IF EXISTS app; -- get rid of database if exists
     CREATE USER $DBUSER WITH CREATEDB ENCRYPTED PASSWORD '$DBPASS'; -- create role
     GRANT $DBUSER to $ADMINDBUSER; -- weirdly, as admin user is cluster master acccount and RDS restricts this role quite harshly 
