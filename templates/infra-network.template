@@ -53,28 +53,33 @@ Parameters:
     ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
     Description: CIDR Block for VPC.
     Type: String
+    Default: 10.100.0.0/16
   
   DMZCidrBlock1:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
     Description: CIDR Block for DMZ1.
     Type: String
+    Default: 10.100.252.0/24
 
   DMZCidrBlock2:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
     Description: CIDR Block for DMZ2.
     Type: String
+    Default: 10.100.253.0/24
     
   DMZCidrBlock3:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x.
     Description: CIDR Block for DMZ3.
     Type: String
+    Default: 10.100.254.0/24
   
   CompanyName:
     Type: String
     Description: Company wide prefix
+    Default: alpha
 
 Resources:
   ClouwdWatchFlowLogsGroup:
