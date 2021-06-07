@@ -10,7 +10,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   seed:
-    image: servian:0.11 
+    image: servian:app 
     command: updatedb
     environment:
       - VTT_DBHOST=db
@@ -23,7 +23,7 @@ services:
     depends_on:
       - db
   app:
-    image: servian:0.11
+    image: servian:app
     command: serve
     environment:
       - VTT_DBHOST=db
