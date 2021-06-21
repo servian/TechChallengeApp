@@ -5,6 +5,26 @@ variable "location" {
 }
 
 variable "resourceGroupName" {
-    type = string
-    description = "Name of resource group"
+  type        = string
+  description = "Name of resource group"
+}
+
+variable "databaseName" {
+  type        = string
+  description = "Name of the PostreSQL database"
+  default     = "tca_dev"
+}
+
+variable "dbUser" {
+  type    = string
+  default = "sparticus"
+}
+variable "dbPassword" {
+  type    = string
+  default = "S3curestring!"
+}
+
+variable "sqlServerName" {
+  type    = string
+  default = "tcasql202106"
 }
