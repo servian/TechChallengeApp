@@ -35,6 +35,7 @@ resource "azurerm_app_service" "tca-docker-app" {
     "VTT_DBHOST"     = "${azurerm_postgresql_server.postgressql_server.name}.postgres.database.azure.com"
     "VTT_DBPASSWORD" = var.dbPassword
     "VTT_DBUSER"     = "${var.dbUser}@${azurerm_postgresql_server.postgressql_server.name}"
+    "VTT_DBNAME"     = var.databaseName
     "VTT_LISTENHOST" = "0.0.0.0"
     "VTT_LISTENPORT" = 80
   }

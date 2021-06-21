@@ -16,7 +16,7 @@ resource "azurerm_postgresql_server" "postgressql_server" {
   administrator_login          = var.dbUser
   administrator_login_password = var.dbPassword
   version                      = "9.6"
-  ssl_enforcement_enabled      = true
+  ssl_enforcement_enabled      = false
 
   //Network config
   # public_network_access_enabled = false
