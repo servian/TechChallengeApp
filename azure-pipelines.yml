@@ -1,0 +1,29 @@
+#  Deploy terraform
+#
+#
+
+trigger:
+  - solution/bt-2021.06
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'Pay-As-You-Go(72e55264-1ef3-4325-a18e-42810ff5011c)'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: 'terraform init -input=false'
+      workingDirectory: '.deploy/azure'
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'Pay-As-You-Go(72e55264-1ef3-4325-a18e-42810ff5011c)'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: 'terraform plan -out=tfplan -input=false -var-file="vars.tfvars"'
+      workingDirectory: '.deploy/azure'
+# Task - deploy infra
+
+# Task - Run DB seed task with container image.
