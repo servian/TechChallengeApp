@@ -22,7 +22,7 @@ steps:
       azureSubscription: 'Pay-As-You-Go(72e55264-1ef3-4325-a18e-42810ff5011c)'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
-      inlineScript: 'terraform plan -out=tfplan -input=false -var-file="vars.tfvars"'
+      inlineScript: 'terraform plan -out=tfplan -input=false -var=resourceGroupName="$(resourceGroupName)"'
       workingDirectory: '.deploy/azure'
 # Task - deploy infra
 
