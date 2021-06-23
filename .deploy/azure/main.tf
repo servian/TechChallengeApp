@@ -8,7 +8,8 @@ terraform {
   }
 }
 provider "azurerm" {
-  features {}
+  features {
+  }
 }
 
 # Establish the resource group 

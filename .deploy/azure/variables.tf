@@ -3,16 +3,19 @@ variable "location" {
   description = "azure region where the resource will be created"
   default     = "westus2"
 }
-
 variable "resourceGroupName" {
   type        = string
   description = "Name of resource group"
+  default     = "rg-techchallengeapp"
 }
-
 variable "databaseName" {
   type        = string
   description = "Name of the PostreSQL database"
   default     = "tca_dev"
+}
+variable "sqlServerName" {
+  type    = string
+  default = "tcasql202106"
 }
 
 variable "dbUser" {
@@ -21,10 +24,5 @@ variable "dbUser" {
 }
 variable "dbPassword" {
   type    = string
-  default = "S3curestring!"
-}
-
-variable "sqlServerName" {
-  type    = string
-  default = "tcasql202106"
+  default = "S3cure5tring!"
 }
