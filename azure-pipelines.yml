@@ -1,5 +1,5 @@
 #  Deploy terraform
-#
+#  STATUS: INCOMPLETE
 #
 
 trigger:
@@ -11,7 +11,7 @@ pool:
 steps:
   - task: AzureCLI@2
     inputs:
-      azureSubscription: 'Pay-As-You-Go(72e55264-1ef3-4325-a18e-42810ff5011c)'
+      azureSubscription: 'PayG-sp-conn'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: 'terraform init -input=false'
@@ -19,7 +19,7 @@ steps:
 
   - task: AzureCLI@2
     inputs:
-      azureSubscription: 'Pay-As-You-Go(72e55264-1ef3-4325-a18e-42810ff5011c)'
+      azureSubscription: 'PayG-sp-conn'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: 'terraform plan -out=tfplan -input=false -var=resourceGroupName="$(resourceGroupName)"'
