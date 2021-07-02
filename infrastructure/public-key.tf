@@ -1,0 +1,6 @@
+# Create a key-pair
+
+resource "aws_key_pair" "ssh-key" {
+  key_name   = "ssh-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCdxxCiqJ1PkC9yMD+nu1Ou4MR7sCzIiP9Igoc6BebxLjN1QbMJ6TVGb6Wd4HZe038CCuOoS0zGMJcsgBrWOar3LhCCgo+ltvWb8H+x+t8TMdXTpObBaJadJNBhFit7y5lSzSEtpOOa0jaQzbDN00PUP/MEovurlOlsEvv+z9L7bAQoKubaSzCeq9IM9hiZX8HgzBPwDRzVo+O9DwvZqG2QSFohnZ0iUVKbiI0yjDuC8zLODp0iD3967LAWriRJKkNLbVK9tN+8qLVMKrFuxdtP/qcTAjIdrImsWY0/YqiMauK0oKqnidB6qwOTjN0O/6r9xAIvjw1K8tHwWvWZgqzadg6e6ONTLVnkR8cFsvMyEzgZPnR45BEd+EwO2Xgg2FJBKONrT8AkgzXicM334f+ZzssSblzL/t8rLM6v2ikh2z9u34qrohw6SGQeVqkgrcfTzmgByHG4uWLJhwoBaSVhixaEOB0F74m0xaRlA3Y3EEF/YEdwprvQYpH8pLx7w8s= thouseef@DESKTOP-CSUM99I"
+}
