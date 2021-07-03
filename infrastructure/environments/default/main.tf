@@ -1,8 +1,12 @@
-module "networking" {
-  source = "../../modules/network"
+module "network" {
+  source      = "./network"
   environment = var.environment
-  aws_vpc_cidr = var.aws_vpc_cidr
-  public_subnets_cidr = var.public_subnets_cidr
-  private_subnets_cidr = var.private_subnets_cidr
-  availability_zones = var.availability_zones
+}
+
+module "backend" {
+  source             = "./backend"
+  environment        = var.environment
+  vpc_id             = module.network.vpc_id
+  private_subnet_ids = module.network.private_subnets
+
 }

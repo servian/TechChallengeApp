@@ -1,4 +1,5 @@
 output "vpc_id" {
-  description = "VPC ID"
-  value       = module.networking.vpc_id
+  value = module.network.vpc_id
 }
+
+

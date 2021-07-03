@@ -109,7 +109,7 @@ resource "aws_route_table_association" "servian_tc_public_association" {
 # Create a private Route Table and associate it with private Subnets
 
 resource "aws_route_table" "servian_tc_private" {
-  count  = length(var.public_subnets_cidr)
+  count  = length(var.private_subnets_cidr)
   vpc_id = aws_vpc.servian_tc_vpc.id
   route {
     cidr_block     = "0.0.0.0/0"
@@ -123,7 +123,7 @@ resource "aws_route_table" "servian_tc_private" {
 }
 
 resource "aws_route_table_association" "servian_tc_private_association" {
-  count          = length(var.public_subnets_cidr)
+  count          = length(var.private_subnets_cidr)
   subnet_id      = element(aws_subnet.servian_tc_private.*.id, count.index)
   route_table_id = element(aws_route_table.servian_tc_private.*.id, count.index)
 }
