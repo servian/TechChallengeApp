@@ -8,8 +8,9 @@ resource "aws_vpc" "servian_tc_vpc" {
   cidr_block       = var.aws_vpc_cidr
   instance_tenancy = "default"
   tags = {
-    Name      = "${local.prefix}_VPC"
-    Terrafrom = "True"
+    Name        = "${local.prefix}_VPC"
+    Terrafrom   = "True"
+    Environment = "${var.environment}"
   }
 }
 
@@ -18,8 +19,9 @@ resource "aws_vpc" "servian_tc_vpc" {
 resource "aws_internet_gateway" "servian_tc_igw" {
   vpc_id = aws_vpc.servian_tc_vpc.id
   tags = {
-    Name      = "${local.prefix}_IGW"
-    Terraform = "True"
+    Name        = "${local.prefix}_IGW"
+    Terraform   = "True"
+    Environment = "${var.environment}"
   }
 }
 
@@ -32,8 +34,9 @@ resource "aws_subnet" "servian_tc_public" {
   availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = "true"
   tags = {
-    Name      = "${local.prefix}_Public_Subnet"
-    Terraform = "True"
+    Name        = "${local.prefix}_Public_Subnet"
+    Terraform   = "True"
+    Environment = "${var.environment}"
   }
 }
 
@@ -46,8 +49,9 @@ resource "aws_subnet" "servian_tc_private" {
   availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = "false"
   tags = {
-    Name      = "${local.prefix}_Private_Subnet"
-    Terraform = "True"
+    Name        = "${local.prefix}_Private_Subnet"
+    Terraform   = "True"
+    Environment = "${var.environment}"
   }
 }
 
@@ -57,8 +61,9 @@ resource "aws_eip" "servian_tc_nat" {
   count = length(var.availability_zones)
   vpc   = true
   tags = {
-    Name      = "${local.prefix}_EIP"
-    Terraform = "True"
+    Name        = "${local.prefix}_EIP"
+    Terraform   = "True"
+    Environment = "${var.environment}"
   }
 }
 
@@ -70,8 +75,9 @@ resource "aws_nat_gateway" "servian_tc_nat_gateway" {
   subnet_id     = element(aws_subnet.servian_tc_public.*.id, count.index)
 
   tags = {
-    Name      = "${local.prefix}_NG"
-    Terraform = "True"
+    Name        = "${local.prefix}_NG"
+    Terraform   = "True"
+    Environment = "${var.environment}"
   }
 }
 
@@ -85,8 +91,9 @@ resource "aws_route_table" "servian_tc_public" {
     gateway_id = aws_internet_gateway.servian_tc_igw.id
   }
   tags = {
-    Name      = "${local.prefix}_Public_RT"
-    Terraform = "True"
+    Name        = "${local.prefix}_Public_RT"
+    Terraform   = "True"
+    Environment = "${var.environment}"
   }
 }
 
@@ -109,8 +116,9 @@ resource "aws_route_table" "servian_tc_private" {
     nat_gateway_id = element(aws_nat_gateway.servian_tc_nat_gateway.*.id, count.index)
   }
   tags = {
-    Name      = "${local.prefix}_Private_RT"
-    Terraform = "True"
+    Name        = "${local.prefix}_Private_RT"
+    Terraform   = "True"
+    Environment = "${var.environment}"
   }
 }
 
