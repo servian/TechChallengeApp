@@ -197,4 +197,18 @@ resource "aws_autoscaling_group" "servian_tc_frontend" {
 
 }
 
+# Create an Autoscaling policy for Auto scaling group
+
+resource "aws_autoscaling_policy" "servian_tc_asg_policy" {
+  name                   = "${local.prefix}_autoscaling_policy"
+  policy_type            = "TargetTrackingScaling"
+  autoscaling_group_name = aws_autoscaling_group.servian_tc_frontend
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 40.0
+  }
+}
+
 
