@@ -23,39 +23,41 @@ module "backend" {
 }
 
 module "frontend" {
-  source          = "./frontend"
-  environment     = var.environment
-  vpc_id          = module.network.vpc_id
-  asg_subnet_ids  = module.network.private_subnet_ids
-  alb_subnets_ids = module.network.public_subnet_ids
-  db_user         = module.backend.db_user
-  db_password     = module.backend.db_password
-  db_port         = module.backend.db_port
-  db_name         = module.backend.db_name
-  db_host         = module.backend.db_address
-  app_ami         = var.ami
-  aws_key_name    = aws_key_pair.servian_tc_generated_key.key_name
+  source                  = "./frontend"
+  environment             = var.environment
+  vpc_id                  = module.network.vpc_id
+  asg_subnet_ids          = module.network.private_subnet_ids
+  alb_subnets_ids         = module.network.public_subnet_ids
+  db_user                 = module.backend.db_user
+  db_password             = module.backend.db_password
+  db_port                 = module.backend.db_port
+  db_name                 = module.backend.db_name
+  db_host                 = module.backend.db_address
+  latest_app_package_path = var.app_package_link
+  listen_port             = var.app_port
+  app_ami                 = var.ami
+  aws_key_name            = aws_key_pair.servian_tc_generated_key.key_name
 }
 
 module "management" {
-  source            = "./management"
-  environment       = var.environment
-  vpc_id            = module.network.vpc_id
-  public_subnet_ids = module.network.public_subnet_ids
-  db_user           = module.backend.db_user
-  db_password       = module.backend.db_password
-  db_port           = module.backend.db_port
-  db_name           = module.backend.db_name
-  db_host           = module.backend.db_address
-  bastion_ami       = var.ami
-  aws_key_name      = aws_key_pair.servian_tc_generated_key.key_name
-  depends_on        = [module.backend]
+  source                  = "./management"
+  environment             = var.environment
+  vpc_id                  = module.network.vpc_id
+  public_subnet_ids       = module.network.public_subnet_ids
+  db_user                 = module.backend.db_user
+  db_password             = module.backend.db_password
+  db_port                 = module.backend.db_port
+  db_name                 = module.backend.db_name
+  db_host                 = module.backend.db_address
+  latest_app_package_path = var.app_package_link
+  listen_port             = var.app_port
+  bastion_ami             = var.ami
+  aws_key_name            = aws_key_pair.servian_tc_generated_key.key_name
+  depends_on              = [module.backend]
 
 }
 
 # Define the Security Group rules here once all the resources are created to avoid cyclic dependencies
-
-
 
 locals {
   backend_allowed_sg = [module.frontend.asg_sg_id, module.management.bastion_sg_id]

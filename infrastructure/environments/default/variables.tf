@@ -27,3 +27,9 @@ variable "app_port" {
   type        = number
   default     = 3000
 }
+
+variable "app_package_link" {
+  description = "Link to the Servian Tech Challenge app package"
+  type        = string
+  default     = "https://github.com/servian/TechChallengeApp/releases/download/v.0.8.0/TechChallengeApp_v.0.8.0_linux64.zip"
+}

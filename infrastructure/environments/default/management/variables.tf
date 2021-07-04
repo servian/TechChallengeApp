@@ -54,13 +54,11 @@ variable "listen_host" {
 variable "listen_port" {
   description = "App listen port"
   type        = number
-  default     = 3000
 }
 
 variable "latest_app_package_path" {
   description = "App latest package link"
   type        = string
-  default     = "https://github.com/servian/TechChallengeApp/releases/download/v.0.8.0/TechChallengeApp_v.0.8.0_linux64.zip"
 }
 
 variable "bastion_ami" {
