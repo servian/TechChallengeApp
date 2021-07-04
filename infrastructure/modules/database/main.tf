@@ -32,22 +32,23 @@ resource "aws_security_group" "servian_tc_backend_sg" {
   #   ]
   # }
   tags = {
-    Name      = "Servian TC Backend Security Group"
-    Terraform = "True"
+    Name        = "${local.prefix}_Backend_SG"
+    Terraform   = "True"
+    Environment = "${var.environment}"
   }
 }
 
 # Create Security Group rules associate to the Security Group
 
-resource "aws_security_group_rule" "servian_tc_backend_sg_rule" {
-  type        = "ingress"
-  from_port   = var.db_port
-  to_port     = var.db_port
-  protocol    = "tcp"
-  cidr_blocks = var.allowed_security_groups
-  # source_security_group_id = var.allowed_security_groups
-  security_group_id = aws_security_group.servian_tc_backend_sg.id
-}
+# resource "aws_security_group_rule" "servian_tc_backend_sg_rule" {
+#   type        = "ingress"
+#   from_port   = var.db_port
+#   to_port     = var.db_port
+#   protocol    = "tcp"
+#   cidr_blocks = var.allowed_security_groups
+#   # source_security_group_id = var.allowed_security_groups
+#   security_group_id = aws_security_group.servian_tc_backend_sg.id
+# }
 
 resource "aws_security_group_rule" "egress" {
   description       = "Allow all egress traffic"

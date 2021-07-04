@@ -13,7 +13,7 @@ variable "public_subnet_ids" {
   type        = list(string)
 }
 
-variable "key_name" {
+variable "aws_key_name" {
   description = "name AWS key to login to instance"
   type        = string
 }
@@ -43,6 +43,7 @@ variable "db_host" {
   description = "DB host address"
   type        = string
 }
+
 
 variable "listen_host" {
   description = "App listen host"

@@ -52,7 +52,7 @@ resource "aws_instance" "servian_tc_bastion_host" {
   count                       = length(var.public_subnet_ids)
   ami                         = var.bastion_ami
   instance_type               = var.instance_type
-  key_name                    = var.aws_key_pair
+  key_name                    = var.aws_key_name
   associate_public_ip_address = var.associate_public_ip_address
   vpc_security_group_ids      = [aws_security_group.servian_tc_bastion_sg.id]
   subnet_id                   = element(var.public_subnet_ids, count.index)

@@ -133,3 +133,8 @@ variable "health_check_interval" {
   description = "Helath Check interval"
   type        = number
 }
+
+variable "aws_key_name" {
+  description = "name AWS key to login to instance"
+  type        = string
+}

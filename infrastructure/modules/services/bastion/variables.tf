@@ -64,7 +64,7 @@ variable "latest_app_package_path" {
   type        = string
 }
 
-variable "aws_key_pair" {
+variable "aws_key_name" {
   description = "name AWS key to login to instance"
   type        = string
 }

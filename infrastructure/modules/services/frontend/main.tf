@@ -105,7 +105,7 @@ resource "aws_lb_listener_rule" "servian_tc_http" {
 }
 
 # Create Security Group for ASG
-
+# It allows ALB to access app listener port 
 resource "aws_security_group" "servian_tc_asg_sg" {
   vpc_id = var.vpc_id
   name   = "${local.prefix}_ASG_SG"
@@ -122,15 +122,6 @@ resource "aws_security_group" "servian_tc_asg_sg" {
     Terraform   = "True"
     Environment = var.environment
   }
-}
-
-resource "aws_security_group_rule" "servian_tc_backend_sg_rule" {
-  type                     = "ingress"
-  from_port                = 22
-  to_port                  = 22
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.servian_tc_alb_sg.id
-  security_group_id        = aws_security_group.servian_tc_asg_sg.id
 }
 
 resource "aws_security_group_rule" "egress" {
@@ -167,8 +158,8 @@ resource "aws_launch_configuration" "servian_tc_launch_config" {
   image_id        = var.app_ami
   instance_type   = var.app_instance_type
   security_groups = [aws_security_group.servian_tc_asg_sg.id]
-  # key_name        = aws_key_pair.ssh-key.key_name
-  user_data = data.template_file.userdata_template.rendered
+  key_name        = var.aws_key_name
+  user_data       = data.template_file.userdata_template.rendered
   lifecycle {
     create_before_destroy = true
   }
@@ -202,7 +193,7 @@ resource "aws_autoscaling_group" "servian_tc_frontend" {
 resource "aws_autoscaling_policy" "servian_tc_asg_policy" {
   name                   = "${local.prefix}_autoscaling_policy"
   policy_type            = "TargetTrackingScaling"
-  autoscaling_group_name = aws_autoscaling_group.servian_tc_frontend
+  autoscaling_group_name = aws_autoscaling_group.servian_tc_frontend.name
   target_tracking_configuration {
     predefined_metric_specification {
       predefined_metric_type = "ASGAverageCPUUtilization"

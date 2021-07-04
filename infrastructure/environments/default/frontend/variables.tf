@@ -44,6 +44,11 @@ variable "db_host" {
   type        = string
 }
 
+variable "aws_key_name" {
+  description = "AWS Key name to SSH into EC2"
+  type        = string
+}
+
 variable "listen_host" {
   description = "Servian Tech Challenge App listen host"
   type        = string

@@ -23,3 +23,8 @@ output "db_name" {
   description = "The database name in the DB"
 }
 
+output "backend_sg_id" {
+  value       = aws_security_group.servian_tc_backend_sg.id
+  description = "Backend Security Group id"
+}
+

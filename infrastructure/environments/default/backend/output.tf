@@ -23,3 +23,7 @@ output "db_name" {
   description = "The database name in the DB"
 }
 
+output "backend_sg_id" {
+  value       = module.backend.backend_sg_id
+  description = "Backend Security Group id"
+}

@@ -15,3 +15,15 @@ variable "ami" {
   type        = string
   default     = "ami-05064bb33b40c33a2"
 }
+
+variable "aws_key_name" {
+  description = "This is the name of the key to login to bastion."
+  type        = string
+  default     = "servian_tc_admin_key"
+}
+
+variable "app_port" {
+  description = "Application listening port"
+  type        = number
+  default     = 3000
+}

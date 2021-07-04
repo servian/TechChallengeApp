@@ -11,7 +11,7 @@ module "bastion" {
   listen_host                 = var.listen_host
   listen_port                 = var.listen_port
   latest_app_package_path     = var.latest_app_package_path
-  aws_key_pair                = var.key_name
+  aws_key_name                = var.aws_key_name
   public_subnet_ids           = var.public_subnet_ids
   associate_public_ip_address = var.associate_public_ip_address
   environment                 = var.environment

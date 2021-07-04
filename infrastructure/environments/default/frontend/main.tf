@@ -26,5 +26,6 @@ module "frontend" {
   health_check_timeout       = var.health_check_timeout
   health_check_interval      = var.health_check_interval
   environment                = var.environment
+  aws_key_name               = var.aws_key_name
 }
 
