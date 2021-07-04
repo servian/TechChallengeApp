@@ -33,3 +33,11 @@ nohup ./TechChallengeApp serve &
 ps -fx | grep TechChallengeApp
 
 echo "App is running successfully"
+
+# Create tasks table if it not exists
+
+tasks="$(curl ${listen_host}:${listen_port}/api/task/ -sb -H "Accept: application/json")"
+if [ "$tasks" = null ]; then 
+    echo "NULL"; 
+    ./TechChallengeApp updatedb -s
+fi

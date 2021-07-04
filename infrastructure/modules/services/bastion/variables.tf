@@ -23,47 +23,47 @@ variable "instance_type" {
   type        = string
 }
 
-variable "db_user" {
-  description = "Username for the master DB user"
-  type        = string
-  sensitive = true
-}
+# variable "db_user" {
+#   description = "Username for the master DB user"
+#   type        = string
+#   sensitive = true
+# }
 
-variable "db_password" {
-  description = "Password for the master DB user"
-  type        = string
-  sensitive   = true
-}
+# variable "db_password" {
+#   description = "Password for the master DB user"
+#   type        = string
+#   sensitive   = true
+# }
 
-variable "db_port" {
-  description = "DB port for Postgres"
-  type        = number
-}
+# variable "db_port" {
+#   description = "DB port for Postgres"
+#   type        = number
+# }
 
-variable "db_name" {
-  description = "Master database of Postgres"
-  type        = string
-}
+# variable "db_name" {
+#   description = "Master database of Postgres"
+#   type        = string
+# }
 
-variable "db_host" {
-  description = "DB host address"
-  type        = string
-}
+# variable "db_host" {
+#   description = "DB host address"
+#   type        = string
+# }
 
-variable "listen_host" {
-  description = "App listen host"
-  type        = string
-}
+# variable "listen_host" {
+#   description = "App listen host"
+#   type        = string
+# }
 
-variable "listen_port" {
-  description = "App listen port"
-  type        = number
-}
+# variable "listen_port" {
+#   description = "App listen port"
+#   type        = number
+# }
 
-variable "latest_app_package_path" {
-  description = "App latest package link"
-  type        = string
-}
+# variable "latest_app_package_path" {
+#   description = "App latest package link"
+#   type        = string
+# }
 
 variable "aws_key_name" {
   description = "name AWS key to login to instance"

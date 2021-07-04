@@ -1,10 +1,9 @@
-# Network variables
-
 variable "project" {
     description = "This is a prefix given to all resources and tags to identify that they belong to Servian Tech Challenge project"
     type = string
     default = "Servian_TC"
 }
+
 variable "environment" {
     description = "Environment for the application such as prod, staging, dev etc."
     type = string

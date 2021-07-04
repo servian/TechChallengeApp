@@ -34,16 +34,7 @@ resource "aws_security_group" "servian_tc_bastion_sg" {
 
 data "template_file" "db_update_template" {
   template = file("${path.module}/user-data/db-update.tpl")
-  vars = {
-    db_user                 = "${var.db_user}",
-    db_password             = "${var.db_password}",
-    db_name                 = "${var.db_name}",
-    db_port                 = "${var.db_port}",
-    db_host                 = "${var.db_host}",
-    listen_host             = "${var.listen_host}",
-    listen_port             = "${var.listen_port}",
-    latest_app_package_path = "${var.latest_app_package_path}"
-  }
+  vars = {}
 }
 
 # Create Bastion host in public subnets

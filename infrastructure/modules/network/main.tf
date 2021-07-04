@@ -11,6 +11,7 @@ resource "aws_vpc" "servian_tc_vpc" {
   instance_tenancy     = "default"
   enable_dns_support   = true
   enable_dns_hostnames = true
+
   tags = {
     Name        = "${local.prefix}_VPC"
     Terrafrom   = "True"
