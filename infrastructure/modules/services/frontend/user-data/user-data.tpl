@@ -23,8 +23,9 @@ echo "\"DbUser\" = \"dummy\"
 " > conf.toml
 
 # Environment variables override config file.
-export VTT_DBUSER = ${db_user}
-export VTT_DBPASSWORD = ${db_password}
+# Avoiding plain text secrets in config file
+export VTT_DBUSER="${db_user}"
+export VTT_DBPASSWORD="${db_password}"
 
 # Now run the TecChallngeApp
 nohup ./TechChallengeApp serve &

@@ -25,10 +25,10 @@ echo "\"DbUser\" = \"dummy\"
 
 # Environment variables override config file.
 # Avoiding plain text secrets in config file
-export VTT_DBUSER = ${db_user}
-export VTT_DBPASSWORD = ${db_password}
+export VTT_DBUSER="${db_user}"
+export VTT_DBPASSWORD="${db_password}"
 
-# Now run the TecChallngeApp to update the data in Postgres DB
+# Now run the TechChallngeApp to update the data in Postgres DB
 ./TechChallengeApp updatedb -s
 
 echo "DB has been succesfully updated"

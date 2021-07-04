@@ -55,7 +55,7 @@ module "management" {
   listen_port             = var.app_port
   bastion_ami             = var.ami
   aws_key_name            = aws_key_pair.servian_tc_generated_key.key_name
-  depends_on              = [module.backend]
+  depends_on              = [module.backend, module.frontend]
 
 }
 
