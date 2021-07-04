@@ -65,7 +65,6 @@ variable "latest_app_package_path" {
 variable "bastion_ami" {
   description = "AMI for the bastion"
   type        = string
-  default     = "ami-05064bb33b40c33a2"
 }
 
 variable "instance_type" {

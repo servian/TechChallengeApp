@@ -65,7 +65,6 @@ variable "latest_app_package_path" {
 variable "app_ami" {
   description = "AMI for the Launch Configuration"
   type        = string
-  default     = "ami-05064bb33b40c33a2"
 }
 
 variable "app_instance_type" {

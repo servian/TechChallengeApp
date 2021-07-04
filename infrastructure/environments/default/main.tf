@@ -22,6 +22,7 @@ module "frontend" {
   db_port         = module.backend.db_port
   db_name         = module.backend.db_name
   db_host         = module.backend.db_address
+  app_ami         = var.ami
 
 }
 
@@ -35,6 +36,7 @@ module "management" {
   db_port           = module.backend.db_port
   db_name           = module.backend.db_name
   db_host           = module.backend.db_address
+  bastion_ami       = var.ami
   key_name          = ""
   depends_on        = [module.backend]
 

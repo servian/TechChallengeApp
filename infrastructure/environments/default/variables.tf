@@ -9,3 +9,9 @@ variable "environment" {
   type        = string
   default     = "default"
 }
+
+variable "ami" {
+  description = "Same AMI will be used across all the instances"
+  type        = string
+  default     = "ami-05064bb33b40c33a2"
+}
