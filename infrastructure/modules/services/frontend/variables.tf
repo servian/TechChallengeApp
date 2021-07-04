@@ -26,6 +26,7 @@ variable "app_instance_type" {
 variable "db_user" {
   description = "Username for the master DB user"
   type        = string
+  sensitive = true
 }
 
 variable "db_password" {

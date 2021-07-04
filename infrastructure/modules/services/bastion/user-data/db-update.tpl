@@ -14,14 +14,19 @@ rm -rf $APP_PACKAGE
 cd dist/
 
 # Replace the existing contents with the new contents
-echo "\"DbUser\" = "\"${db_user}\""
-\"DbPassword\" = "\"${db_password}\""
+echo "\"DbUser\" = \"dummy\"
+\"DbPassword\" = \"dummy\"
 \"DbName\" = "\"${db_name}\""
 \"DbPort\" = "\"${db_port}\""
 \"DbHost\" = "\"${db_host}\""
 \"ListenHost\" = "\"${listen_host}\""
 \"ListenPort\" = "\"${listen_port}\""
 " > conf.toml
+
+# Environment variables override config file.
+# Avoiding plain text secrets in config file
+export VTT_DBUSER = ${db_user}
+export VTT_DBPASSWORD = ${db_password}
 
 # Now run the TecChallngeApp to update the data in Postgres DB
 ./TechChallengeApp updatedb -s

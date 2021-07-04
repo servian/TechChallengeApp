@@ -19,7 +19,9 @@ module "backend" {
   environment        = var.environment
   vpc_id             = module.network.vpc_id
   private_subnet_ids = module.network.private_subnet_ids
-
+  name = var.db_name
+  db_user                 = var.db_user
+  db_password             = var.db_password
 }
 
 module "frontend" {
@@ -28,10 +30,10 @@ module "frontend" {
   vpc_id                  = module.network.vpc_id
   asg_subnet_ids          = module.network.private_subnet_ids
   alb_subnets_ids         = module.network.public_subnet_ids
-  db_user                 = module.backend.db_user
-  db_password             = module.backend.db_password
+  db_user                 = var.db_user
+  db_password             = var.db_password
   db_port                 = module.backend.db_port
-  db_name                 = module.backend.db_name
+  db_name                 = var.db_name
   db_host                 = module.backend.db_address
   latest_app_package_path = var.app_package_link
   listen_port             = var.app_port
@@ -44,10 +46,10 @@ module "management" {
   environment             = var.environment
   vpc_id                  = module.network.vpc_id
   public_subnet_ids       = module.network.public_subnet_ids
-  db_user                 = module.backend.db_user
-  db_password             = module.backend.db_password
+  db_user                 = var.db_user
+  db_password             = var.db_password
   db_port                 = module.backend.db_port
-  db_name                 = module.backend.db_name
+  db_name                 = var.db_name
   db_host                 = module.backend.db_address
   latest_app_package_path = var.app_package_link
   listen_port             = var.app_port

@@ -21,6 +21,7 @@ variable "aws_key_name" {
 variable "db_user" {
   description = "Username for the master DB user"
   type        = string
+  sensitive = true
 }
 
 variable "db_password" {

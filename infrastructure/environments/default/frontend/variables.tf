@@ -21,6 +21,7 @@ variable "alb_subnets_ids" {
 variable "db_user" {
   description = "Username for the master DB user"
   type        = string
+  sensitive = true
 }
 
 variable "db_password" {

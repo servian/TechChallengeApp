@@ -7,30 +7,7 @@ locals {
 resource "aws_security_group" "servian_tc_backend_sg" {
   name   = "${local.prefix}_Backend_SG"
   vpc_id = var.vpc_id
-  # egress {
-  #   from_port   = 0
-  #   to_port     = 0
-  #   protocol    = "-1"
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
-  # ingress {
-  #   from_port = var.db_port
-  #   to_port   = var.db_port
-  #   protocol  = "tcp"
-  #   security_groups = [
-  #     aws_security_group.servian_tc_asg_sg.id
-  #   ]
-  # }
-
-  # Bastion host will perform the DB import
-  # ingress {
-  #   from_port = 5432
-  #   to_port   = 5432
-  #   protocol  = "tcp"
-  #   security_groups = [
-  #     aws_security_group.servian_tc_bastion_sg.id
-  #   ]
-  # }
+ 
   tags = {
     Name        = "${local.prefix}_Backend_SG"
     Terraform   = "True"
@@ -39,16 +16,6 @@ resource "aws_security_group" "servian_tc_backend_sg" {
 }
 
 # Create Security Group rules associate to the Security Group
-
-# resource "aws_security_group_rule" "servian_tc_backend_sg_rule" {
-#   type        = "ingress"
-#   from_port   = var.db_port
-#   to_port     = var.db_port
-#   protocol    = "tcp"
-#   cidr_blocks = var.allowed_security_groups
-#   # source_security_group_id = var.allowed_security_groups
-#   security_group_id = aws_security_group.servian_tc_backend_sg.id
-# }
 
 resource "aws_security_group_rule" "egress" {
   description       = "Allow all egress traffic"

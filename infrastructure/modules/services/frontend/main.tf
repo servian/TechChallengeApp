@@ -73,8 +73,6 @@ resource "aws_lb_target_group" "servian_tc_frontend_tg" {
   }
 }
 
-
-
 # Create ALB Listner - HTTP
 
 resource "aws_lb_listener" "servian_http" {

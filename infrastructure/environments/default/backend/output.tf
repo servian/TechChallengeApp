@@ -8,21 +8,6 @@ output "db_port" {
   description = "The port the database is listening on"
 }
 
-output "db_user" {
-  value       = module.backend.db_user
-  description = "Master user for the DB"
-}
-
-output "db_password" {
-  value       = module.backend.db_password
-  description = "The password of the master user"
-}
-
-output "db_name" {
-  value       = module.backend.db_name
-  description = "The database name in the DB"
-}
-
 output "backend_sg_id" {
   value       = module.backend.backend_sg_id
   description = "Backend Security Group id"

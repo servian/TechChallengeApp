@@ -36,7 +36,7 @@ data "template_file" "db_update_template" {
   template = file("${path.module}/user-data/db-update.tpl")
   vars = {
     db_user                 = "${var.db_user}",
-    db_password             = "${var.db_port}",
+    db_password             = "${var.db_password}",
     db_name                 = "${var.db_name}",
     db_port                 = "${var.db_port}",
     db_host                 = "${var.db_host}",

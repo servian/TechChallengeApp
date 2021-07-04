@@ -11,14 +11,13 @@ variable "vpc_id" {
 variable "db_user" {
   description = "Username for the master DB user"
   type        = string
-  default     = "postgres"
+  sensitive = true
 }
 
 variable "db_password" {
   description = "Password for the master DB user"
   type        = string
   sensitive   = true
-  default     = "postgres"
 }
 
 variable "db_port" {
@@ -67,7 +66,6 @@ variable "instance_class" {
 variable "name" {
   description = "The name of the database to create when the DB instance is created"
   type        = string
-  default     = "postgres"
 }
 
 variable "identifier" {
