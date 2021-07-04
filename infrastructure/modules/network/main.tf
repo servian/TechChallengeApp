@@ -2,6 +2,8 @@ locals {
   prefix = "${var.project}_${var.environment}"
 }
 
+data "aws_region" "current" {}
+
 # Create a VPC
 
 resource "aws_vpc" "servian_tc_vpc" {
@@ -33,7 +35,7 @@ resource "aws_subnet" "servian_tc_public" {
   vpc_id                  = aws_vpc.servian_tc_vpc.id
   count                   = length(var.availability_zones)
   cidr_block              = element(var.public_subnets_cidr, count.index)
-  availability_zone       = element(var.availability_zones, count.index)
+  availability_zone       = "${data.aws_region.current.name}${element(var.availability_zones, count.index)}"
   map_public_ip_on_launch = "true"
   tags = {
     Name        = "${local.prefix}_Public_Subnet"
@@ -48,7 +50,7 @@ resource "aws_subnet" "servian_tc_private" {
   vpc_id                  = aws_vpc.servian_tc_vpc.id
   count                   = length(var.private_subnets_cidr)
   cidr_block              = element(var.private_subnets_cidr, count.index)
-  availability_zone       = element(var.availability_zones, count.index)
+  availability_zone       = "${data.aws_region.current.name}${element(var.availability_zones, count.index)}"
   map_public_ip_on_launch = "false"
   tags = {
     Name        = "${local.prefix}_Private_Subnet"
