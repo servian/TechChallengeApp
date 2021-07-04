@@ -5,8 +5,10 @@ locals {
 # Create a VPC
 
 resource "aws_vpc" "servian_tc_vpc" {
-  cidr_block       = var.aws_vpc_cidr
-  instance_tenancy = "default"
+  cidr_block           = var.aws_vpc_cidr
+  instance_tenancy     = "default"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
   tags = {
     Name        = "${local.prefix}_VPC"
     Terrafrom   = "True"
