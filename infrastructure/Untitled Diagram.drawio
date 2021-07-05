@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-07-05T08:50:45.559Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" etag="hTg4r3wmcyAdp9L4r5oZ" version="14.8.4" type="github">
+<mxfile host="app.diagrams.net" modified="2021-07-05T12:01:59.090Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" etag="-kryd6w5xeiYNbIpas0f" version="14.8.4" type="github">
   <diagram id="a2KCXQW5y_hcNaTkDCUP" name="Page-1">
-    <mxGraphModel dx="2413" dy="2063" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2413" dy="1982" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -43,19 +43,11 @@
         <mxCell id="AJSDm180iAo4wDnun82W-16" value="" style="points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;pointerEvents=1;" parent="1" vertex="1">
           <mxGeometry x="470" y="360" width="60" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="QND-4vZ9Ax7OfqVobVI6-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#232F3E;" edge="1" parent="1" source="AJSDm180iAo4wDnun82W-21" target="AJSDm180iAo4wDnun82W-15">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="500" y="520" />
-              <mxPoint x="500" y="520" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="AJSDm180iAo4wDnun82W-21" value="ALB Security group" style="fillColor=none;strokeColor=#DD3522;verticalAlign=top;fontStyle=0;fontColor=#DD3522;dashed=0;pointerEvents=1;html=1;" parent="1" vertex="1">
-          <mxGeometry x="240" y="290" width="520" height="170" as="geometry" />
+        <mxCell id="AJSDm180iAo4wDnun82W-21" value="&lt;blockquote style=&quot;margin: 0 0 0 40px ; border: none ; padding: 0px&quot;&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px ; border: none ; padding: 0px&quot;&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px ; border: none ; padding: 0px&quot;&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px ; border: none ; padding: 0px&quot;&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px ; border: none ; padding: 0px&quot;&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px ; border: none ; padding: 0px&quot;&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px ; border: none ; padding: 0px&quot;&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px ; border: none ; padding: 0px&quot;&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px ; border: none ; padding: 0px&quot;&gt;ALB Security group&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;" style="fillColor=none;strokeColor=#DD3522;verticalAlign=top;fontStyle=0;fontColor=#DD3522;dashed=0;pointerEvents=1;html=1;" parent="1" vertex="1">
+          <mxGeometry x="210" y="290" width="610" height="170" as="geometry" />
         </mxCell>
         <mxCell id="AJSDm180iAo4wDnun82W-22" value="&lt;b&gt;ALB&lt;/b&gt;" style="fillColor=none;strokeColor=#5A6C86;dashed=1;verticalAlign=top;fontStyle=0;fontColor=#5A6C86;pointerEvents=1;html=1;" parent="1" vertex="1">
-          <mxGeometry x="275" y="320" width="460" height="120" as="geometry" />
+          <mxGeometry x="240" y="320" width="550" height="120" as="geometry" />
         </mxCell>
         <mxCell id="AJSDm180iAo4wDnun82W-24" value="&lt;b&gt;Bastion Host&lt;/b&gt;" style="points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.compute;pointerEvents=1;" parent="1" vertex="1">
           <mxGeometry x="259" y="160" width="58" height="58" as="geometry" />
@@ -87,6 +79,14 @@
         <mxCell id="AJSDm180iAo4wDnun82W-36" value="Bastion Host &lt;br&gt;Security group" style="fillColor=none;strokeColor=#DD3522;verticalAlign=top;fontStyle=0;fontColor=#DD3522;dashed=0;pointerEvents=1;html=1;" parent="1" vertex="1">
           <mxGeometry x="640" y="114" width="140" height="130" as="geometry" />
         </mxCell>
+        <mxCell id="QND-4vZ9Ax7OfqVobVI6-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1.003;entryY=0.538;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#232F3E;" edge="1" parent="1" target="QND-4vZ9Ax7OfqVobVI6-26">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="280" y="668" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="291" y="668" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
         <mxCell id="AJSDm180iAo4wDnun82W-38" value="&lt;b&gt;EC2&lt;br&gt;Tech Challenge App&lt;/b&gt;" style="points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;pointerEvents=1;" parent="1" vertex="1">
           <mxGeometry x="291" y="636" width="58" height="58" as="geometry" />
         </mxCell>
@@ -115,17 +115,8 @@
         <mxCell id="AJSDm180iAo4wDnun82W-47" value="&lt;b&gt;Parameter &lt;br&gt;Store&lt;/b&gt;" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.parameter_store;fillColor=#759C3E;gradientColor=none;pointerEvents=1;fontColor=#232F3E;" parent="1" vertex="1">
           <mxGeometry x="1050" y="329" width="75" height="102" as="geometry" />
         </mxCell>
-        <mxCell id="AJSDm180iAo4wDnun82W-15" value="ASG Security group" style="fillColor=none;strokeColor=#DD3522;verticalAlign=top;fontStyle=0;fontColor=#DD3522;dashed=0;pointerEvents=1;html=1;" parent="1" vertex="1">
-          <mxGeometry x="211" y="560" width="610" height="190" as="geometry" />
-        </mxCell>
         <mxCell id="AJSDm180iAo4wDnun82W-10" value="&lt;b&gt;RDS&lt;/b&gt;" style="fillColor=none;strokeColor=#5A6C86;dashed=1;verticalAlign=top;fontStyle=0;fontColor=#5A6C86;pointerEvents=1;html=1;" parent="1" vertex="1">
           <mxGeometry x="240" y="840" width="550" height="130" as="geometry" />
-        </mxCell>
-        <mxCell id="QND-4vZ9Ax7OfqVobVI6-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#232F3E;" edge="1" parent="1" source="AJSDm180iAo4wDnun82W-15" target="AJSDm180iAo4wDnun82W-11">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="AJSDm180iAo4wDnun82W-11" value="RDS Security group" style="fillColor=none;strokeColor=#DD3522;verticalAlign=top;fontStyle=0;fontColor=#DD3522;dashed=0;pointerEvents=1;html=1;" parent="1" vertex="1">
-          <mxGeometry x="210" y="810" width="610" height="190" as="geometry" />
         </mxCell>
         <mxCell id="QND-4vZ9Ax7OfqVobVI6-8" value="&lt;b&gt;Internet&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fontColor=#232F3E;" vertex="1" parent="1">
           <mxGeometry x="475" y="-360" width="60" height="20" as="geometry" />
@@ -138,6 +129,33 @@
         </mxCell>
         <mxCell id="QND-4vZ9Ax7OfqVobVI6-18" value="&lt;b&gt;Client&lt;/b&gt;" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3E;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.client;" vertex="1" parent="1">
           <mxGeometry x="533.56" y="1257" width="78" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="AJSDm180iAo4wDnun82W-11" value="&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;RDS Security group" style="fillColor=none;strokeColor=#DD3522;verticalAlign=top;fontStyle=0;fontColor=#DD3522;dashed=0;pointerEvents=1;html=1;" parent="1" vertex="1">
+          <mxGeometry x="210" y="810" width="610" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="QND-4vZ9Ax7OfqVobVI6-24" value="" style="endArrow=classic;html=1;fontColor=#232F3E;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="500" y="441" as="sourcePoint" />
+            <mxPoint x="500" y="590" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QND-4vZ9Ax7OfqVobVI6-25" value="" style="endArrow=classic;html=1;fontColor=#232F3E;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="500" y="740" as="sourcePoint" />
+            <mxPoint x="500" y="810" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QND-4vZ9Ax7OfqVobVI6-26" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/logotypes/32/github-128.png;dashed=0;pointerEvents=1;fontColor=#232F3E;fillColor=#CCFFFF;" vertex="1" parent="1">
+          <mxGeometry x="-210" y="628.5" width="73" height="73" as="geometry" />
+        </mxCell>
+        <mxCell id="QND-4vZ9Ax7OfqVobVI6-27" value="&lt;b&gt;GitHub Repo&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fontColor=#232F3E;" vertex="1" parent="1">
+          <mxGeometry x="-227" y="717" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="AJSDm180iAo4wDnun82W-15" value="&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;&lt;span style=&quot;white-space: pre&quot;&gt;	&lt;/span&gt;ASG Security group" style="fillColor=none;strokeColor=#DD3522;verticalAlign=top;fontStyle=0;fontColor=#DD3522;dashed=0;pointerEvents=1;html=1;" parent="1" vertex="1">
+          <mxGeometry x="211" y="560" width="610" height="210" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
