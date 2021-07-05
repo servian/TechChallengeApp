@@ -24,10 +24,10 @@ Pre-requisites to deploy the Tech Challenge app to AWS from any operating system
 * **AWS account:**
   If using free-tier account, please note, not all services are free-tier eligible. NAT Gateway and multi-az RDS incur cost.
 * **AWS IAM user:**
-  It is preferable to have a user with AdministratorAccess policy, so that you don't have to create anew policy allowing only resources to be created using Terraform.
+  It is preferable to have a user with AdministratorAccess policy, so that you don't have to create a new policy allowing only resources to be created using Terraform.
    IAM user with programmatic access is sufficient to execute this deployment.
 * **AWS CLI:**
-  This solution has been tested in AWS CLI` version aws-cli/2.2.11`
+  This solution has been tested in AWS CLI `version aws-cli/2.2.11`
    [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
 
 * **Terraform:**
@@ -39,9 +39,9 @@ Pre-requisites to deploy the Tech Challenge app to AWS from any operating system
 
 ## Process Instructions
 
-To provision the deployment solution for the Tech Challenge SPA application, please follow the below steps.
+To provision the deployment solution for the Tech Challenge SPA, please follow the below steps.
 
-1. Let's make sure Terraform is installed correctly by typing the below command in your system console.
+1. Let's make sure Terraform is installed correctly by typing in the below command in your system console.
    `terraform version`
    If you can see the version displayed, we are good to go.
 2. Similarly, check whether aws cli is available by typing,
@@ -50,14 +50,14 @@ To provision the deployment solution for the Tech Challenge SPA application, ple
    `aws configure`
    Provide the access key, secret access key and the region to configure your AWS account.
 4.  Assuming that you are already in cloned repo of the Tech Challenge solution, change the directory to `infrastructure/environments/default`. This is where all the Terraform root modules are present.
-5.  Run below command to initialise the working directory containing Terraform root modules,
+5.  Run the command to initialise the working directory containing Terraform root modules,
     `terraform init`
 
 6. In the same directory create a file `default.tfvars` for Terraform variables. This will contain some of the variables user needs to pass.
    You would provide key-value pair in this file, just like this,
    `aws_region = "ap-southeast-2"`
 7. Fill in all the required variables shown in below table,
-   | Variable    | Description |
+   | Variables    | Description |
    | ----------- | ----------- |
    | aws_region        | eg: "ap-southeast-2" |
    | environment    | "default" or any other environment name, like prod, dev etc. |
