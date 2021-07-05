@@ -21,17 +21,17 @@ This section will guide you to deploy the Tech Challenge app written in Go and P
 
 Pre-requisites to deploy the Tech Challenge app to AWS from any operating system requires the following.
 
-* AWS account
-   If using free-tier account, please note, not all services are free-tier eligible. NAT Gateway and multi-az RDS incur cost.
-* AWS IAM user
-   It is preferable to have a user with AdministratorAccess policy, so that you don't have to create anew policy allowing only resources to be created using Terraform.
+* **AWS account:**
+  If using free-tier account, please note, not all services are free-tier eligible. NAT Gateway and multi-az RDS incur cost.
+* **AWS IAM user:**
+  It is preferable to have a user with AdministratorAccess policy, so that you don't have to create anew policy allowing only resources to be created using Terraform.
    IAM user with programmatic access is sufficient to execute this deployment.
-* AWS CLI
-   This solution has been tested in AWS CLI version aws-cli/2.2.11
+* **AWS CLI:**
+  This solution has been tested in AWS CLI` version aws-cli/2.2.11`
    [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
 
-* Terraform 
-   This solution has been tested using Terraform `version v1.0.1 on windows_amd64`.
+* **Terraform:**
+  This solution has been tested using Terraform `version v1.0.1 on windows_amd64`.
    [Terraform CLI](https://learn.hashicorp.com/tutorials/terraform/install-cli)
    [Terraform downloads](https://www.terraform.io/downloads.html)
 
@@ -57,19 +57,21 @@ To provision the deployment solution for the Tech Challenge SPA application, ple
    You would provide key-value pair in this file, just like this,
    `aws_region = "ap-southeast-2"`
 7. Fill in all the required variables shown in below table,
-8. aws_region = "ap-southeast-2"
-   environment = "default" or any other environment name, like prod, dev etc.
-db_user = pass a user name, example, postgres
-db_name = pass a database name, example, app
-app_package_link = <link>, this is the latest package of the application for which this solution is tested.
-9. Now, we are good to provision infrastructure and deploy the application. Run,
+   | Variable    | Description |
+   | ----------- | ----------- |
+   | aws_region        | eg: "ap-southeast-2" |
+   | environment    | "default" or any other environment name, like prod, dev etc. |
+   | db_user | pass a user name, example: postgres |
+   | db_name     | pass a database name, example: postgres |
+   | app_package_link | [releases](https://github.com/servian/TechChallengeApp/releases/download/v.0.8.0/TechChallengeApp_v.0.8.0_linux64.zip) This is the latest package of the application for which this solution is tested.  |
+8. Now, we are good to provision infrastructure and deploy the application. Run,
    `terraform apply -var-file "default.tfvars"`
     It will show you the resources to be created in AWS. When prompted for a response, type `'yes'` to make these changes in your account. Typing anything else would cancel the transaction.
-10. This would take around 10 to 15 minutes to finish as RDS creation takes longer.
-11. Once completed, you can copy the ALB link from the terminal output, `"servian_tech_challenge_app_endpoint"`.
-12. Copy and paste this link in to a browser, you will see the Servian application running. Now you can add and delete tasks in the UI.
-13. Alternatively, you can login to your AWS console, and verify all the resources are created.
-14. Now, to destroy all the resources, run below command,
+9.  This would take around 10 to 15 minutes to finish as RDS creation takes longer.
+10. Once completed, you can copy the ALB link from the terminal output, `"servian_tech_challenge_app_endpoint"`.
+11. Copy and paste this link in to a browser, you will see the Servian application running. Now you can add and delete tasks in the UI.
+12. Alternatively, you can login to your AWS console, and verify all the resources are created.
+13. Now, to destroy all the resources, run below command,
     `terraform destroy -var-file "default.tfvars"`
     Response `'yes'` for a prompt to delete them all.
     It would take few minutes to delete all the resources. 
