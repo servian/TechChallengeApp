@@ -2,7 +2,7 @@
 
 This section will guide you to deploy the Tech Challenge app written in Go and Postgres database. The cloud solution chosen for this solution is AWS Cloud. All cloud changes have been made using infrastructure as code implementation using Hashicorp Terraform.
 
-# Architecture
+## Architecture
 
 ![architecture](ServianTCArchitecture.png)
 
@@ -17,7 +17,7 @@ This section will guide you to deploy the Tech Challenge app written in Go and P
 *  `.tfvars` and `.tfstate` files are not checked into repository, therefore it will remain in local system.
 *  `.tfstate` files are not maintained in S3 to reduce the complexity of the solution, but would be a recommended method if using pipelines. This would secure the `.tfstate` file by encrypting it and also locks enable one user to deploy at a time.
 
-# Pre-requisites
+## Pre-requisites
 
 Pre-requisites to deploy the Tech Challenge app to AWS from any operating system requires the following.
 
@@ -31,13 +31,13 @@ Pre-requisites to deploy the Tech Challenge app to AWS from any operating system
    [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
 
 * Terraform 
-   This solution has been tested using Terraform version v1.0.1 on windows_amd64.
+   This solution has been tested using Terraform `version v1.0.1 on windows_amd64`.
    [Terraform CLI](https://learn.hashicorp.com/tutorials/terraform/install-cli)
    [Terraform downloads](https://www.terraform.io/downloads.html)
 
 * This solution can be deployed from any OS as long as the above pre-requisites are met.
 
-# Process Instructions
+## Process Instructions
 
 To provision the deployment solution for the Tech Challenge SPA application, please follow the below steps.
 
