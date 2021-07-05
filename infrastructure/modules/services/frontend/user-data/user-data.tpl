@@ -38,6 +38,5 @@ echo "App is running successfully"
 
 tasks="$(curl ${listen_host}:${listen_port}/api/task/ -sb -H "Accept: application/json")"
 if [ "$tasks" = null ]; then 
-    echo "NULL"; 
     ./TechChallengeApp updatedb -s
 fi

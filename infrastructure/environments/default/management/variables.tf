@@ -18,50 +18,6 @@ variable "aws_key_name" {
   type        = string
 }
 
-# variable "db_user" {
-#   description = "Username for the master DB user"
-#   type        = string
-#   sensitive = true
-# }
-
-# variable "db_password" {
-#   description = "Password for the master DB user"
-#   type        = string
-#   sensitive   = true
-# }
-
-# variable "db_port" {
-#   description = "DB port for Postgres"
-#   type        = number
-# }
-
-# variable "db_name" {
-#   description = "Master database of Postgres"
-#   type        = string
-# }
-
-# variable "db_host" {
-#   description = "DB host address"
-#   type        = string
-# }
-
-
-# variable "listen_host" {
-#   description = "App listen host"
-#   type        = string
-#   default     = "0.0.0.0"
-# }
-
-# variable "listen_port" {
-#   description = "App listen port"
-#   type        = number
-# }
-
-# variable "latest_app_package_path" {
-#   description = "App latest package link"
-#   type        = string
-# }
-
 variable "bastion_ami" {
   description = "AMI for the bastion"
   type        = string

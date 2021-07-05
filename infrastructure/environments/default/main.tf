@@ -21,7 +21,6 @@ module "backend" {
   private_subnet_ids = module.network.private_subnet_ids
   name = var.db_name
   db_user                 = var.db_user
-  db_password             = var.db_password
 }
 
 module "frontend" {
@@ -31,7 +30,7 @@ module "frontend" {
   asg_subnet_ids          = module.network.private_subnet_ids
   alb_subnets_ids         = module.network.public_subnet_ids
   db_user                 = var.db_user
-  db_password             = var.db_password
+  db_password             = module.backend.db_password
   db_port                 = module.backend.db_port
   db_name                 = var.db_name
   db_host                 = module.backend.db_address
@@ -46,17 +45,8 @@ module "management" {
   environment             = var.environment
   vpc_id                  = module.network.vpc_id
   public_subnet_ids       = module.network.public_subnet_ids
-  # db_user                 = var.db_user
-  # db_password             = var.db_password
-  # db_port                 = module.backend.db_port
-  # db_name                 = var.db_name
-  # db_host                 = module.backend.db_address
-  # latest_app_package_path = var.app_package_link
-  # listen_port             = var.app_port
   bastion_ami             = var.ami
   aws_key_name            = aws_key_pair.servian_tc_generated_key.key_name
-  depends_on              = [module.backend, module.frontend]
-
 }
 
 # Define the Security Group rules here once all the resources are created to avoid cyclic dependencies
@@ -73,7 +63,6 @@ resource "aws_security_group_rule" "servian_tc_backend_sg_rule" {
   from_port = module.backend.db_port
   to_port   = module.backend.db_port
   protocol  = "tcp"
-  # cidr_blocks = var.allowed_security_groups
   source_security_group_id = element(local.backend_allowed_sg, count.index)
   security_group_id        = module.backend.backend_sg_id
 }

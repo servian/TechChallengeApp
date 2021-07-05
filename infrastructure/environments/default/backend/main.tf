@@ -2,7 +2,6 @@ module "backend" {
   source                  = "../../../modules/database"
   vpc_id                  = var.vpc_id
   db_user                 = var.db_user
-  db_password             = var.db_password
   db_port                 = var.db_port
   allocated_storage       = var.allocated_storage
   storage_type            = var.storage_type

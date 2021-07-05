@@ -40,6 +40,20 @@ resource "aws_db_subnet_group" "servian_tc_db_subnet_group" {
   }
 }
 
+# Generate a random string for DB master password
+resource "random_password" "servian_tc_db_master_pass" {
+  length            = 15
+  special           = true
+  min_special       = 1
+  min_lower         = 1
+  min_numeric       = 1
+  min_upper         = 1
+  override_special  = "%^&*()-_=+[]{}<>:?"
+  keepers           = {
+    pass_version  = 1
+  }
+}
+
 # Create Postgres database RDS instance 
 
 resource "aws_db_instance" "servian_tc_db" {
@@ -51,7 +65,7 @@ resource "aws_db_instance" "servian_tc_db" {
   instance_class          = var.instance_class
   name                    = var.name
   username                = var.db_user
-  password                = var.db_password
+  password                = random_password.servian_tc_db_master_pass.result
   identifier              = var.identifier
   skip_final_snapshot     = var.skip_final_snapshot
   backup_retention_period = var.backup_retention_period
@@ -64,4 +78,35 @@ resource "aws_db_instance" "servian_tc_db" {
     Terraform   = "True"
     Environment = "${var.environment}"
   }
+}
+
+# Store the DB credentials in AWS SSM Parameter Store for future references
+
+# This secret parameter is not secured with a KMS key to reduce complexity of implementation.
+# To secure it, add a key_id argument and pass the KMS key 
+resource "aws_ssm_parameter" "servian_tc_db_password" {
+  name        = "/${var.environment}/postgres/master/password"
+  description = "The password for the DB master user"
+  type        = "SecureString"
+  value       = random_password.servian_tc_db_master_pass.result
+
+  tags = {
+    Name        = "${local.prefix}_SSM"
+    Terraform   = "True"
+    Environment = "${var.environment}"
+  }
+}
+
+# Store the DB master user
+resource "aws_ssm_parameter" "servian_tc_db_user" {
+  name  = "/${var.environment}/postgres/master/user"
+  type  = "String"
+  value = var.db_user
+}
+
+# Store the master DB name
+resource "aws_ssm_parameter" "servian_tc_db_name" {
+  name  = "/${var.environment}/postgres/master/db_name"
+  type  = "String"
+  value = var.name
 }
