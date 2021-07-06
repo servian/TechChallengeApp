@@ -8,12 +8,6 @@ variable "environment" {
   type        = string
 }
 
-variable "ami" {
-  description = "Same AMI will be used across all the instances"
-  type        = string
-  default = "ami-05064bb33b40c33a2"
-}
-
 variable "aws_key_name" {
   description = "This is the name of the key to login to bastion."
   type        = string
@@ -23,7 +17,7 @@ variable "aws_key_name" {
 variable "app_port" {
   description = "Application listening port"
   type        = number
-  default = 3000
+  default     = 3000
 
 }
 
@@ -40,5 +34,5 @@ variable "db_name" {
 variable "db_user" {
   description = "Username for the master DB user"
   type        = string
-  sensitive = true
+  sensitive   = true
 }

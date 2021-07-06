@@ -19,8 +19,8 @@ module "backend" {
   environment        = var.environment
   vpc_id             = module.network.vpc_id
   private_subnet_ids = module.network.private_subnet_ids
-  name = var.db_name
-  db_user                 = var.db_user
+  name               = var.db_name
+  db_user            = var.db_user
 }
 
 module "frontend" {
@@ -36,17 +36,17 @@ module "frontend" {
   db_host                 = module.backend.db_address
   latest_app_package_path = var.app_package_link
   listen_port             = var.app_port
-  app_ami                 = var.ami
+  app_ami                 = data.aws_ami.latest_amazon_linux2_ami.id
   aws_key_name            = aws_key_pair.servian_tc_generated_key.key_name
 }
 
 module "management" {
-  source                  = "./management"
-  environment             = var.environment
-  vpc_id                  = module.network.vpc_id
-  public_subnet_ids       = module.network.public_subnet_ids
-  bastion_ami             = var.ami
-  aws_key_name            = aws_key_pair.servian_tc_generated_key.key_name
+  source            = "./management"
+  environment       = var.environment
+  vpc_id            = module.network.vpc_id
+  public_subnet_ids = module.network.public_subnet_ids
+  bastion_ami       = data.aws_ami.latest_amazon_linux2_ami.id
+  aws_key_name      = aws_key_pair.servian_tc_generated_key.key_name
 }
 
 # Define the Security Group rules here once all the resources are created to avoid cyclic dependencies
@@ -58,11 +58,11 @@ locals {
 # Create Security Group ingress rules for backend Security group
 # Allows ASG SG & Bastion SG to access DB port
 resource "aws_security_group_rule" "servian_tc_backend_sg_rule" {
-  count     = length(local.backend_allowed_sg)
-  type      = "ingress"
-  from_port = module.backend.db_port
-  to_port   = module.backend.db_port
-  protocol  = "tcp"
+  count                    = length(local.backend_allowed_sg)
+  type                     = "ingress"
+  from_port                = module.backend.db_port
+  to_port                  = module.backend.db_port
+  protocol                 = "tcp"
   source_security_group_id = element(local.backend_allowed_sg, count.index)
   security_group_id        = module.backend.backend_sg_id
 }
@@ -75,4 +75,26 @@ resource "aws_security_group_rule" "servian_tc_asg_rule" {
   protocol                 = "tcp"
   source_security_group_id = module.management.bastion_sg_id
   security_group_id        = module.frontend.asg_sg_id
+}
+
+# Pick the latest Amazon Linux 2 AMI
+
+data "aws_ami" "latest_amazon_linux2_ami" {
+  most_recent = true
+  owners      = ["137112412989"] # Amazon
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
 }
