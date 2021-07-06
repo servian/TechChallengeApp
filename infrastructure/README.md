@@ -17,6 +17,35 @@ This section will guide you to deploy the Tech Challenge app written in Go and P
 *  `.tfvars` and `.tfstate` files are not checked into repository, therefore it will remain in local system.
 *  `.tfstate` files are not maintained in S3 to reduce the complexity of the solution, but would be a recommended method if using pipelines. This would secure the `.tfstate` file by encrypting it and also locks enable one user to deploy at a time.
 
+**Security Group rules**:
+    | ASG Security Group - Inbound |
+    | Protocol Type | Port | Source | 
+    | ------------- | ----------- |
+    | TCP        | 3000 | ALB Security Group |
+    | SSH | 22 | Bastion Security Group |
+
+    | ALB Security Group - Inbound |
+    | Protocol Type | Port | Source | 
+    | ------------- | ----------- |
+    | TCP        | 80 | 0.0.0.0/0 |
+
+    | RDS Security Group - Inbound |
+    | Protocol Type | Port | Source | 
+    | ------------- | ----------- |
+    | TCP        | 5432 | ASG Security Group |
+    | TCP        | 5432 | Bastion Security Group |
+
+    | Bastion Security Group - Inbound |
+    | Protocol Type | Port | Source | 
+    | ------------- | ----------- |
+    | SSH        | 22 | 0.0.0.0/0 |
+    | TCP        | 5432 | Bastion Security Group |
+
+    | All - Outbound |
+    | Protocol Type | Port | Source | 
+    | ------------- | ----------- |
+    | All        | ALL | All |
+
 ## Pre-requisites
 
 Pre-requisites to deploy the Tech Challenge app to AWS from any operating system requires the following.
