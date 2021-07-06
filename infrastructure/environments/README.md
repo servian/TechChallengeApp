@@ -9,4 +9,15 @@ Example directories:
 - pre-prod
 - prod
 
+``` sh
+.
+├── dev
+├── dev
+├── dev
+├── dev
+├── dev
+├── dev
+.
+```
+
 Either set up a root tf file at this location to run all environment at once or keep them individually within respective environment directories.
