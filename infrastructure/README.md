@@ -122,11 +122,11 @@ To provision the deployment solution for the Tech Challenge SPA, please follow t
 8. Now, we are good to provision infrastructure and deploy the application. Run,
    `terraform apply -var-file "default.tfvars"`
     It will show you the resources to be created in AWS. When prompted for a response, type `'yes'` to make these changes in your account. Typing anything else would cancel the transaction.
-9.  This would take around 10 to 15 minutes to finish as RDS creation takes longer.
+9.  This would take about 15 minutes to finish as service such as RDS creation takes longer.
 10. Once completed, you can copy the ALB link from the terminal output, `"servian_tech_challenge_app_endpoint"`.
 11. Copy and paste this link in to a browser, you will see the Servian application running. Now you can add and delete tasks in the UI.
 12. Alternatively, you can login to your AWS console, and verify all the resources are created.
 13. Now, to destroy all the resources, run below command,
     `terraform destroy -var-file "default.tfvars"`
     Response `'yes'` for a prompt to delete them all.
-    It would take few minutes to delete all the resources. 
+    It would take upto 10 minutes to destroy all the resources. 
