@@ -2,7 +2,8 @@ locals {
   prefix = "${var.project}_${var.environment}"
 }
 
-# Create Bastion Host Security Group
+# Create Bastion Host Security Group.
+# Bastion hosts available to SSH from anywhere
 
 resource "aws_security_group" "servian_tc_bastion_sg" {
   vpc_id = var.vpc_id
@@ -30,11 +31,11 @@ resource "aws_security_group" "servian_tc_bastion_sg" {
   }
 }
 
-# Create Template file data source for DB import
+# Create Template file data source for user data
 
 data "template_file" "db_update_template" {
   template = file("${path.module}/user-data/db-update.tpl")
-  vars = {}
+  vars     = {}
 }
 
 # Create Bastion host in public subnets
@@ -54,5 +55,3 @@ resource "aws_instance" "servian_tc_bastion_host" {
     Environment = var.environment
   }
 }
-
-

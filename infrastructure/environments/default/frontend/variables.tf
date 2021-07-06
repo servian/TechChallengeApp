@@ -21,7 +21,7 @@ variable "alb_subnets_ids" {
 variable "db_user" {
   description = "Username for the master DB user"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
 variable "db_password" {
@@ -86,19 +86,19 @@ variable "asg_health_check_type" {
 variable "asg_min_size" {
   description = "Minimum number of instances running in ASG"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "asg_max_size" {
   description = "Maximum number of instances running in ASG"
   type        = number
-  default     = 1
+  default     = 6
 }
 
 variable "asg_desired_capacity" {
   description = "Desired number of instances running in ASG"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "enable_deletion_protection" {

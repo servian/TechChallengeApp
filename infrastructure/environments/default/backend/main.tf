@@ -14,7 +14,6 @@ module "backend" {
   skip_final_snapshot     = var.skip_final_snapshot
   backup_retention_period = var.backup_retention_period
   storage_encrypted       = var.storage_encrypted
-  allowed_security_groups = var.allowed_security_groups
   subnet_group            = var.private_subnet_ids
   environment             = var.environment
 }

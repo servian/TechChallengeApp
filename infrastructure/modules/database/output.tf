@@ -11,7 +11,7 @@ output "db_port" {
 output "db_password" {
   value       = random_password.servian_tc_db_master_pass.result
   description = "DB master password"
-  sensitive = true
+  sensitive   = true
 }
 
 output "backend_sg_id" {

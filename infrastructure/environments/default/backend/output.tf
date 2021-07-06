@@ -11,7 +11,7 @@ output "db_port" {
 output "db_password" {
   value       = module.backend.db_password
   description = "DB master password"
-  sensitive = true
+  sensitive   = true
 }
 
 output "backend_sg_id" {

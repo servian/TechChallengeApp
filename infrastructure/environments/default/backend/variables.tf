@@ -11,7 +11,7 @@ variable "vpc_id" {
 variable "db_user" {
   description = "Username for the master DB user"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
 variable "db_port" {
@@ -48,7 +48,7 @@ variable "engine_version" {
 variable "multi_az" {
   description = "Whether Multi AZ should be enabled for DB?"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "instance_class" {
@@ -87,16 +87,7 @@ variable "storage_encrypted" {
   default     = false
 }
 
-variable "allowed_security_groups" {
-  description = "ID of the allowed Security Groups for Security Group"
-  type        = list(string)
-  default     = ["10.0.3.0/24", "10.0.4.0/24"]
-}
-
-# TODO: To be replaced by subnets
 variable "private_subnet_ids" {
   description = "Private Subnet IDs for RDS"
   type        = list(string)
-  default     = ["10.0.3.0/24", "10.0.4.0/24"]
 }
-

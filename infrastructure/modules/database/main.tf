@@ -7,7 +7,7 @@ locals {
 resource "aws_security_group" "servian_tc_backend_sg" {
   name   = "${local.prefix}_Backend_SG"
   vpc_id = var.vpc_id
- 
+
   tags = {
     Name        = "${local.prefix}_Backend_SG"
     Terraform   = "True"
@@ -42,15 +42,15 @@ resource "aws_db_subnet_group" "servian_tc_db_subnet_group" {
 
 # Generate a random string for DB master password
 resource "random_password" "servian_tc_db_master_pass" {
-  length            = 15
-  special           = true
-  min_special       = 1
-  min_lower         = 1
-  min_numeric       = 1
-  min_upper         = 1
-  override_special  = "%^&*()-_=+[]{}<>:?"
-  keepers           = {
-    pass_version  = 1
+  length           = 15
+  special          = true
+  min_special      = 1
+  min_lower        = 1
+  min_numeric      = 1
+  min_upper        = 1
+  override_special = "%^&*()-_=+[]{}<>:?"
+  keepers = {
+    pass_version = 1
   }
 }
 

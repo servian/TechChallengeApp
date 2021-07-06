@@ -134,7 +134,6 @@ resource "aws_security_group_rule" "egress" {
 
 # Template File Data Source
 
-# TODO: Can be kept outside this file, as bastion also uses this
 data "template_file" "userdata_template" {
   template = file("${path.module}/user-data/user-data.tpl")
   vars = {
@@ -152,12 +151,12 @@ data "template_file" "userdata_template" {
 # Create Launch Configuration
 
 resource "aws_launch_configuration" "servian_tc_launch_config" {
-  name_prefix     = "${local.prefix}_Launch_Configuration"
-  image_id        = var.app_ami
-  instance_type   = var.app_instance_type
-  security_groups = [aws_security_group.servian_tc_asg_sg.id]
-  key_name        = var.aws_key_name
-  user_data       = data.template_file.userdata_template.rendered
+  name_prefix      = "${local.prefix}_Launch_Configuration"
+  image_id         = var.app_ami
+  instance_type    = var.app_instance_type
+  security_groups  = [aws_security_group.servian_tc_asg_sg.id]
+  key_name         = var.aws_key_name
+  user_data_base64 = data.template_file.userdata_template.rendered
   lifecycle {
     create_before_destroy = true
   }
@@ -175,6 +174,7 @@ resource "aws_autoscaling_group" "servian_tc_frontend" {
 
   vpc_zone_identifier = var.asg_subnet_ids
   target_group_arns   = [aws_lb_target_group.servian_tc_frontend_tg.arn]
+
   lifecycle {
     create_before_destroy = true
   }

@@ -16,7 +16,7 @@ variable "vpc_id" {
 variable "db_user" {
   description = "Username for the master DB user"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
 variable "db_port" {
@@ -77,11 +77,6 @@ variable "backup_retention_period" {
 variable "storage_encrypted" {
   description = "Specifies whether the DB instance is encrypted"
   type        = bool
-}
-
-variable "allowed_security_groups" {
-  description = "ID of the allowed Security Groups for Security Group"
-  type        = list(string)
 }
 
 variable "subnet_group" {

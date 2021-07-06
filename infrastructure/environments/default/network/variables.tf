@@ -1,7 +1,6 @@
 variable "environment" {
   description = "Environment for the application such as prod, staging, dev etc."
   type        = string
-  # default = "default"
 }
 
 variable "aws_vpc_cidr" {
