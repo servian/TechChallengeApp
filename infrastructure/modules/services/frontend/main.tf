@@ -151,12 +151,12 @@ data "template_file" "userdata_template" {
 # Create Launch Configuration
 
 resource "aws_launch_configuration" "servian_tc_launch_config" {
-  name_prefix      = "${local.prefix}_Launch_Configuration"
-  image_id         = var.app_ami
-  instance_type    = var.app_instance_type
-  security_groups  = [aws_security_group.servian_tc_asg_sg.id]
-  key_name         = var.aws_key_name
-  user_data_base64 = data.template_file.userdata_template.rendered
+  name_prefix     = "${local.prefix}_Launch_Configuration"
+  image_id        = var.app_ami
+  instance_type   = var.app_instance_type
+  security_groups = [aws_security_group.servian_tc_asg_sg.id]
+  key_name        = var.aws_key_name
+  user_data       = data.template_file.userdata_template.rendered
   lifecycle {
     create_before_destroy = true
   }
