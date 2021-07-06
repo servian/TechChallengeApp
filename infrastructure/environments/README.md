@@ -12,11 +12,12 @@ Example directories:
 ``` sh
 .
 ├── dev
-├── dev
-├── dev
-├── dev
-├── dev
-├── dev
+├── staging
+├── integration
+├── acceptance
+├── pre-prod
+├── prod
+.
 .
 ```
 
