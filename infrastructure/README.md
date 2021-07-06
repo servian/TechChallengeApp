@@ -23,6 +23,7 @@ This section will guide you to deploy the Tech Challenge app written in Go and P
     | ------------- | -----| ------ |
     | TCP        | 3000 | ALB Security Group |
     | SSH | 22 | Bastion Security Group |
+    
     Table: ASG Security Group - Inbound
 
     | Protocol Type | Port | Source | 
