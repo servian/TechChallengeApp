@@ -20,30 +20,30 @@ This section will guide you to deploy the Tech Challenge app written in Go and P
 **Security Group rules**:
 
     | Protocol Type | Port | Source | 
-    | ------------- | ----------- |
+    | ------------- | ----- | ------ |
     | TCP        | 3000 | ALB Security Group |
     | SSH | 22 | Bastion Security Group |
     Table: ASG Security Group - Inbound
 
     | Protocol Type | Port | Source | 
-    | ------------- | ----------- |
+   | ------------- | ----- | ------ |
     | TCP        | 80 | 0.0.0.0/0 |
     Table: ALB Security Group - Inbound
 
     | Protocol Type | Port | Source | 
-    | ------------- | ----------- |
+    | ------------- | ----- | ------ |
     | TCP        | 5432 | ASG Security Group |
     | TCP        | 5432 | Bastion Security Group |
     Table: RDS Security Group - Inbound
 
     | Protocol Type | Port | Source | 
-    | ------------- | ----------- |
+    | ------------- | ----- | ------ |
     | SSH        | 22 | 0.0.0.0/0 |
     | TCP        | 5432 | Bastion Security Group |
     Table: Bastion Security Group - Inbound
 
     | Protocol Type | Port | Source | 
-    | ------------- | ----------- |
+    | ------------- | ----- | ------ |
     | All        | ALL | All |
     Table:  All - Outbound
 
