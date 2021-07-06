@@ -55,19 +55,19 @@ This section will guide you to deploy the Tech Challenge app written in Go and P
 ├── infrastrcture                # All infrastructure as code files here
 │   ├── environments             # Environment specific directories 
 |       ├── default              # default environment for asessment purpose
-|            ├── network         # network implementation for default environment
-|            ├── frontend        # frontend implementation for default environment
-|            ├── backend         # backend implementation for default environment
-|            ├── management      # any management resources implementation for default environment
-|            └── .tf files       # root terraform modules here
-|         ├── .                  # other environments
-|         ├── .
+|           ├── network          # network implementation for default environment
+|           ├── frontend         # frontend implementation for default environment
+|           ├── backend          # backend implementation for default environment
+|           ├── management       # any management resources implementation for default environment
+|           └── .tf files        # root terraform modules here
+|       ├── .                    # other environments
+|       ├── .
 │   └── modules                  # All modules defined here
-|         ├── network            # module for network, vpc, subnet, NAT etc.
-|         ├── services           # module definition for different services
-|            ├── frontend        # module for frontend services like ASG, ALB and their SGs   
-|            └── bastion         # module definition for bastion hosts and their SGs
-|         └── database           # module definition for backend services
+|       ├── network              # module for network, vpc, subnet, NAT etc.
+|       ├── services             # module definition for different services
+|           ├── frontend         # module for frontend services like ASG, ALB and their SGs   
+|           └── bastion          # module definition for bastion hosts and their SGs
+|       └── database             # module definition for backend services
 
 ```
 
