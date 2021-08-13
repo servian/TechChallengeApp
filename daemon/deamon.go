@@ -54,8 +54,16 @@ func Run(cfg *Config) error {
 }
 
 func waitForSignal() {
-	ch := make(chan os.Signal)
-	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
-	s := <-ch
-	log.Printf("Got signal: %v, exiting.", s)
+	xsig := make(chan os.Signal)
+	signal.Notify(xsig, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	hsig := make(chan os.Signal)
+	signal.Notify(hsig, syscall.SIGHUP)
+	for {
+		select {
+		case s := <-xsig:
+			log.Fatalf("Got signal: %v, exiting.", s)
+		case s := <-hsig:
+			log.Printf("Got signal: %v, continue.", s)
+		}
+	}
 }
