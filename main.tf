@@ -133,7 +133,7 @@ module "techchallenge-alb" {
   http_tcp_listeners           = [
     {
       port                     = 3000
-      protocol                 = "HTTP"
+      protocol                 = "TCP"
       target_group_index       = 0
       # action_type            = "forward"
     }
@@ -191,7 +191,7 @@ module "techchallenge-http-sg" {
   description                  = "HTTP access to EC2 instance."
   vpc_id                       = module.techchallenge-vpc.vpc_id
   ingress_cidr_blocks          = ["0.0.0.0/0"]
-  ingress_rules                = ["http-3000-tcp", "all-icmp"]
+  ingress_rules                = ["tcp-3000-tcp", "all-icmp"]
   egress_rules                 = ["all-all"]
 }
 
