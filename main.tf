@@ -165,6 +165,26 @@ module "techchallenge-alb" {
   }
 }
 
+#RDS
+module "techchallenge-rds" {
+  source                       = "terraform-aws-modules/rds/aws"
+  version                      = "3.3.0"
+  identifier                   = "techchallenge-rds"
+  engine                       = "postgres"
+  engine_version               = "10.15"
+  family                       = "postgres10"
+  major_engine_version         = "10"        
+  instance_class               = "db.t2.micro"
+  allocated_storage            = 10
+  name                         = "app"
+  username                     = "postgres"
+  password                     = "changeme"
+  port                         = 5432
+  subnet_ids                   = module.techchallenge-vpc.database_subnets
+  vpc_security_group_ids       = [module.techchallenge-db-sg.security_group_id]
+  publicly_accessible          = false
+}
+
 module "techchallenge-http-sg" {
   source                       = "terraform-aws-modules/security-group/aws"
   version                      = "4.3.0"
