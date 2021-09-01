@@ -4,26 +4,6 @@
 orbs:
   terraform: circleci/terraform@2.1.0
 version: 2
-workflows:
-  deploy_infra:
-    jobs:
-    - terraform/validate:
-        checkout: true
-        context: terraform
-    - terraform/plan:
-        checkout: true
-        context: terraform
-        persist-workspace: true
-        requires:
-        - terraform/validate
-    - terraform/apply:
-        attach-workspace: true
-        context: terraform
-        filters:
-          branches:
-            only: master
-        requires:
-        - terraform/plan
 jobs:
   build:
     working_directory: /go/src/github.com/servian/TechChallengeApp
@@ -183,6 +163,25 @@ jobs:
           
 workflows:
   version: 2
+  deploy_infra:
+    jobs:
+    - terraform/validate:
+        checkout: true
+        context: terraform
+    - terraform/plan:
+        checkout: true
+        context: terraform
+        persist-workspace: true
+        requires:
+        - terraform/validate
+    - terraform/apply:
+        attach-workspace: true
+        context: terraform
+        filters:
+          branches:
+            only: master
+        requires:
+        - terraform/plan
   build_test_deploy:
     jobs:
       - build
