@@ -158,33 +158,35 @@ jobs:
 
       - store_artifacts:
           path: output
-          
+
 workflows:
   deploy_infra:
     jobs:
-      - terraform/validate:
-          checkout: true
-          context: terraform
-      - terraform/plan:
-          checkout: true
-          context: terraform
-          persist-workspace: true
-          requires:
-          - terraform/validate
-      - terraform/apply:
-          attach-workspace: true
-          context: terraform
-          filters:
-            branches:
-              only: master
-          requires:
-          - terraform/plan
-      - build:
-      - deploy:
-          requires: 
-          - build
-          filters:
-            branches:
-              only: master
-            tags:
-              ignore: /.*/
+    - terraform/validate:
+        checkout: true
+        context: terraform
+    - terraform/plan:
+        checkout: true
+        context: terraform
+        persist-workspace: true
+        requires:
+        - terraform/validate
+    - terraform/apply:
+        attach-workspace: true
+        context: terraform
+        filters:
+          branches:
+            only: master
+        requires:
+        - terraform/plan
+    - build:
+        requires: 
+        - terraform/apply
+    - deploy:
+        requires: 
+        - build
+        filters:
+          branches:
+            only: master
+          tags:
+            ignore: /.*/
