@@ -192,7 +192,7 @@ module "techchallenge-http-sg" {
   description                  = "HTTP access to EC2 instance."
   vpc_id                       = module.techchallenge-vpc.vpc_id
   ingress_cidr_blocks          = ["0.0.0.0/0"]
-  ingress_rules                = ["tcp-3000-tcp", "all-icmp"]
+  ingress_rules                = [3000, 3000, "tcp"]
   egress_rules                 = ["all-all"]
 }
 
