@@ -165,6 +165,7 @@ module "techchallenge-alb" {
   }
 }
 
+#RDS module
 module "techchallenge-rds" {
   source                       = "terraform-aws-modules/rds/aws"
   version                      = "3.3.0"
