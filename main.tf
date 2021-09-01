@@ -177,8 +177,8 @@ module "techchallenge-rds" {
   instance_class               = "db.t2.micro"
   allocated_storage            = 10
   name                         = "app"
-  username                     = "postgres"
-  password                     = "changeme"
+  username                     = var.db_username
+  password                     = var.db_password
   port                         = 5432
   subnet_ids                   = module.techchallenge-vpc.database_subnets
   vpc_security_group_ids       = [module.techchallenge-db-sg.security_group_id]
