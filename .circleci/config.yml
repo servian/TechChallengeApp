@@ -1,6 +1,8 @@
 # Golang CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
+orbs:
+  terraform: circleci/terraform@2.1.0
 version: 2
 jobs:
   build:
@@ -161,6 +163,25 @@ jobs:
           
 workflows:
   version: 2
+  deploy_infra:
+    jobs:
+    - terraform/validate:
+        checkout: true
+        context: terraform
+    - terraform/plan:
+        checkout: true
+        context: terraform
+        persist-workspace: true
+        requires:
+        - terraform/validate
+    - terraform/apply:
+        attach-workspace: true
+        context: terraform
+        filters:
+          branches:
+            only: master
+        requires:
+        - terraform/plan
   build_test_deploy:
     jobs:
       - build
