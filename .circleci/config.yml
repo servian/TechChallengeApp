@@ -174,9 +174,6 @@ workflows:
     - terraform/apply:
         attach-workspace: true
         context: terraform
-        filters:
-          branches:
-            only: master
         requires:
         - terraform/plan
     - build:
