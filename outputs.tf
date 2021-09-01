@@ -82,66 +82,6 @@ output "techchallenge-asg_vpc_zone_identifier" {
   value       = module.techchallenge-asg.autoscaling_group_vpc_zone_identifier
 }
 
-output "techchallenge-asg_load_balancers" {
-  description = "The load balancer names associated with the autoscaling group"
-  value       = module.techchallenge-asg.autoscaling_group_load_balancers
-}
-
-output "techchallenge-asg_target_group_arns" {
-  description = "List of Target Group ARNs that apply to this AutoScaling Group"
-  value       = module.techchallenge-asg.autoscaling_group_target_group_arns
-}
-
-output "techchallenge-alb_id" {
-  description = "The ID and ARN of the load balancer we created."
-  value       = module.techchallenge-alb.lb_id
-}
-
-output "techchallenge-alb_arn" {
-  description = "The ID and ARN of the load balancer we created."
-  value       = module.techchallenge-alb.lb_arn
-}
-
-output "techchallenge-alb_dns_name" {
-  description = "The DNS name of the load balancer."
-  value       = module.techchallenge-alb.lb_dns_name
-}
-
-output "techchallenge-alb_arn_suffix" {
-  description = "ARN suffix of our load balancer - can be used with CloudWatch."
-  value       = module.techchallenge-alb.lb_arn_suffix
-}
-
-output "techchallenge-alb_zone_id" {
-  description = "The zone_id of the load balancer to assist with creating DNS records."
-  value       = module.techchallenge-alb.lb_zone_id
-}
-
-output "http_tcp_listener_arns" {
-  description = "The ARN of the TCP and HTTP load balancer listeners created."
-  value       = module.techchallenge-alb.http_tcp_listener_arns
-}
-
-output "http_tcp_listener_ids" {
-  description = "The IDs of the TCP and HTTP load balancer listeners created."
-  value       = module.techchallenge-alb.http_tcp_listener_ids
-}
-
-output "target_group_arns" {
-  description = "ARNs of the target groups. Useful for passing to your Auto Scaling group."
-  value       = module.techchallenge-alb.target_group_arns
-}
-
-output "target_group_names" {
-  description = "Name of the target group."
-  value       = module.techchallenge-alb.target_group_names
-}
-
-output "target_group_attachments" {
-  description = "ARNs of the target group attachment IDs."
-  value       = module.techchallenge-alb.target_group_attachments
-}
-
 # Security group
 output "techchallenge-ssh" {
   description   = "SSH security group ID"
