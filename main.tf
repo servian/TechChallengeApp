@@ -93,7 +93,7 @@ module "techchallenge-asg" {
   ebs_optimized                = true
   enable_monitoring            = true
   disable_api_termination      = true
-  target_group_arns            = module.techchallenge-alb.target_group_arns
+  #target_group_arns            = module.techchallenge-alb.target_group_arns
 
   network_interfaces           = [
     {
