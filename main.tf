@@ -132,7 +132,7 @@ module "techchallenge-alb" {
   security_groups              = [module.techchallenge-http-sg.security_group_id]
   http_tcp_listeners           = [
     {
-      port                     = 3000
+      port                     = 80
       protocol                 = "TCP"
       target_group_index       = 0
       # action_type            = "forward"
@@ -142,7 +142,7 @@ module "techchallenge-alb" {
     {
       name                     = "techchallenge-tg"
       backend_protocol         = "HTTP"
-      backend_port             = 3000
+      backend_port             = 80
       target_type              = "instance"
       vpc_id                   = module.techchallenge-vpc.vpc_id
       deregistration_delay     = 10
@@ -182,7 +182,7 @@ module "techchallenge-rds" {
   port                         = 5432
   subnet_ids                   = module.techchallenge-vpc.database_subnets
   vpc_security_group_ids       = [module.techchallenge-db-sg.security_group_id]
-  publicly_accessible          = true
+  publicly_accessible          = false
 }
 
 module "techchallenge-http-sg" {
@@ -192,7 +192,7 @@ module "techchallenge-http-sg" {
   description                  = "HTTP access to EC2 instance."
   vpc_id                       = module.techchallenge-vpc.vpc_id
   ingress_cidr_blocks          = ["0.0.0.0/0"]
-  ingress_rules                = ["grafana-tcp"]
+  ingress_rules                = ["http-80-tcp", "all-icmp"]
   egress_rules                 = ["all-all"]
 }
 
