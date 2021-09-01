@@ -121,49 +121,6 @@ module "techchallenge-asg" {
   ]
 }
 
-#ALB module
-module "techchallenge-alb" {
-  source                       = "terraform-aws-modules/alb/aws"
-  version                      = "~> 6.0"
-  name                         = "techchallenge-alb"
-  load_balancer_type           = "application"
-  vpc_id                       = module.techchallenge-vpc.vpc_id
-  subnets                      = module.techchallenge-vpc.public_subnets
-  security_groups              = [module.techchallenge-http-sg.security_group_id]
-  http_tcp_listeners           = [
-    {
-      port                     = 80
-      protocol                 = "HTTP"
-      target_group_index       = 0
-      # action_type            = "forward"
-    }
-  ]
-  target_groups                = [
-    {
-      name                     = "techchallenge-tg"
-      backend_protocol         = "HTTP"
-      backend_port             = 80
-      target_type              = "instance"
-      vpc_id                   = module.techchallenge-vpc.vpc_id
-      deregistration_delay     = 10
-      health_check             = {
-        enabled                = true
-        interval               = 30
-        path                   = "/"
-        port                   = "traffic-port"
-        healthy_threshold      = 3
-        unhealthy_threshold    = 3
-        timeout                = 6
-        protocol               = "HTTP"
-        matcher                = "200-399"
-      }
-    }
-  ]
-  tags                         = {
-    Function                   = "ALB"
-    Terraform                  = "true"
-  }
-}
 
 #RDS module
 module "techchallenge-rds" {
