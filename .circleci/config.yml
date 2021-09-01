@@ -1,9 +1,9 @@
 # Golang CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
+version: '2.1'
 orbs:
   terraform: circleci/terraform@2.1.0
-version: 2
 jobs:
   build:
     working_directory: /go/src/github.com/servian/TechChallengeApp
@@ -162,7 +162,6 @@ jobs:
           path: output
           
 workflows:
-  version: 2
   deploy_infra:
     jobs:
     - terraform/validate:
