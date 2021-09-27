@@ -45,6 +45,7 @@ func Start(cfg Config, listener net.Listener) {
 	}
 
 	mainRouter := mux.NewRouter()
+	mainRouter.Handle("/healthcheck", healthcheckHandler(cfg))
 	mainRouter.Handle("/healthcheck/", healthcheckHandler(cfg))
 
 	apiRouter := mainRouter.PathPrefix("/api").Subrouter()
