@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/GeertJohan/go.rice"
 	"github.com/gorilla/mux"
 )
 
@@ -68,15 +69,12 @@ func indexHandler() http.Handler {
 	})
 }
 
-func assetHandler(cfg Config) http.Handler {
-	// so not secure!
-	return http.FileServer(cfg.Assets)
-}
-
 func uiHandler(cfg Config, router *mux.Router) {
-	router.PathPrefix("/js/").Handler(assetHandler(cfg))
-	router.PathPrefix("/css/").Handler(assetHandler(cfg))
-	router.PathPrefix("/images/").Handler(assetHandler(cfg))
-	router.PathPrefix("/swagger/").Handler(assetHandler(cfg))
+	box := rice.MustFindBox("assets")
+	staticFileServer := http.FileServer(box.HTTPBox())
+	router.Handle("/js/{path:.*}", staticFileServer)
+	router.Handle("/css/{path:.*}", staticFileServer)
+	router.Handle("/images/{path:.*}", staticFileServer)
+	router.Handle("/swagger/{path:.*}", staticFileServer)
 	router.Handle("/", indexHandler())
 }
