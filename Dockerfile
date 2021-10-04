@@ -12,6 +12,8 @@ RUN dir=$(mktemp -d) \
     && mv /tmp/swagger-ui-$SWAGGER_UI_VERSION /tmp/swagger \
     && sed -i 's#"https://petstore\.swagger\.io/v2/swagger\.json"#"./swagger.json"#g' /tmp/swagger/dist/index.html
 
+RUN go get github.com/GeertJohan/go.rice/rice
+
 WORKDIR $GOPATH/src/github.com/servian/TechChallengeApp
 
 COPY go.mod go.sum $GOPATH/src/github.com/servian/TechChallengeApp/
@@ -20,18 +22,18 @@ RUN go mod tidy
 
 COPY . .
 
-RUN go build -ldflags="-s -w" -a -o /TechChallengeApp
-RUN swagger generate spec -o /swagger.json
+RUN CGO_ENABLED="0" go build -ldflags="-s -w" -a -o /TechChallengeApp
+RUN swagger generate spec -o /swagger.json \
+ && cp /swagger.json ui/assets/swagger/ \
+ && cp -R /tmp/swagger/dist ui/assets/swagger
+
+RUN cd ui && rice append --exec /TechChallengeApp
 
 FROM alpine:latest
 
 WORKDIR /TechChallengeApp
 
-COPY assets ./assets
 COPY conf.toml ./conf.toml
-
-COPY --from=build /tmp/swagger/dist ./assets/swagger
-COPY --from=build /swagger.json ./assets/swagger/swagger.json
 COPY --from=build /TechChallengeApp TechChallengeApp
 
 ENTRYPOINT [ "./TechChallengeApp" ]

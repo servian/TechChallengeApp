@@ -28,6 +28,7 @@ jobs:
           name: Setup
           command: |
             go get -v -t -d ./...
+            go get github.com/GeertJohan/go.rice/rice
             mkdir output
             go build -ldflags="-s -w" -a -v -o TechChallengeApp .
             ls
@@ -47,9 +48,12 @@ jobs:
             mkdir -p dist
             
             go build -ldflags="-s -w" -a -v -o TechChallengeApp .
-            
+
+            pushd ui
+            rice append --exec ../TechChallengeApp
+            popd
+
             cp TechChallengeApp dist/
-            cp -r assets dist/
             cp conf.toml dist/
             
             rm TechChallengeApp
@@ -72,11 +76,14 @@ jobs:
             mkdir -p dist
             
             go build -ldflags="-s -w" -a -v -o TechChallengeApp .
-            
+
+            pushd ui
+            rice append --exec ../TechChallengeApp
+            popd
+
             cp TechChallengeApp dist/
-            cp -r assets dist/
             cp conf.toml dist/
-            
+
             rm TechChallengeApp
 
             export version=$(cat versionfile)
@@ -101,11 +108,14 @@ jobs:
             mkdir -p dist
             
             go build -ldflags="-s -w" -a -v -o TechChallengeApp.exe .
-            
+
+            pushd ui
+            rice append --exec ../TechChallengeApp.exe
+            popd
+
             cp TechChallengeApp.exe dist/
-            cp -r assets dist/
             cp conf.toml dist/
-            
+
             rm TechChallengeApp.exe
 
             export version=$(cat versionfile)
@@ -126,11 +136,14 @@ jobs:
             mkdir -p dist
             
             go build -ldflags="-s -w" -a -v -o TechChallengeApp.exe .
-            
+
+            pushd ui
+            rice append --exec ../TechChallengeApp.exe
+            popd
+
             cp TechChallengeApp.exe dist/
-            cp -r assets dist/
             cp conf.toml dist/
-            
+
             rm TechChallengeApp.exe
 
             export version=$(cat versionfile)
