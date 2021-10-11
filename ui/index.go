@@ -21,6 +21,7 @@
 package ui
 
 import (
+	"expvar"
 	"fmt"
 	"net/http"
 
@@ -76,5 +77,6 @@ func uiHandler(cfg Config, router *mux.Router) {
 	router.Handle("/css/{path:.*}", staticFileServer)
 	router.Handle("/images/{path:.*}", staticFileServer)
 	router.Handle("/swagger/{path:.*}", staticFileServer)
+	router.Handle("/metrics", expvar.Handler())
 	router.Handle("/", indexHandler())
 }

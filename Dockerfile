@@ -8,8 +8,8 @@ RUN curl -sfL https://github.com/swagger-api/swagger-ui/archive/v$SWAGGER_UI_VER
     && mv /tmp/swagger-ui-$SWAGGER_UI_VERSION /tmp/swagger \
     && sed -i 's#"https://petstore\.swagger\.io/v2/swagger\.json"#"./swagger.json"#g' /tmp/swagger/dist/index.html
 
-RUN go get github.com/go-swagger/go-swagger/cmd/swagger
-RUN go get github.com/GeertJohan/go.rice/rice
+RUN go install github.com/go-swagger/go-swagger/cmd/swagger@latest
+RUN go install github.com/GeertJohan/go.rice/rice@latest
 
 WORKDIR $GOPATH/src/github.com/servian/TechChallengeApp
 
