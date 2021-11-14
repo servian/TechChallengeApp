@@ -2,6 +2,8 @@
 
 Candidates should assume that the solution will be deployed to an empty cloud subscription with no existing infrastructure in place.
 
+Candidates are free to use the most appropriate release package of the App for their platform and *should not* try to compile it themselves.
+
 There *should not* be a requirement for Servian to access a candidate's cloud services account to deploy this solution.
 
 Demonstrate regular commits and good git workflow practices.

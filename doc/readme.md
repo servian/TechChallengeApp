@@ -91,7 +91,11 @@ The application itself is a React based single page application (SPA) with an AP
 
 ## Build from source
 
+Pre-built releases are available so not many people need to look here.
+
 ### Requirements
+
+Application currently bundles assets using [go.rice](https://github.com/GeertJohan/go.rice/)
 
 #### Golang
 
@@ -103,9 +107,7 @@ If building using docker you need to have docker installed on your local machine
 
 ### Compiling the application locally
 
-Download the application using go get:
-
-`go get -d github.com/servian/TechChallengeApp`
+From the source repo:
 
 run `build.sh` to download all the dependencies and compile the application
 

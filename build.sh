@@ -11,7 +11,7 @@ go mod tidy
 CGO_ENABLED="0" go build -ldflags="-s -w" -a -v -o TechChallengeApp .
 
 pushd ui
-rice append --exec TechChallengeApp
+rice append --exec ../TechChallengeApp
 popd
 
 cp TechChallengeApp dist/
