@@ -1,0 +1,20 @@
+version: '3'
+services:
+  postgres:
+    restart: always
+    image: postgres:10
+    ports:
+      - 5432:5432
+    env_file: [database.env]
+
+  techchallengeapp:
+    #image: servian/techchallengeapp:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./conf.toml:/TechChallengeApp/conf.toml
+    depends_on:
+      - postgres
