@@ -36,4 +36,4 @@ WORKDIR /TechChallengeApp
 COPY conf.toml ./conf.toml
 COPY --from=build /TechChallengeApp TechChallengeApp
 
-ENTRYPOINT ./TechChallengeApp updatedb && ./TechChallengeApp serve
+ENTRYPOINT ./TechChallengeApp updatedb -s && ./TechChallengeApp serve

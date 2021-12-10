@@ -41,7 +41,7 @@ resource "aws_ecs_task_definition" "servian_task" {
             },
             {
                 "name": "VTT_DBNAME",
-                "value": "app" 
+                "value": "postgres" 
             }
         ],
         
