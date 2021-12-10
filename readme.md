@@ -1,33 +1,57 @@
 # Servian DevOps Tech Challenge - Tech Challenge App
 
-[![Build Status][circleci-badge]][circleci]
-[![Release][release-badge]][release]
-[![GoReportCard][report-badge]][report]
-[![License][license-badge]][license]
+## Deployment
 
-[circleci-badge]: https://circleci.com/gh/servian/TechChallengeApp.svg?style=shield&circle-token=8dfd03c6c2a5dc5555e2f1a84c36e33bc58ad0aa
-[circleci]: https://circleci.com/gh/servian/TechChallengeApp
-[release-badge]: http://img.shields.io/github/release/servian/TechChallengeApp/all.svg?style=flat
-[release]:https://github.com/Servian/TechChallengeApp/releases
-[report-badge]: https://goreportcard.com/badge/github.com/Servian/TechChallengeApp
-[report]: https://goreportcard.com/report/github.com/Servian/TechChallengeApp
-[license-badge]: https://img.shields.io/github/license/Servian/TechChallengeApp.svg?style=flat
-[license]: https://github.com/Servian/TechChallengeApp/license
+I have chosen to use an AWS Fargate ECS instance for hosting the dockerized application, and an AWS RDS instance for the postgres. There is an AWS Elastic Load Balancer in front.
 
-## Overview
+### Reasons
+- AWS Fargate is highly available, and serverless so there is little managing of the containers.
+- RDS is a managed database, which is highly available by utilising multiple availability zones, and is easy to scale if required.
+- Elastic load balancer allows us to have a single point of entry into the application from the internet. 
 
-This is the Servian DevOps Tech challenge. It uses a simple application to help measure a candidate's technical capability and fit with Servian. The application itself is a simple GTD Golang application that is backed by a Postgres database.
+## How to Deploy
+### Locally
+I have created a docker-compose which should allow you to easily run the application locally. The config file for the database is `database.env`. The application config is set in the `conf.toml`.
 
-Servian provides the Tech Challenge to potential candidates, which focuses on deploying this application into a cloud environment of choice.
+1. Clone repo
+2. `docker-compose up` 
 
-More details about the application can be found in the [document folder](doc/readme.md)
+### Deploying to AWS
+1. Clone repo
+2. Set environment variable for AWS: 
 
-## Taking the challenge
+    `export AWS_ACCESS_KEY_ID = <value>`
 
-For more information about taking the challenge and joining Servians's amazing team, please head over to our [recruitment page](https://www.servian.com/careers/) and apply there. Our recruitment team will reach out to you about the details of the test and be able to answer any questions you have about Servian or the test itself.
+    `export AWS_SECRET_ACCESS_KEY= <value>`
 
-Information about the assessment is available in the [assessment.md file](ASSESSMENT.md)
+3. Run terraform code: 
 
-## Found an issue?
+    `terraform init`
 
-If you've found an issue with the application, the documentation, or anything else, we are happy to take contributions. Please raise an issue in the [github repository](https://github.com/Servian/TechChallengeApp/issues) and read through the contribution rules found the [CONTRIBUTING.md](CONTRIBUTING.md) file for the details.
+    `terraform apply --auto-approve`
+
+3. Push docker image into the newly provisioned AWS ECR instance
+
+    `docker build -t servian/techchallengeapp .`
+
+    `docker tag servian/techchallengeapp <path to ECR repo>`
+
+    `docker push <path to ECR repo>`
+
+4. Ensure fargate tasks are running successfully.
+
+5. Find load balncer DNS name and navigate to site. 
+
+
+## Architecture Diagram
+
+## TODO
+
+There are a lot of things I would implement/change given more time and if this was a real production system.
+
+- Secret Management - using Terraform and AWS Secret Manager to automatically generate and store secret for database. 
+- Better hardening of networking - ensuring private subnets for the fargate application and only have the load balancer public facing. 
+- Makefile for easy tag/push of docker image for local dev.
+- CI/CD pipeline to automate the entire deployment. 
+- Better logging and observability.
+
