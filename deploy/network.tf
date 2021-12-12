@@ -18,13 +18,18 @@ resource "aws_subnet" "public_b" {
     map_public_ip_on_launch = true
 }
 
-# resource "aws_subnet" "private_a" {
-#   count             = 2
-#   cidr_block        = cidrsubnet(aws_vpc.default.cidr_block, 8, count.index)
-#   availability_zone = data.aws_availability_zones.available_zones.names[count.index]
-#   vpc_id            = aws_vpc.default.id
-# }
+resource "aws_subnet" "private_a" {
+    vpc_id            = "${aws_vpc.servian_vpc.id}"
+    cidr_block        = "10.0.3.0/24"
+    availability_zone = "${var.aws_region}a"
+}
 
+resource "aws_subnet" "private_b" {
+
+    vpc_id            = "${aws_vpc.servian_vpc.id}"
+    cidr_block        = "10.0.4.0/24"
+    availability_zone = "${var.aws_region}b"
+}
 
 resource "aws_internet_gateway" "internet_gateway" {
     vpc_id = "${aws_vpc.servian_vpc.id}"
@@ -36,6 +41,7 @@ resource "aws_route" "internet_access" {
     gateway_id = "${aws_internet_gateway.internet_gateway.id}"
 }
 
+# ALB to ECS
 resource "aws_security_group" "servian_security_group" {
     name = "servian_security_group"
     description = "Allow TLS inbound traffic on port 80 (http)"
@@ -55,7 +61,7 @@ resource "aws_security_group" "servian_security_group" {
         cidr_blocks = ["0.0.0.0/0"]
     }
 }
-
+# Internet to ALB
 resource "aws_security_group" "servian_alb_security_group" {
     vpc_id = "${aws_vpc.servian_vpc.id}"
     ingress {
@@ -74,6 +80,7 @@ resource "aws_security_group" "servian_alb_security_group" {
 
 }
 
+# ECS to RDS
 resource "aws_security_group" "postgres_security_group" {
   name = "postgres_security_group"
   vpc_id = aws_vpc.servian_vpc.id
@@ -92,12 +99,12 @@ resource "aws_security_group" "postgres_security_group" {
   }
 }
 
-resource "aws_db_subnet_group" "persistent_data" {
-  name = "persistent_data"
-  description = "Persistent Data"
+resource "aws_db_subnet_group" "postgres_subnet_group" {
+  name = "postgres_subnet_group"
+  description = "postgres subnet group"
 
   subnet_ids = [
-    aws_subnet.public_a.id,
-    aws_subnet.public_b.id
+    aws_subnet.private_a.id,
+    aws_subnet.private_b.id
   ]
 }
