@@ -4,6 +4,10 @@
 *.so
 *.dylib
 .DS_Store
+*.tfvars
+backend.tf
+.terraform/
+.terraform.*
 
 # Test binary, build with `go test -c`
 *.test
