@@ -217,7 +217,7 @@ workflows:
             - hold-apply     
       - build:
           requires: 
-            - plan-apply
+            - apply
       - deploy:
           requires: 
             - build
