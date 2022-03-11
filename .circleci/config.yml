@@ -13,8 +13,23 @@ jobs:
           name: terraform init & plan
           command: |
             cd infrastructure
+            cat << EOF > variables.tfvars
+            AWS_REGION       = "ap-southeast-2"
+            TF_DBUSER       = "${TF_DBUSER}"
+            TF_DBPASSWORD    = "${TF_DBPASSWORD}"
+            TF_DBSUBNETGROUP = "dbsubnetgroup"
+            tag_prefix = "techchallenge"
+            EOF
+            if [[ -f variables.tfvars ]]
+            then
+              echo "file is present"
+            else
+              echo "tfvar file missing!!!"
+              exit 1;
+            fi
+            cat variables.tfvars
             terraform init -input=false
-            terraform plan -out tfapply  
+            terraform plan -out tfapply -var-file variables.tfvars
       - persist_to_workspace:
           root: .
           paths:
@@ -29,7 +44,11 @@ jobs:
           name: terraform
           command: |
             cd infrastructure
-            terraform apply -auto-approve tfapply
+            ls
+            cat variables.tfvars
+            terraform init -input=false
+            terraform plan -out tfapply -var-file variables.tfvars
+            terraform apply -auto-approve tfapply -var-file variables.tfvars            
       - persist_to_workspace:
           root: .
           paths:
