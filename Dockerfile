@@ -35,5 +35,5 @@ WORKDIR /TechChallengeApp
 
 COPY conf.toml ./conf.toml
 COPY --from=build /TechChallengeApp TechChallengeApp
-
-ENTRYPOINT [ "./TechChallengeApp" ]
+EXPOSE 3000
+ENTRYPOINT [ "./TechChallengeApp"]

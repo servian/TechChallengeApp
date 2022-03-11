@@ -3,6 +3,37 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
 jobs:
+  plan-apply:
+    working_directory: /go/src/github.com/servian/TechChallengeApp
+    docker:
+      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+    steps:
+      - checkout
+      - run:
+          name: terraform init & plan
+          command: |
+            cd infrastructure
+            terraform init -input=false
+            terraform plan -out tfapply  
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  apply:
+    docker:
+      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+    steps:
+      - attach_workspace:
+         at: .
+      - run:
+          name: terraform
+          command: |
+            cd infrastructure
+            terraform apply -auto-approve tfapply
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
   build:
     working_directory: /go/src/github.com/servian/TechChallengeApp
     docker:
@@ -176,7 +207,17 @@ workflows:
   version: 2
   build_test_deploy:
     jobs:
-      - build
+      - plan-apply 
+      - hold-apply:
+          type: approval
+          requires:
+            - plan-apply
+      - apply:
+          requires:
+            - hold-apply     
+      - build:
+          requires: 
+            - apply
       - deploy:
           requires: 
             - build
