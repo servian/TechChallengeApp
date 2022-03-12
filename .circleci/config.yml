@@ -48,7 +48,7 @@ jobs:
             cat variables.tfvars
             terraform init -input=false
             terraform plan -out tfapply -var-file variables.tfvars
-            terraform apply -auto-approve tfapply -var-file variables.tfvars            
+            terraform apply -auto-approve tfapply           
       - persist_to_workspace:
           root: .
           paths:
