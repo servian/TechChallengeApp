@@ -21,7 +21,7 @@ output "tf_state_file" {
 }
 # Configure the AWS Provider
 provider "aws" {
-  region = var.region
+  region = var.AWS_REGION
 }
 resource "aws_dynamodb_table" "terraform_locks" {
   name         = "techchallenge-dynamodb-table"
