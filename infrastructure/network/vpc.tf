@@ -8,8 +8,8 @@ resource "aws_vpc" "vpc" {
     Name = "${var.tag_prefix}-vpc"
   }
 }
+
 output "out_vpc" {
   value = aws_vpc.vpc
 }
-variable "tag_prefix" { 
-}
+ 

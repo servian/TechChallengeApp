@@ -13,12 +13,6 @@ terraform {
   }
 }
 
-output "s3_bucket_name" {
-  value = "techchallange"
-}
-output "tf_state_file" {
-  value = "servian/s3/challange.tfstate"
-}
 # Configure the AWS Provider
 provider "aws" {
   region = var.AWS_REGION

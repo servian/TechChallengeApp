@@ -1,5 +1,3 @@
-
-
 resource "aws_db_instance" "postgres_instance" {
   allocated_storage       = 5
   engine                  = "postgres"
@@ -16,26 +14,13 @@ resource "aws_db_instance" "postgres_instance" {
   password                = var.TF_DBPASSWORD
   skip_final_snapshot     = true
   publicly_accessible     = false
+  vpc_security_group_ids = [var.securitygroup_id]
   db_subnet_group_name    = var.TF_DBSUBNETGROUP
   tags = {
     Name = "${var.tag_prefix}-postgres"
   }
 }
 
-variable "TF_DBUSER" {
-}
-
-
 output "db_instance" {
   value = aws_db_instance.postgres_instance.address
 }
-
-variable "TF_DBPASSWORD" {
-}
-
-variable "TF_DBSUBNETGROUP" {
-}
-
-variable "tag_prefix" {
-}
-
