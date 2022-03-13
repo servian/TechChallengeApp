@@ -32,16 +32,18 @@ jobs:
             uname -a 
             pwd
             sudo apt-get update -y
-            sudo apt install curl -y 
-            sudo apt install zip -y
-            sudo apt install unzip -y
-            sudo apt install python3-pip -y
-            sudo apt install python3 -y
+            sudo apt-get install pip -y
+            pip install awscli
+            # sudo apt install curl -y 
+            # sudo apt install zip -y
+            # sudo apt install unzip -y
+            # sudo apt install python3-pip -y
+            # sudo apt install python3 -y
             #sudo apt-get install python-is-python3 -y
-            whereis python3
-            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-            unzip awscli-bundle.zip
-            ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+            # whereis python3
+            # curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            # unzip awscli-bundle.zip
+            # ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
             aws s3 ls
             ls
             echo "this is ubuntu"
