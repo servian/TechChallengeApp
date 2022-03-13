@@ -23,7 +23,7 @@ jobs:
   testA:
     docker:
       - image: ubuntu:circleci/latest
-    step: 
+    steps: 
       - checkout 
       - run: pwd
       - run: ls
