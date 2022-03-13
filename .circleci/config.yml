@@ -202,10 +202,9 @@ workflows:
   build_test_deploy:
     jobs:
       - build
-      - test
-      - testA:  
-          requires:
-            - test
+      - testA
+      - test  
+          
       - deploy:
           requires: 
             - build
