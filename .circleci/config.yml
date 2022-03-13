@@ -22,7 +22,7 @@ jobs:
 #####john test config.yml on my terminal
   testA:
     docker:
-      - image: circleci/ubuntu:latest
+      - image: circleci/golang:latest
     steps: 
       - checkout 
       - run: pwd
