@@ -32,8 +32,8 @@ jobs:
             uname -a 
             pwd
             sudo apt-get update -y
-            sudo apt-get install pip -y
-            pip install awscli
+            sudo apt-get install python3-pip -y
+            pip install awscli --upgrade
             # sudo apt install curl -y 
             # sudo apt install zip -y
             # sudo apt install unzip -y
