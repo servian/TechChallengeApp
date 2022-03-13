@@ -20,6 +20,14 @@ jobs:
       - run: ls
   
 #####john test config.yml on my terminal
+  testA:
+    docker:
+      - image: ubuntu:circleci/latest
+    step: 
+      - checkout 
+      - run: pwd
+      - run: ls
+      - run: echo "this is ubuntu"
   test: 
     #working_directory: .
     docker:
@@ -195,6 +203,9 @@ workflows:
     jobs:
       - build
       - test
+      - testA:  
+          requires:
+            - test
       - deploy:
           requires: 
             - build
