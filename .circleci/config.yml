@@ -24,7 +24,8 @@ jobs:
     steps:
       - checkout
     
-      - run: echo ${TEST_VALUE}
+      - run: echo "${TEST_VALUE}"
+      - run: echo ${CONTEXT_VAR}
       - run: pwd
       - run: ls
 ###########################################################################
