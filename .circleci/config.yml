@@ -15,6 +15,19 @@ jobs:
       - run: go get -v -t -d ./...
       - run: go build -v
       - run: go test -v -race -cover ./...
+  
+#####john test config.yml on my terminal
+  test: 
+    working_directory: .
+    docker:
+      - image: circleci/golang:latest
+    steps:
+      - checkout
+    
+      - run: echo ${TEST_VALUE}
+      - run: pwd
+      - run: ls
+###########################################################################
 
   deploy:
     working_directory: /go/src/github.com/servian/TechChallengeApp
@@ -177,6 +190,7 @@ workflows:
   build_test_deploy:
     jobs:
       - build
+      - test
       - deploy:
           requires: 
             - build
