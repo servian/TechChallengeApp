@@ -10,11 +10,14 @@ jobs:
 
     steps:
       - checkout
-
+      - run: pwd
+      - run: ls
       # build and test
       - run: go get -v -t -d ./...
       - run: go build -v
       - run: go test -v -race -cover ./...
+      - run: pwd
+      - run: ls
   
 #####john test config.yml on my terminal
   test: 
