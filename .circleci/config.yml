@@ -25,6 +25,7 @@ jobs:
       - image: ubuntu:latest
     steps: 
       #- checkout 
+      - run: uname -a
       - run: pwd
       - run: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" 
       - run: unzip awscli-bundle.zip
