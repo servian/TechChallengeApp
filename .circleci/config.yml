@@ -33,7 +33,7 @@ jobs:
             pwd
             sudo apt-get update -y
             sudo apt-get install python3-pip -y
-            pip install awscli --upgrade
+            pip install awsebcli --upgrade
             # sudo apt install curl -y 
             # sudo apt install zip -y
             # sudo apt install unzip -y
