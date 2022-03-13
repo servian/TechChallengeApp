@@ -22,12 +22,14 @@ jobs:
 #####john test config.yml on my terminal
   testA:
     docker:
-      - image: ubuntu:latest
+      - image: circleci/golang:latest
+
     steps: 
       #- checkout 
       - run: 
           name: install awscli
           command: |
+            uname -a 
             pwd
             apt-get update -y
             apt install curl -y 
