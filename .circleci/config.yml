@@ -35,7 +35,7 @@ jobs:
             apt install unzip -y
             # apt install python3-pip -y
             # apt install python3 -y
-            ln -s /usr/binpython3 /usr/bin/python
+         
             whereis python3
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
