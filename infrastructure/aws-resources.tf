@@ -4,6 +4,9 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.0"
     }
+    local = {
+      source = "hashicorp/local"
+    }
   }
   backend "s3" {
     bucket         = "techchallange"
@@ -11,6 +14,7 @@ terraform {
     region         = "ap-southeast-2"
     dynamodb_table = "techchallenge-dynamodb-table"
   }
+
 }
 
 # Configure the AWS Provider

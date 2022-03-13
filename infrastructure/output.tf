@@ -12,5 +12,11 @@ output "tf_state_file" {
 }
 
 output "repository_url" {
-  value =  module.ecs.repository_url
+  value = module.ecs.repository_url
+}
+output "dbname" {
+  value = module.techchallange_database.dbname
+}
+output "dbuser" {
+  value = module.techchallange_database.dbuser
 }

@@ -14,7 +14,7 @@ resource "aws_db_instance" "postgres_instance" {
   password                = var.TF_DBPASSWORD
   skip_final_snapshot     = true
   publicly_accessible     = false
-  vpc_security_group_ids = [var.securitygroup_id]
+  vpc_security_group_ids  = [var.securitygroup_id]
   db_subnet_group_name    = var.TF_DBSUBNETGROUP
   tags = {
     Name = "${var.tag_prefix}-postgres"
@@ -23,4 +23,11 @@ resource "aws_db_instance" "postgres_instance" {
 
 output "db_instance" {
   value = aws_db_instance.postgres_instance.address
+}
+output "dbuser" {
+  value = aws_db_instance.postgres_instance.username
+}
+
+output "dbname" {
+  value = aws_db_instance.postgres_instance.name
 }
