@@ -21,8 +21,8 @@ jobs:
   
 #####john test config.yml on my terminal
   testA:
-    docker:
-      - image: circleci/golang:latest
+    machine:
+      image: circleci/golang:latest
 
     steps: 
       #- checkout 
