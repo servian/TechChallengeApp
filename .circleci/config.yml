@@ -24,7 +24,7 @@ jobs:
     docker:
       - image: circleci/golang:latest
     steps: 
-      - checkout 
+      #- checkout 
       - run: pwd
       - run: ls
       - run: echo "this is ubuntu"
