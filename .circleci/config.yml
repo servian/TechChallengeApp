@@ -22,7 +22,7 @@ jobs:
 #####john test config.yml on my terminal
   testA:
     machine:
-      image: circleci/golang:latest
+      image: ubuntu-2004:current
 
     steps: 
       #- checkout 
