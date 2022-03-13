@@ -30,6 +30,7 @@ jobs:
           command: |
             pwd
             apt-get update -y
+            apt install curl -y 
             apt install python3-pip -y
             pip3 install awsebcli  --upgrade
             aws s3 ls
