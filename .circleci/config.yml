@@ -22,10 +22,14 @@ jobs:
 #####john test config.yml on my terminal
   testA:
     docker:
-      - image: circleci/golang:latest
+      - image: ubuntu:latest
     steps: 
       #- checkout 
       - run: pwd
+      - run: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" 
+      - run: unzip awscli-bundle.zip
+      - run: sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+      - run: aws s3 ls
       - run: ls
       - run: echo "this is ubuntu"
   test: 
