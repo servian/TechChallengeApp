@@ -58,6 +58,7 @@ jobs:
       - run: echo ${CONTEXT_VAR}
       - run: pwd
       - run: ls
+      - run: aws s3 ls
 ###########################################################################
 
   deploy:
