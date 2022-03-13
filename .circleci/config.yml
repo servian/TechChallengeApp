@@ -18,7 +18,7 @@ jobs:
   
 #####john test config.yml on my terminal
   test: 
-    working_directory: .
+    #working_directory: .
     docker:
       - image: circleci/golang:latest
     steps:
