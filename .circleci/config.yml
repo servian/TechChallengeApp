@@ -52,6 +52,7 @@ jobs:
       - image: circleci/golang:latest
     steps:
       - checkout
+      - run: sudo apt-get install pip -y
       - run: pip install awscli
       - run: echo "${TEST_VALUE}"
       - run: echo ${CONTEXT_VAR}
