@@ -31,10 +31,10 @@ jobs:
           command: |
             uname -a 
             pwd
-            apt-get update -y
-            apt install curl -y 
-            apt install zip -y
-            apt install unzip -y
+            sudo apt-get update -y
+            sudo apt install curl -y 
+            sudo apt install zip -y
+            sudo apt install unzip -y
             # apt install python3-pip -y
             # apt install python3 -y
          
