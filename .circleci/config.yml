@@ -190,12 +190,12 @@ workflows:
   build_test_deploy:
     jobs:
       - build
-      #- test
+      - test
       - deploy:
           requires: 
             - build
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: master
             tags:
               ignore: /.*/
