@@ -25,15 +25,16 @@ jobs:
       - image: ubuntu:latest
     steps: 
       #- checkout 
-      - run: uname -a
-      - run: pwd
-      - run: apt install curl -y
-      - run: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" 
-      - run: unzip awscli-bundle.zip
-      - run: sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-      - run: aws s3 ls
-      - run: ls
-      - run: echo "this is ubuntu"
+      - run: 
+          name: install awscli
+          command: |
+            pwd
+            sudo apt install python3-pip
+            sudo pip3 install awsebcli  --upgrade
+            aws s3 ls
+            ls
+            echo "this is ubuntu"
+     
   test: 
     #working_directory: .
     docker:
