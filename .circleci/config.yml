@@ -27,6 +27,7 @@ jobs:
       #- checkout 
       - run: uname -a
       - run: pwd
+      - run: sudo apt install curl -y
       - run: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" 
       - run: unzip awscli-bundle.zip
       - run: sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
