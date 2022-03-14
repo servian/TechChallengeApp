@@ -18,52 +18,43 @@ jobs:
       - run: go test -v -race -cover ./...
       - run: pwd
       - run: ls
+      - run: A="JOHN"
+      - run: echo $A
   
-#####john test config.yml on my terminal
-  testA:
-    machine:
-      image: ubuntu-2004:current
+# #####john test config.yml on my terminal
+#   testA:
+#     machine:
+#       image: ubuntu-2004:current
 
-    steps: 
-      #- checkout 
-      - run: 
-          name: install awscli
-          command: |
-            uname -a 
-            pwd
-            sudo apt-get update -y
-            pip install --upgrade pip
-            #sudo apt-get install python3-pip -y
-            pip install awscli --upgrade
-          
-            # sudo apt install curl -y 
-            # sudo apt install zip -y
-            # sudo apt install unzip -y
-            # sudo apt install python3-pip -y
-            # sudo apt install python3 -y
-            #sudo apt-get install python-is-python3 -y
-            # whereis python3
-            # curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-            # unzip awscli-bundle.zip
-            # ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-            aws s3 ls
-            ls
-            echo "this is ubuntu"
+#     steps: 
+#       #- checkout 
+#       - run: 
+#           name: install awscli
+#           command: |
+#             uname -a 
+#             pwd
+#             sudo apt-get update -y
+#             pip install --upgrade pip
+#             #sudo apt-get install python3-pip -y
+#             pip install awscli --upgrade
+#             aws s3 ls
+#             ls
+#             echo "this is ubuntu"
      
-  test: 
-    #working_directory: .
-    docker:
-      - image: circleci/golang:latest
-    steps:
-      - checkout
-      - run: sudo apt-get install pip -y
-      - run: pip install awscli
-      - run: echo "${TEST_VALUE}"
-      - run: echo ${CONTEXT_VAR}
-      - run: pwd
-      - run: ls
-      - run: aws s3 ls
-###########################################################################
+#   test: 
+#     #working_directory: .
+#     docker:
+#       - image: circleci/golang:latest
+#     steps:
+#       - checkout
+#       - run: sudo apt-get install pip -y
+#       - run: pip install awscli
+#       - run: echo "${TEST_VALUE}"
+#       - run: echo ${CONTEXT_VAR}
+#       - run: pwd
+#       - run: ls
+#       - run: aws s3 ls
+# ###########################################################################
 
   deploy:
     working_directory: /go/src/github.com/servian/TechChallengeApp
@@ -82,7 +73,7 @@ jobs:
             go build -ldflags="-s -w" -a -v -o TechChallengeApp .
             ls
             ./TechChallengeApp --version | sed -e 's/TechChallengeApp version /v./' > versionfile
-
+            echo $A
 
       - run: 
           name: Build for linux
