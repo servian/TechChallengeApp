@@ -12,7 +12,8 @@ jobs:
     working_directory: /go/src/github.com/servian/TechChallengeApp
     docker:
       - image: circleci/golang:latest
-
+    context: 
+      -john-context
     steps:
       - checkout
       - run: pwd
@@ -23,7 +24,7 @@ jobs:
       - run: go test -v -race -cover ./...
       - run: pwd
       - run: ls
-      - run: aws s3 ls
+      - run: echo ${MY_FIRST_CONTEXT}
     #  - run: service docker start  && docker ps
 
   #ecr-push:
