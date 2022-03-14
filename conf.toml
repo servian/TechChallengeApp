@@ -2,6 +2,6 @@
 "DbPassword" = "admin"
 "DbName" = ""
 "DbPort" = "5432"
-"DbHost" = "app.c4f83bfpg4ih.ap-southeast-2.rds.amazonaws.com"
+"DbHost" = ""
 "ListenHost" = "localhost"
 "ListenPort" = "3000"
