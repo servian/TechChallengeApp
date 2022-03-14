@@ -24,49 +24,7 @@ jobs:
       - run: pwd
       - run: ls
       - run: echo ${MY_FIRST_CONTEXT}
-    #  - run: service docker start  && docker ps
-
-  #ecr-push:
-
-
-
-
-
-
-# #####john test config.yml on my terminal
-  # testA:
-  #   machine:
-  #     image: ubuntu-2004:current
-
-  #   steps: 
-  #     - checkout 
-  #     - run: 
-  #         name: install awscli
-  #         command: |
-  #           uname -a 
-  #           pwd
-  #           sudo apt-get update -y
-  #           pip install --upgrade pip
-  #           #sudo apt-get install python3-pip -y
-  #           pip install awscli --upgrade
-  #           aws s3 ls
-  #           ls
-  #           echo "this is ubuntu"
-     
-#   test: 
-#     #working_directory: .
-#     docker:
-#       - image: circleci/golang:latest
-#     steps:
-#       - checkout
-#       - run: sudo apt-get install pip -y
-#       - run: pip install awscli
-#       - run: echo "${TEST_VALUE}"
-#       - run: echo ${CONTEXT_VAR}
-#       - run: pwd
-#       - run: ls
-#       - run: aws s3 ls
-# ###########################################################################
+  
 
   deploy:
     working_directory: /go/src/github.com/servian/TechChallengeApp
@@ -236,19 +194,19 @@ workflows:
       # - testA
       # - test  
       - aws-ecr/build-and-push-image:
-          account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
-          aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-          aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-          context: myContext
+          account-url: AWS_ECR_ACCOUNT_URL
+          #aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
+          #aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+          context: john-context
           create-repo: true
-          dockerfile: myDockerfile
+          dockerfile: Dockerfile
           no-output-timeout: 20m
-          path: pathToMyDockerfile
-          profile-name: myProfileName
-          region: AWS_REGION_ENV_VAR_NAME
-          repo: myECRRepository
+          path: .
+          #profile-name: myProfileName
+          region: AWS_REGION
+          repo: stc
           skip-when-tags-exist: false
-          tag: 'latest,myECRRepoTag'
+          tag: 'latest,v0.9.0.${CIRCLE_BUILD_NUM}'
 
       - deploy:
           requires: 
