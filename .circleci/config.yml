@@ -35,7 +35,7 @@ jobs:
             pip install --upgrade pip
             #sudo apt-get install python3-pip -y
             pip install awscli --upgrade
-            aws configure
+          
             # sudo apt install curl -y 
             # sudo apt install zip -y
             # sudo apt install unzip -y
