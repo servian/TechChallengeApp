@@ -6,7 +6,7 @@ version: 2.1
 
 orbs:
   aws-ecr: circleci/aws-ecr@7.3.0
-
+  aws-cli: circleci/aws-cli@2.1.0
 jobs:
   build:
     working_directory: /go/src/github.com/servian/TechChallengeApp
@@ -23,6 +23,7 @@ jobs:
       - run: go test -v -race -cover ./...
       - run: pwd
       - run: ls
+      - run: aws s3 ls
     #  - run: service docker start  && docker ps
 
   #ecr-push:
@@ -33,24 +34,24 @@ jobs:
 
 
 # #####john test config.yml on my terminal
-#   testA:
-#     machine:
-#       image: ubuntu-2004:current
+  # testA:
+  #   machine:
+  #     image: ubuntu-2004:current
 
-#     steps: 
-#       #- checkout 
-#       - run: 
-#           name: install awscli
-#           command: |
-#             uname -a 
-#             pwd
-#             sudo apt-get update -y
-#             pip install --upgrade pip
-#             #sudo apt-get install python3-pip -y
-#             pip install awscli --upgrade
-#             aws s3 ls
-#             ls
-#             echo "this is ubuntu"
+  #   steps: 
+  #     - checkout 
+  #     - run: 
+  #         name: install awscli
+  #         command: |
+  #           uname -a 
+  #           pwd
+  #           sudo apt-get update -y
+  #           pip install --upgrade pip
+  #           #sudo apt-get install python3-pip -y
+  #           pip install awscli --upgrade
+  #           aws s3 ls
+  #           ls
+  #           echo "this is ubuntu"
      
 #   test: 
 #     #working_directory: .
