@@ -1,7 +1,11 @@
 # Golang CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
-version: 2
+version: 2.1
+
+
+orbs:
+  aws-ecr: circleci/aws-ecr@7.3.0
 jobs:
   build:
     working_directory: /go/src/github.com/servian/TechChallengeApp
@@ -18,9 +22,14 @@ jobs:
       - run: go test -v -race -cover ./...
       - run: pwd
       - run: ls
-      - run: A="JOHN"
-      - run: echo $A
-  
+
+  ecr-push:
+
+
+
+
+
+
 # #####john test config.yml on my terminal
 #   testA:
 #     machine:
@@ -73,7 +82,7 @@ jobs:
             go build -ldflags="-s -w" -a -v -o TechChallengeApp .
             ls
             ./TechChallengeApp --version | sed -e 's/TechChallengeApp version /v./' > versionfile
-            echo $A
+
 
       - run: 
           name: Build for linux
@@ -101,6 +110,8 @@ jobs:
             export version=$(cat versionfile)
             
             zip -r "output/TechChallengeApp_${version}_linux64.zip" dist/*
+
+            sudo docker ps
 
       # build for macos
       - run: 
