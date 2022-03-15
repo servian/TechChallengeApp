@@ -35,5 +35,9 @@ WORKDIR /TechChallengeApp
 
 COPY conf.toml ./conf.toml
 COPY --from=build /TechChallengeApp TechChallengeApp
+
 EXPOSE 3000
-ENTRYPOINT [ "./TechChallengeApp"]
+
+RUN echo "./TechChallengeApp updatedb; ./TechChallengeApp serve" > startapp.sh
+
+ENTRYPOINT [ "/bin/sh", "startapp.sh"]
