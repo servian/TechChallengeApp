@@ -207,8 +207,10 @@ workflows:
           tag: 'latest,v0.9.0.${CIRCLE_BUILD_NUM}'
       - aws-ecs/deploy-service-update:
           cluster-name: '${MY_ECS_CLUSTER}'
-          container-image-name-updates: 'container=${MY_ECS_CLUSTER}service,tag=latest'
-          family: '${MY_ECS_CLUSTER}service'
+          container-image-name-updates: 'container=${MY_ECS_SERVICE},tag=latest'
+          family: '${MY_TASK_DEF}'
+
+
           requires:
             - aws-ecr/build-and-push-image
 
