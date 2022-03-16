@@ -10,6 +10,14 @@ resource "aws_security_group" "app_security_group" {
     self             = false
   }
 
+  ingress {
+    protocol    = "tcp"
+    from_port   = 22
+    to_port     = 22
+    cidr_blocks = ["0.0.0.0/0"]
+    self             = false
+  }
+
   egress {
     protocol    = "-1"
     from_port   = 0
@@ -20,5 +28,5 @@ resource "aws_security_group" "app_security_group" {
   tags = {
     Name = "${var.tag_prefix}-securitygroup"
   }
-  
+
 }
