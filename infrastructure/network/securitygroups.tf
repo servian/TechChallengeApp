@@ -1,6 +1,7 @@
 resource "aws_security_group" "app_security_group" {
   name   = "app-sg"
   vpc_id = aws_vpc.vpc.id
+
   ingress {
     protocol    = "tcp"
     from_port   = 80
@@ -19,4 +20,5 @@ resource "aws_security_group" "app_security_group" {
   tags = {
     Name = "${var.tag_prefix}-securitygroup"
   }
+  
 }
