@@ -17,3 +17,4 @@ output "securitygroup_id" {
 output "public_subnet_a_id" {
   value = aws_subnet.public_subnet_a.id
 }
+
