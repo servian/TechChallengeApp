@@ -25,9 +25,9 @@ resource "aws_db_subnet_group" "dbsubnetgroup" {
 }
 
 resource "aws_subnet" "public_subnet_a" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = "172.16.20.0/24"
-  availability_zone = "ap-southeast-2a"
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = "172.16.20.0/24"
+  availability_zone       = "ap-southeast-2a"
   map_public_ip_on_launch = true
   tags = {
     Name = "${var.tag_prefix}-public-a"
@@ -35,10 +35,10 @@ resource "aws_subnet" "public_subnet_a" {
 }
 
 resource "aws_subnet" "public_subnet_b" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = "172.16.3.0/24"
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = "172.16.3.0/24"
   map_public_ip_on_launch = true
-  availability_zone = "ap-southeast-2b"
+  availability_zone       = "ap-southeast-2b"
   tags = {
     Name = "${var.tag_prefix}-public-b"
   }
