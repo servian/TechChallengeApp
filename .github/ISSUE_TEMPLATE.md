@@ -1,5 +1,7 @@
 ### Subject of the issue
 
+**Issues and Pull requests should only be made for changes to the application code, not Tech Challenge Assessments.**
+
 Describe your issue here.
 
 ### Your environment
