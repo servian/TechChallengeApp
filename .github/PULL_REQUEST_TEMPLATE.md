@@ -1,5 +1,7 @@
 ### Description
 
+**Issues and Pull requests should only be made for changes to the application code, not Tech Challenge Assessments.**
+
 Please explain the changes you made here.
 
 Fixes: https://github.com/servian/TechChallengeApp/issues/{issue number}
