@@ -62,7 +62,8 @@ jobs:
             popd
 
             cp TechChallengeApp dist/
-            echo ${MY_CONFIG_TEST} >> conf.toml
+            echo ${DBHOST} >> conf.toml
+            echo ${DBPASS} >> conf.toml
             # aws s3 cp s3://serviantechchallenge/conf.toml .
             cat conf.toml
             
