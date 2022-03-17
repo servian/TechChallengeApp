@@ -8,3 +8,10 @@ resource "aws_vpc" "vpc" {
     Name = "${var.tag_prefix}-vpc"
   }
 }
+
+#detects if any changes were made to default vpc outside terraform
+resource "aws_default_vpc" "default" {
+  tags = {
+    Name = "Default VPC"
+  }
+}

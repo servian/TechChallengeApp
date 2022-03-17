@@ -1,4 +1,4 @@
- output "db_instance" {
+output "db_instance" {
   value = aws_db_instance.postgres_instance.address
 }
 
@@ -11,5 +11,5 @@ output "dbname" {
 }
 
 output "postgres_securitygroup_id" {
-  value=aws_security_group.postgres_securitygroup.id
+  value = aws_security_group.postgres_securitygroup.id
 }
