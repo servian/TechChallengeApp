@@ -24,14 +24,14 @@ provider "aws" {
 }
 
 resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "${var.tag_prefix}-statelocktable"  
+  name         = "${var.tag_prefix}-statelocktable"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
   attribute {
     name = "LockID"
     type = "S"
   }
-  
+
   tags = {
     Name = "${var.tag_prefix}-dynamo"
   }

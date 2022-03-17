@@ -23,8 +23,8 @@ resource "aws_db_instance" "postgres_instance" {
 
 resource "aws_security_group" "postgres_securitygroup" {
   name        = "securitygroup-postgres"
-  description = "Allow database connections on port 5432" 
-  vpc_id      = var.vpc_id  #Attached to Application VPC 
+  description = "Allow database connections on port 5432"
+  vpc_id      = var.vpc_id #Attached to Application VPC 
 
   ingress = [
     {
@@ -38,7 +38,7 @@ resource "aws_security_group" "postgres_securitygroup" {
       prefix_list_ids  = []
       self             = false
     }
-  ]  
+  ]
 
   egress = [
     {
@@ -53,14 +53,9 @@ resource "aws_security_group" "postgres_securitygroup" {
       self             = false
     }
   ]
-  
+
   tags = {
     Name = "${var.tag_prefix}-postgres"
   }
 }
 
-resource "aws_default_vpc" "default" {
-  tags = {
-    Name = "Default VPC"
-  }
-}
