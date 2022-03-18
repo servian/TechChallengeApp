@@ -64,7 +64,7 @@ jobs:
             cp TechChallengeApp dist/
             echo ${DBHOST} >> conf.toml
             echo ${DBPASS} >> conf.toml
-            # aws s3 cp s3://serviantechchallenge/conf.toml .
+            aws s3 cp s3://serviantechchallenge/conf.toml .
             cat conf.toml
             
             cp conf.toml dist/
