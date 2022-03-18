@@ -62,8 +62,10 @@ jobs:
             popd
 
             cp TechChallengeApp dist/
-            echo ${DBHOST} >> conf.toml
-            echo ${DBPASS} >> conf.toml
+            
+            sudo apt-get install pip -y
+            pip install awscli
+            aws s3 ls
             aws s3 cp s3://serviantechchallenge/conf.toml .
             cat conf.toml
             
@@ -130,10 +132,7 @@ jobs:
 
             cp TechChallengeApp.exe dist/
 
-            sudo apt-get install pip -y
-            pip install awscli
-            aws s3 ls
-
+          
 
             cp conf.toml dist/
 
