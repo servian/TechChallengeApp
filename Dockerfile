@@ -12,7 +12,7 @@ RUN dir=$(mktemp -d) \
     && mv /tmp/swagger-ui-$SWAGGER_UI_VERSION /tmp/swagger \
     && sed -i 's#"https://petstore\.swagger\.io/v2/swagger\.json"#"./swagger.json"#g' /tmp/swagger/dist/index.html
 
-RUN go get github.com/GeertJohan/go.rice/rice
+RUN go install github.com/GeertJohan/go.rice/rice
 
 WORKDIR $GOPATH/src/github.com/servian/TechChallengeApp
 
