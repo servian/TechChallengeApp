@@ -2,6 +2,6 @@
 "DbPassword" = ""
 "DbName" = "app"
 "DbPort" = "5432"
-"DbHost" = ${MY_CONFIG_TEST}
+"DbHost" = $MY_CONFIG_TEST
 "ListenHost" = "0.0.0.0"
 "ListenPort" = "3000"
