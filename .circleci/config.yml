@@ -66,11 +66,7 @@ jobs:
             sudo apt-get install pip -y
             pip install awscli
             aws s3 ls
-            
-            
-            echo ${DBHOST} >> conf.toml
-            echo ${DBPASS} >> conf.toml
-            # aws s3 cp s3://serviantechchallenge/conf.toml .
+            aws s3 cp s3://serviantechchallenge/conf.toml .
             cat conf.toml
             
             cp conf.toml dist/
