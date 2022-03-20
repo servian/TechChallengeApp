@@ -49,11 +49,6 @@ jobs:
             GOOS: linux
             GOARCH: amd64
           command: |   
-            echo "--- before s3 download---"
-            pwd
-            ls -al
-            cat conf.toml
-
             sudo apt-get install pip -y
             pip install awscli
             
@@ -78,19 +73,9 @@ jobs:
             rice append --exec ../TechChallengeApp
             popd
 
-
-            echo "---before cp "          
-            pwd
-            ls -al 
-
-
             cp TechChallengeApp dist/
-            pwd
-            ls -al
             cp conf.toml dist/
             
-            ls -al dist/*
-            echo "---checking dist/conf.toml---"
             cat dist/conf.toml
 
             rm TechChallengeApp
@@ -224,11 +209,11 @@ workflows:
       - deploy:
           requires: 
             - build
-          # filters:
-          #   branches:
-          #     only: master
-          #   tags:
-          #     ignore: /.*/
+          filters:
+            branches:
+              only: john-0309
+            tags:
+              ignore: /.*/
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL
           #aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
