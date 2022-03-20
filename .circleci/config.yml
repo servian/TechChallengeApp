@@ -64,13 +64,13 @@ jobs:
             sudo apt-get install pip -y
             pip install awscli
             
-            ll conf.toml
+            ls -al conf.toml
             cat conf.toml
 
 
             aws s3 cp s3://serviantechchallenge/conf.toml .
             echo "---checking conf.toml---"
-            ll conf.toml
+            ls -al conf.toml
             cat conf.toml
             
             cp TechChallengeApp dist/
