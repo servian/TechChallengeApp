@@ -50,7 +50,7 @@ var rootCmd = &cobra.Command{
 This application is used as part of challenging potential candiates at Sevian.
 
 Please visit http://Servian.com for more details`,
-	Version: "0.9.0",
+	Version: "0.9.1",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
