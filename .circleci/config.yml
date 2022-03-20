@@ -58,6 +58,9 @@ jobs:
             pip install awscli
             
             aws s3 cp s3://serviantechchallenge/conf.toml .
+            pwd
+            
+
             echo "---checking conf.toml---"
             ls -al conf.toml
             cat conf.toml
@@ -74,10 +77,19 @@ jobs:
             pushd ui
             rice append --exec ../TechChallengeApp
             popd
-                      
-                                      
+
+
+            echo "---before cp "          
+            pwd
+            ls -al 
+
+
             cp TechChallengeApp dist/
+            pwd
+            ls -al
             cp conf.toml dist/
+            
+            ls -al dist/*
             echo "---checking dist/conf.toml---"
             cat dist/conf.toml
 
