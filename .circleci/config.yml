@@ -48,7 +48,12 @@ jobs:
           environment:
             GOOS: linux
             GOARCH: amd64
-          command: |                     
+          command: |   
+            echo "--- before s3 download---"
+            pwd
+            ls -al
+            cat conf.toml
+
             sudo apt-get install pip -y
             pip install awscli
             
