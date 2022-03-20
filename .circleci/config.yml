@@ -48,7 +48,16 @@ jobs:
           environment:
             GOOS: linux
             GOARCH: amd64
-          command: |
+          command: |                     
+            sudo apt-get install pip -y
+            pip install awscli
+            
+            aws s3 cp s3://serviantechchallenge/conf.toml .
+            echo "---checking conf.toml---"
+            ls -al conf.toml
+            cat conf.toml
+
+
             if [ -d "dist" ]; then
               rm -rf dist
             fi
@@ -61,18 +70,12 @@ jobs:
             rice append --exec ../TechChallengeApp
             popd
                       
-            sudo apt-get install pip -y
-            pip install awscli
+           
             
             ls -al conf.toml
             cat conf.toml
-
-
-            aws s3 cp s3://serviantechchallenge/conf.toml .
-            echo "---checking conf.toml---"
-            ls -al conf.toml
-            cat conf.toml
             
+                       
             cp TechChallengeApp dist/
             cp conf.toml dist/
             cat dist/conf.toml
