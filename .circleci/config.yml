@@ -70,14 +70,10 @@ jobs:
             rice append --exec ../TechChallengeApp
             popd
                       
-           
-            
-            ls -al conf.toml
-            cat conf.toml
-            
-                       
+                                      
             cp TechChallengeApp dist/
             cp conf.toml dist/
+            echo "---checking dist/conf.toml---"
             cat dist/conf.toml
 
             rm TechChallengeApp
