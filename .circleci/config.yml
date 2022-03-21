@@ -46,8 +46,8 @@ jobs:
             # pip install awscli
             # aws s3 cp s3://serviantechchallenge/conf.toml .
             # pwd           
-            sed 's/pwd/$DbPassword/' conf.toml
-            sed 's/dbhost/$DbHost/' conf.toml  
+            sed 's/pwd/${DbPassword}/' conf.toml
+            sed 's/dbhost/${DbHost}/' conf.toml  
             echo "--after sed---"
             ls -al conf.toml
             cat conf.toml
