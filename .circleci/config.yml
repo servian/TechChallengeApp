@@ -20,7 +20,7 @@ jobs:
       
       - run: 
           name: build and test
-          command: 
+          command: |
             echo "--build stage before download--"
             ls -al conf.toml
             cat conf.toml
