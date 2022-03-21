@@ -38,18 +38,19 @@ jobs:
       - run:
           name: Setup
           command: |      
-            echo "--deploy stage before sed--"
+            rm conf.toml
+            echo "--deploy stage before download--"
             ls -al conf.toml
             cat conf.toml
-            # echo "--installing awscli--"
-            # sudo apt-get install pip -y
-            # pip install awscli
-            # aws s3 cp s3://serviantechchallenge/conf.toml .
-            # pwd  
-            echo ${DbPassword}         
-            sed 's/pwd/"${DbPassword}"/' conf.toml
-            sed 's/dbhost/"${DbHost}"/' conf.toml  
-            echo "--after sed---"
+            echo "--installing awscli--"
+            sudo apt-get install pip -y
+            pip install awscli
+            aws s3 cp s3://serviantechchallenge/conf.toml .
+            # # pwd  
+            # echo ${DbPassword}         
+            # sed 's/pwd/"${DbPassword}"/' conf.toml
+            # sed 's/dbhost/"${DbHost}"/' conf.toml  
+            echo "--after download---"
             ls -al conf.toml
             cat conf.toml
 
@@ -67,6 +68,8 @@ jobs:
             GOOS: linux
             GOARCH: amd64
           command: |   
+            echo "--build stage--"
+            cat conf.toml
             if [ -d "dist" ]; then
               rm -rf dist
             fi
