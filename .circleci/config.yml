@@ -17,11 +17,27 @@ jobs:
    
     steps:
       - checkout
-      # build and test
-      - run: go get -v -t -d ./...
-      - run: go build -v
-      - run: go test -v -race -cover ./...
-      - run: echo ${MY_FIRST_CONTEXT}
+      
+      - run: 
+          name: build and test
+          command: 
+            echo "--build stage before download--"
+            ls -al conf.toml
+            cat conf.toml
+            sudo apt-get install pip -y
+            pip install awscli
+            
+            aws s3 cp s3://serviantechchallenge/conf.toml .
+            pwd
+            
+            echo "---build stage after download---"
+            ls -al conf.toml
+            cat conf.toml
+            
+            go get -v -t -d ./...
+            go build -v
+            go test -v -race -cover ./...
+            echo ${MY_FIRST_CONTEXT}
   
 
   deploy:
@@ -34,7 +50,10 @@ jobs:
 
       - run:
           name: Setup
-          command: |
+          command: |      
+            echo "--deploy stage--"
+            cat conf.toml
+
             go get -v -t -d ./...
             go get github.com/GeertJohan/go.rice/rice
             mkdir output
@@ -49,18 +68,6 @@ jobs:
             GOOS: linux
             GOARCH: amd64
           command: |   
-            sudo apt-get install pip -y
-            pip install awscli
-            
-            aws s3 cp s3://serviantechchallenge/conf.toml .
-            pwd
-            
-
-            echo "---checking conf.toml---"
-            ls -al conf.toml
-            cat conf.toml
-
-
             if [ -d "dist" ]; then
               rm -rf dist
             fi
