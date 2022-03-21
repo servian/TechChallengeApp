@@ -20,20 +20,7 @@ jobs:
       
       - run: 
           name: build and test
-          command: |
-            echo "--build stage before download--"
-            ls -al conf.toml
-            cat conf.toml
-            sudo apt-get install pip -y
-            pip install awscli
-            
-            aws s3 cp s3://serviantechchallenge/conf.toml .
-            pwd
-            
-            echo "---build stage after download---"
-            ls -al conf.toml
-            cat conf.toml
-            
+          command: |                    
             go get -v -t -d ./...
             go build -v
             go test -v -race -cover ./...
@@ -51,7 +38,18 @@ jobs:
       - run:
           name: Setup
           command: |      
-            echo "--deploy stage--"
+            echo "--deploy stage before sed--"
+            ls -al conf.toml
+            cat conf.toml
+            # echo "--installing awscli--"
+            # sudo apt-get install pip -y
+            # pip install awscli
+            # aws s3 cp s3://serviantechchallenge/conf.toml .
+            # pwd           
+            sed 's/pwd/$DbPassword/' conf.toml
+            sed 's/dbhost/$DbHost/' conf.toml  
+            echo "--after sed---"
+            ls -al conf.toml
             cat conf.toml
 
             go get -v -t -d ./...
