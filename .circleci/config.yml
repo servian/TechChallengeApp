@@ -181,7 +181,6 @@ jobs:
       - run:
           name: Release if new version
           command: |
-            export GITHUB_API=https://api.github.com/repos/johnwu94/TechChallengeApp/releases/
             export version=$(cat versionfile)
             echo $version
             export tagvalue=$(git tag | grep ${version})
@@ -191,8 +190,8 @@ jobs:
 
               if [ -z "${prerelease}" ]; then
                 echo "No pre-release in version, creating release"
-                #ghr -u servian ${version} output
-                ghr -u johnwu94 ${version} output
+                ghr -u servian ${version} output
+                
               else
                 echo "Found pre-release in version, creating pre-release"
                 ghr -u servian -prerelease ${version} output
