@@ -213,8 +213,8 @@ workflows:
           requires: 
             - build
           filters:
-            branches:
-              only: john-0309
+            # branches:
+            #   only: john-0309
             tags:
               ignore: /.*/
       - aws-ecr/build-and-push-image: #push image to ecr
