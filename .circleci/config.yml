@@ -47,7 +47,8 @@ jobs:
             # aws s3 cp s3://serviantechchallenge/conf.toml .
             # # pwd  
             # echo ${DbPassword}         
-            sed -i -e "s/pwd/$(echo ${DbPassword})/" "s/dbhost/$(echo ${DbHost})/" conf.toml
+            sed -i -e "s/pwd/$(echo ${DbPassword})/" conf.toml
+            sed -i -e "s/dbhost/$(echo ${DbHost})/" conf.toml
             echo "--after sed---"
             
             ls -al conf.toml
