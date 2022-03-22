@@ -230,7 +230,7 @@ workflows:
           region: AWS_REGION
           repo: stc
           skip-when-tags-exist: false
-          tag: 'latest,build.${CIRCLE_BUILD_NUM}'
+          tag: 'latest,${CIRCLE_BUILD_NUM}'
           requires:
             - deploy
       - aws-ecs/deploy-service-update:  #deploy to ecs service
