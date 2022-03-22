@@ -201,7 +201,7 @@ jobs:
 
               if [ -z "${prerelease}" ]; then
                 echo "No pre-release in version, creating release"
-                ghr -u servian ${version} output
+                #ghr -u servian ${version} output
                 ghr -u johnwu94 ${version} output
               else
                 echo "Found pre-release in version, creating pre-release"
@@ -227,7 +227,7 @@ workflows:
               only: john-0309
             tags:
               ignore: /.*/
-      - aws-ecr/build-and-push-image:
+      - aws-ecr/build-and-push-image: #push image to ecr
           account-url: AWS_ECR_ACCOUNT_URL
           #aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
           #aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
@@ -243,7 +243,7 @@ workflows:
           tag: 'latest,v0.9.0.${CIRCLE_BUILD_NUM}'
           requires:
             - deploy
-      - aws-ecs/deploy-service-update:
+      - aws-ecs/deploy-service-update:  #deploy to ecs service
           cluster-name: '${MY_ECS_CLUSTER}'
           #container-image-name-updates: 'container=${MY_TASK_DEF},tag=latest,v0.9.0.${CIRCLE_BUILD_NUM}'
           family: '${MY_TASK_DEF}'
