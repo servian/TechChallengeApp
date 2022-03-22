@@ -150,3 +150,22 @@ Builds will be produced for:
 
 #### Note
 * If you are setting up the database using RDS, do not run the `./TechChallengeApp updatedb` command. Instead run `./TechChallengeApp updatedb -s` 
+
+
+
+### John's comments
+
+1. infrastructure
+* terraform deployed infra on aws platform (terraform code in separate repo)
+* ecr and esc for image repo and deployment environment
+* psql docker running on ec2 as uat environment (I will use rds if it is prod environment for better scalability and availability)
+
+2. Changes made to config.yml
+* changed to version 2.1 to use orbs
+* added two orbs option, aws-ecr and aws-ecs for image repo and deployment environment
+* added deploy-uat stage to run on non master branches and associate the stage with uat deployment environment ( A prod deployment environment can be added into config.yml  )
+* used deploy-uat stage without "Release if new version" to skip create release which is only allowed on master branch.  ( I got error messages when running this part on other branch and the pipeline will stop and skip the rest actions, assuming there is authentication requirement to create new release only on master branch)
+
+3. questions:
+* not sure how to use env var in conf.toml which includes dbpassword and host location, I tried to copy a same name file from s3 to replace the repo one, and also tried to sed to inject CircleCI environment vars, but failed either way. The pipeline just didn't recognize the new file or content and stick with the original. This is the most interesting part that I am looking forward to some instructions.
+* command "updatedb" was still manually done, ecs task definition takes only one command, serve, in the entrypoint section.  
