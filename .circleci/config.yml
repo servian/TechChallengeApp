@@ -191,7 +191,7 @@ jobs:
       - run:
           name: Release if new version
           command: |
-            export GITHUB_API=https://api.github.com/repos/johnwu94/TechChallengeApp/releases
+            export GITHUB_API=https://api.github.com/repos/johnwu94/TechChallengeApp/releases/
             export version=$(cat versionfile)
             echo $version
             export tagvalue=$(git tag | grep ${version})
