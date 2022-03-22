@@ -40,8 +40,8 @@ jobs:
           command: |      
             rm conf.toml
             echo "--deploy stage before download--"
-            ls -al conf.toml
-            cat conf.toml
+            #ls -al conf.toml
+            #cat conf.toml
             echo "--installing awscli--"
             sudo apt-get install pip -y
             pip install awscli
