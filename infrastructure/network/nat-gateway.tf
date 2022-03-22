@@ -15,7 +15,6 @@ resource "aws_nat_gateway" "nat_gateway_a" {
 
 resource "aws_route_table" "private_route_table_a" {
   vpc_id = aws_vpc.vpc.id
-
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat_gateway_a.id
@@ -24,7 +23,6 @@ resource "aws_route_table" "private_route_table_a" {
   tags = {
     Name = "${var.tag_prefix}-privateroutetable_b"
   }
-
 }
 
 resource "aws_route_table_association" "table_a_private_subnet_a_association" {

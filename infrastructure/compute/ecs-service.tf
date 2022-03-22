@@ -1,5 +1,5 @@
 resource "aws_ecs_service" "techchallenge_svc" {
-  name            = "techchallenge-svc"
+  name            = "${var.tag_prefix}-svc"
   task_definition = aws_ecs_task_definition.ecstask_definition_techchallenge.arn
   cluster         = aws_ecs_cluster.ecs_cluster.id
   launch_type     = "FARGATE"

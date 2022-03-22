@@ -12,10 +12,10 @@ terraform {
 
   #remote state setup - create and provide bucket
   backend "s3" {
-    bucket         = "techchallange"
+    bucket         = "backend-terraform-southeast"
     key            = "servian/s3/challange.tfstate"
     region         = "ap-southeast-2"
-    dynamodb_table = "apptechc-statelocktable"
+    #dynamodb_table = "apptechc-statelocktable"
   }
 }
 
@@ -24,7 +24,7 @@ provider "aws" {
 }
 
 resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "${var.tag_prefix}-statelocktable"
+  name         = "${var.dynamodb_table_statelock}"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
   attribute {
@@ -35,5 +35,10 @@ resource "aws_dynamodb_table" "terraform_locks" {
   tags = {
     Name = "${var.tag_prefix}-dynamo"
   }
+
+   lifecycle {
+    prevent_destroy = true
+  }
+
 }
  

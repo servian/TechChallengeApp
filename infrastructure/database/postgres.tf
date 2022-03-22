@@ -4,7 +4,7 @@ resource "aws_db_instance" "postgres_instance" {
   identifier              = "postgres-db"
   engine_version          = "13.4"
   instance_class          = "db.t3.micro"
-  name                    = "techChallangedb"
+  name                    = "${var.tag_prefix}-db"
   multi_az                = false
   storage_type            = "gp2"
   backup_retention_period = 1
@@ -22,7 +22,7 @@ resource "aws_db_instance" "postgres_instance" {
 }
 
 resource "aws_security_group" "postgres_securitygroup" {
-  name        = "securitygroup-postgres"
+  name        = "${var.tag_prefix}-securitygroup-postgres"
   description = "Allow database connections on port 5432"
   vpc_id      = var.vpc_id #Attached to Application VPC 
 

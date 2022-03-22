@@ -20,4 +20,8 @@ variable "TF_DBSUBNETGROUP" {
 variable "AWS_REGION" {
   type = string
 }
- 
+
+variable "dynamodb_table_statelock"{
+type = string
+
+}

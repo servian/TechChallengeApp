@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ecstask_executionrole" {
-  name               = "taskexecution-role"
+  name               = "${var.tag_prefix}-taskexecution-role"
   assume_role_policy = <<EOF
 {
  "Version": "2012-10-17",

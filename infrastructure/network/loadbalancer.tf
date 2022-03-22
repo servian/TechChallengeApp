@@ -1,5 +1,5 @@
 resource "aws_alb" "app_loadbalancer" {
-  name               = "techchallenge-loadbalancer"
+  name               = "${var.tag_prefix}-loadbalancer"
   load_balancer_type = "application"
   subnets = [
     aws_subnet.public_subnet_a.id,
@@ -21,6 +21,9 @@ resource "aws_lb_target_group" "loadbalancer_targetgroup" {
   health_check {
     path = "/healthcheck/"
   }
+  tags = {
+    Name = "${var.tag_prefix}-loadbalancer"
+  }
 }
 
 resource "aws_lb_listener" "loadbalancer_listener" {
@@ -30,5 +33,8 @@ resource "aws_lb_listener" "loadbalancer_listener" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.loadbalancer_targetgroup.arn
+  }
+    tags = {
+    Name = "${var.tag_prefix}-loadbalancer"
   }
 }

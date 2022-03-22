@@ -1,5 +1,5 @@
 resource "aws_security_group" "loadbalancer_security_group" {
-  name   = "loadbalancer-sg"
+  name   = "${var.tag_prefix}-loadbalancer-sg"
   vpc_id = aws_vpc.vpc.id
   ingress {
     description = "allow tcp 80"
