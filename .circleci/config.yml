@@ -57,6 +57,7 @@ jobs:
             go get -v -t -d ./...
             go get github.com/GeertJohan/go.rice/rice
             mkdir output
+            ls -al output
             go build -ldflags="-s -w" -a -v -o TechChallengeApp .
             ls
             ./TechChallengeApp --version | sed -e 's/TechChallengeApp version /v./' > versionfile
@@ -92,8 +93,11 @@ jobs:
             rm TechChallengeApp
 
             export version=$(cat versionfile)
-            
+            echo "--before zip--"
+            ls -al output
             zip -r "output/TechChallengeApp_${version}_linux64.zip" dist/*
+            echo "--after zip--"
+            ls -al output
             echo ${version}
            
 
