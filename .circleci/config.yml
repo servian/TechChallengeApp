@@ -24,7 +24,7 @@ jobs:
             go get -v -t -d ./...
             go build -v
             go test -v -race -cover ./...
-            echo ${MY_FIRST_CONTEXT}
+            
   
 
   deploy:
@@ -38,21 +38,20 @@ jobs:
       - run:
           name: Setup
           command: |      
-            rm conf.toml
             echo "--deploy stage before download--"
-            #ls -al conf.toml
-            #cat conf.toml
-            echo "--installing awscli--"
-            sudo apt-get install pip -y
-            pip install awscli
-            aws s3 cp s3://serviantechchallenge/conf.toml .
+            ls -al conf.toml
+            cat conf.toml
+            # echo "--installing awscli--"
+            # sudo apt-get install pip -y
+            # pip install awscli
+            # aws s3 cp s3://serviantechchallenge/conf.toml .
             # # pwd  
             # echo ${DbPassword}         
-            # sed 's/pwd/"${DbPassword}"/' conf.toml
-            # sed 's/dbhost/"${DbHost}"/' conf.toml  
-            echo "--after download---"
+            sed "s/pwd/$(echo ${DbPassword})/" conf.toml
+            sed "s/dbhost/$(echo ${DbHost}/" conf.toml  
+            echo "--after sed---"
             
-            ls -al | grep conf.toml
+            ls -al conf.toml
             cat conf.toml
 
             go get -v -t -d ./...
@@ -70,7 +69,9 @@ jobs:
             GOARCH: amd64
           command: |   
             echo "--build stage--"
+            ls -al conf.toml
             cat conf.toml
+            
             if [ -d "dist" ]; then
               rm -rf dist
             fi
