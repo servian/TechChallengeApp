@@ -1,5 +1,5 @@
 "DbUser" = "postgres"
-"DbPassword" = "admin"
+"DbPassword" = "pwd"
 "DbName" = "app"
 "DbPort" = "5432"
 "DbHost" = "localhost"
