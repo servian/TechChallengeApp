@@ -178,26 +178,26 @@ jobs:
 
             zip -r "output/TechChallengeApp_${version}_win32.zip" dist/*
 
-      # - run:
-      #     name: Release if new version
-      #     command: |
-      #       export GITHUB_API=https://api.github.com/repos/johnwu94/TechChallengeApp/releases/
-      #       export version=$(cat versionfile)
-      #       echo $version
-      #       export tagvalue=$(git tag | grep ${version})
-      #       export prerelease=$(echo ${version} | grep 'pre-release')
-      #       if [ -z "${tagvalue}" ]; then
-      #         go get github.com/tcnksm/ghr
+      - run:
+          name: Release if new version
+          command: |
+            export GITHUB_API=https://api.github.com/repos/johnwu94/TechChallengeApp/releases/
+            export version=$(cat versionfile)
+            echo $version
+            export tagvalue=$(git tag | grep ${version})
+            export prerelease=$(echo ${version} | grep 'pre-release')
+            if [ -z "${tagvalue}" ]; then
+              go get github.com/tcnksm/ghr
 
-      #         if [ -z "${prerelease}" ]; then
-      #           echo "No pre-release in version, creating release"
-      #           #ghr -u servian ${version} output
-      #           ghr -u johnwu94 ${version} output
-      #         else
-      #           echo "Found pre-release in version, creating pre-release"
-      #           ghr -u servian -prerelease ${version} output
-      #         fi
-      #       fi
+              if [ -z "${prerelease}" ]; then
+                echo "No pre-release in version, creating release"
+                #ghr -u servian ${version} output
+                ghr -u johnwu94 ${version} output
+              else
+                echo "Found pre-release in version, creating pre-release"
+                ghr -u servian -prerelease ${version} output
+              fi
+            fi
 
       - store_artifacts:
           path: output
@@ -230,7 +230,7 @@ workflows:
           region: AWS_REGION
           repo: stc
           skip-when-tags-exist: false
-          tag: 'latest,${version}.${CIRCLE_BUILD_NUM}'
+          tag: 'latest,build.${CIRCLE_BUILD_NUM}'
           requires:
             - deploy
       - aws-ecs/deploy-service-update:  #deploy to ecs service
