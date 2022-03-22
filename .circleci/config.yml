@@ -51,7 +51,8 @@ jobs:
             # sed 's/pwd/"${DbPassword}"/' conf.toml
             # sed 's/dbhost/"${DbHost}"/' conf.toml  
             echo "--after download---"
-            ls -al conf.toml
+            
+            ls -al | grep conf.toml
             cat conf.toml
 
             go get -v -t -d ./...
