@@ -6,7 +6,7 @@ version: 2.1
 
 orbs:
   aws-ecr: circleci/aws-ecr@7.3.0
-  aws-cli: circleci/aws-cli@2.1.0
+  #aws-cli: circleci/aws-cli@2.1.0
   aws-ecs: circleci/aws-ecs@2.2.1
 
 jobs:
@@ -25,7 +25,156 @@ jobs:
             go build -v
             go test -v -race -cover ./...
             
-  
+  deploy-uat:   #add deploy-uat stage to run on non-master branch and no release action
+    working_directory: /go/src/github.com/servian/TechChallengeApp
+    docker:
+      - image: circleci/golang:latest
+
+    steps:
+      - checkout
+
+      - run:
+          name: Setup
+          command: |      
+            # try to replace conf.toml with s3 stored file
+            # echo "--installing awscli--"
+            # sudo apt-get install pip -y
+            # pip install awscli
+            # aws s3 cp s3://serviantechchallenge/conf.toml .
+            # try to replace password and host using env var      
+            sed -i -e "s/pwd/$(echo ${DbPassword})/" conf.toml
+            sed -i -e "s/dbhost/$(echo ${DbHost})/" conf.toml 
+
+            go get -v -t -d ./...
+            go get github.com/GeertJohan/go.rice/rice
+            mkdir output
+           
+            go build -ldflags="-s -w" -a -v -o TechChallengeApp .
+            ls
+            ./TechChallengeApp --version | sed -e 's/TechChallengeApp version /v./' > versionfile
+
+
+      - run: 
+          name: Build for linux
+          environment:
+            GOOS: linux
+            GOARCH: amd64
+          command: |                         
+            if [ -d "dist" ]; then
+              rm -rf dist
+            fi
+            
+            mkdir -p dist
+            
+            go build -ldflags="-s -w" -a -v -o TechChallengeApp .
+
+            pushd ui
+            rice append --exec ../TechChallengeApp
+            popd
+
+            cp TechChallengeApp dist/
+            cp conf.toml dist/
+            
+            rm TechChallengeApp
+
+            export version=$(cat versionfile)
+            echo "--before zip--"
+            zip -r "output/TechChallengeApp_${version}_linux64.zip" dist/*
+            echo ${version}
+           
+
+      # build for macos
+      - run: 
+          name: Build for macOS
+          environment:
+            GOOS: darwin
+            GOARCH: amd64
+          command: |
+            if [ -d "dist" ]; then
+              rm -rf dist
+            fi
+            
+            mkdir -p dist
+            
+            go build -ldflags="-s -w" -a -v -o TechChallengeApp .
+
+            pushd ui
+            rice append --exec ../TechChallengeApp
+            popd
+
+            cp TechChallengeApp dist/
+            cp conf.toml dist/
+
+            rm TechChallengeApp
+
+            export version=$(cat versionfile)
+
+            zip -r "output/TechChallengeApp_${version}_darwin.zip" dist/*
+
+      # build windows 64 bit
+      - run: 
+          name: Build Windows 64bit
+          environment:
+            GOOS: windows
+            GOARCH: amd64
+          command: | 
+            # cross compile to windows in linux requires a few extra bits
+            # this gets around permission issues
+            sudo chmod -R 0777 /usr/local/go/
+            go get github.com/inconshreveable/mousetrap
+            if [ -d "dist" ]; then
+              rm -rf dist
+            fi
+            
+            mkdir -p dist
+            
+            go build -ldflags="-s -w" -a -v -o TechChallengeApp.exe .
+
+            pushd ui
+            rice append --exec ../TechChallengeApp.exe
+            popd
+
+            cp TechChallengeApp.exe dist/
+
+          
+
+            cp conf.toml dist/
+
+            rm TechChallengeApp.exe
+
+            export version=$(cat versionfile)
+
+            zip -r "output/TechChallengeApp_${version}_win64.zip" dist/*
+
+      #build windows 32 bit
+      - run: 
+          name: Build Windows 32bit
+          environment:
+            GOOS: windows
+            GOARCH: 386
+          command: |
+            if [ -d "dist" ]; then
+              rm -rf dist
+            fi
+            
+            mkdir -p dist
+            
+            go build -ldflags="-s -w" -a -v -o TechChallengeApp.exe .
+
+            pushd ui
+            rice append --exec ../TechChallengeApp.exe
+            popd
+
+            cp TechChallengeApp.exe dist/
+            cp conf.toml dist/
+
+            rm TechChallengeApp.exe
+
+            export version=$(cat versionfile)
+
+            zip -r "output/TechChallengeApp_${version}_win32.zip" dist/*
+
+     
 
   deploy:
     working_directory: /go/src/github.com/servian/TechChallengeApp
@@ -208,6 +357,12 @@ workflows:
       - build:
           context: 
             - john-context
+      - deploy-uat:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
       - deploy:
           requires: 
             - build
@@ -231,10 +386,9 @@ workflows:
           skip-when-tags-exist: false
           tag: 'latest,${CIRCLE_BUILD_NUM}'
           requires:
-            - deploy
+            - deploy-uat
       - aws-ecs/deploy-service-update:  #deploy to ecs service
           cluster-name: '${MY_ECS_CLUSTER}'
-          #container-image-name-updates: 'container=${MY_TASK_DEF},tag=latest,v0.9.0.${CIRCLE_BUILD_NUM}'
           family: '${MY_TASK_DEF}'
           service-name: '${MY_ECS_SERVICE}'
           requires:
