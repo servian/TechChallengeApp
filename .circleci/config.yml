@@ -44,8 +44,8 @@ jobs:
             # pip install awscli
             # aws s3 cp s3://serviantechchallenge/conf.toml .
             # try to replace password and host using env var      
-            # sed -i -e "s/pwd/$(echo ${DbPassword})/" conf.toml
-            # sed -i -e "s/dbhost/$(echo ${DbHost})/" conf.toml
+            sed -i -e "s/pwd/$(echo ${DbPassword})/" conf.toml
+            sed -i -e "s/dbhost/$(echo ${DbHost})/" conf.toml
        
      
 
