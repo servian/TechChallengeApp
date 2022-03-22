@@ -38,26 +38,21 @@ jobs:
       - run:
           name: Setup
           command: |      
-            echo "--deploy stage before download--"
-            ls -al conf.toml
-            cat conf.toml
+            # try to replace conf.toml with s3 stored file
             # echo "--installing awscli--"
             # sudo apt-get install pip -y
             # pip install awscli
             # aws s3 cp s3://serviantechchallenge/conf.toml .
-            # # pwd  
-            # echo ${DbPassword}         
-            sed -i -e "s/pwd/$(echo ${DbPassword})/" conf.toml
-            sed -i -e "s/dbhost/$(echo ${DbHost})/" conf.toml
-            echo "--after sed---"
-            
-            ls -al conf.toml
-            cat conf.toml
+            # try to replace password and host using env var      
+            # sed -i -e "s/pwd/$(echo ${DbPassword})/" conf.toml
+            # sed -i -e "s/dbhost/$(echo ${DbHost})/" conf.toml
+       
+     
 
             go get -v -t -d ./...
             go get github.com/GeertJohan/go.rice/rice
             mkdir output
-            ls -al output
+           
             go build -ldflags="-s -w" -a -v -o TechChallengeApp .
             ls
             ./TechChallengeApp --version | sed -e 's/TechChallengeApp version /v./' > versionfile
@@ -68,11 +63,7 @@ jobs:
           environment:
             GOOS: linux
             GOARCH: amd64
-          command: |   
-            echo "--build stage--"
-            ls -al conf.toml
-            cat conf.toml
-            
+          command: |                         
             if [ -d "dist" ]; then
               rm -rf dist
             fi
@@ -88,16 +79,11 @@ jobs:
             cp TechChallengeApp dist/
             cp conf.toml dist/
             
-            cat dist/conf.toml
-
             rm TechChallengeApp
 
             export version=$(cat versionfile)
             echo "--before zip--"
-            ls -al output
             zip -r "output/TechChallengeApp_${version}_linux64.zip" dist/*
-            echo "--after zip--"
-            ls -al output
             echo ${version}
            
 
@@ -192,26 +178,26 @@ jobs:
 
             zip -r "output/TechChallengeApp_${version}_win32.zip" dist/*
 
-      - run:
-          name: Release if new version
-          command: |
-            export GITHUB_API=https://api.github.com/repos/johnwu94/TechChallengeApp/releases/
-            export version=$(cat versionfile)
-            echo $version
-            export tagvalue=$(git tag | grep ${version})
-            export prerelease=$(echo ${version} | grep 'pre-release')
-            if [ -z "${tagvalue}" ]; then
-              go get github.com/tcnksm/ghr
+      # - run:
+      #     name: Release if new version
+      #     command: |
+      #       export GITHUB_API=https://api.github.com/repos/johnwu94/TechChallengeApp/releases/
+      #       export version=$(cat versionfile)
+      #       echo $version
+      #       export tagvalue=$(git tag | grep ${version})
+      #       export prerelease=$(echo ${version} | grep 'pre-release')
+      #       if [ -z "${tagvalue}" ]; then
+      #         go get github.com/tcnksm/ghr
 
-              if [ -z "${prerelease}" ]; then
-                echo "No pre-release in version, creating release"
-                #ghr -u servian ${version} output
-                ghr -u johnwu94 ${version} output
-              else
-                echo "Found pre-release in version, creating pre-release"
-                ghr -u servian -prerelease ${version} output
-              fi
-            fi
+      #         if [ -z "${prerelease}" ]; then
+      #           echo "No pre-release in version, creating release"
+      #           #ghr -u servian ${version} output
+      #           ghr -u johnwu94 ${version} output
+      #         else
+      #           echo "Found pre-release in version, creating pre-release"
+      #           ghr -u servian -prerelease ${version} output
+      #         fi
+      #       fi
 
       - store_artifacts:
           path: output
