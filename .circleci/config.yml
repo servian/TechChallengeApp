@@ -197,7 +197,7 @@ jobs:
             export tagvalue=$(git tag | grep ${version})
             export prerelease=$(echo ${version} | grep 'pre-release')
             if [ -z "${tagvalue}" ]; then
-              go get -d github.com/tcnksm/ghr
+              go get github.com/tcnksm/ghr
 
               if [ -z "${prerelease}" ]; then
                 echo "No pre-release in version, creating release"
