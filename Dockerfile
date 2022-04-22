@@ -29,6 +29,8 @@ FROM alpine:latest
 WORKDIR /TechChallengeApp
 
 COPY conf.toml ./conf.toml
+COPY scripts/entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 COPY --from=build /TechChallengeApp TechChallengeApp
 
-ENTRYPOINT [ "./TechChallengeApp" ]
+ENTRYPOINT [ "./entrypoint.sh" ]

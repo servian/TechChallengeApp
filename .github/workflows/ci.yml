@@ -1,0 +1,82 @@
+name: CICD Workflow
+on: 
+  push:
+    paths:
+      - '!env/**'
+      - '!doc/**'
+  workflow_dispatch:
+    branches:
+      - master
+
+env:
+  imageTag: '1.0.${{ github.run_number }}'
+  AZURE_WEBAPP_NAME: chappweb   # Azure App Service Name 
+  CONTAINER_REGISTRY: ghcr.io
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags')
+    steps:
+      - name: Extract Version
+        id: version_step
+        run: |
+          echo "##[set-output name=version;]VERSION=${GITHUB_REF#$"refs/tags/v"}"
+          echo "##[set-output name=version_tag;]$GITHUB_REPOSITORY:${{ env.imageTag }}"
+          echo "##[set-output name=latest_tag;]$GITHUB_REPOSITORY:latest"
+
+      - name: Print Version
+        run: |
+          echo ${{steps.version_step.outputs.version_tag}}
+          echo ${{steps.version_step.outputs.latest_tag}}
+
+      - name: Checkout 
+        uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Create Docker Tags
+        id: read-docker-image-identifiers
+        run: |
+          echo VERSION_TAG=$(echo ${{ steps.version_step.outputs.version_tag }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+          echo LASTEST_TAG=$(echo ${{ steps.version_step.outputs.latest_tag  }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+
+      - name: Build and Push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: |
+            ${{env.VERSION_TAG}}
+            ${{env.LASTEST_TAG}}
+          build-args: |
+            ${{steps.version_step.outputs.version}}
+
+      - name: Login via Az module
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+          enable-AzPSSession: true            
+
+      - name: Deploy CI
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}-ci-app
+          images: ${{ env.VERSION_TAG }}
+          startup-command: serve
+
+      # Azure logout
+      - name: logout
+        run: |
+          az logout
