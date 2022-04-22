@@ -10,7 +10,7 @@ on:
 
 env:
   IMAGE_TAG: '1.0.${{ github.run_number }}'
-  IMAGE_NAME: 'techchallengeapp'
+  IMAGE_NAME: 'eliasm50/techchallengeapp'
   AZURE_WEBAPP_NAME: chappweb   # Azure App Service Name   
 
 jobs:
