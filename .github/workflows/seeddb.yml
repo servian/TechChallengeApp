@@ -2,14 +2,13 @@ name: Seed db Workflow
 on: workflow_dispatch
 
 env:
-  imageTag: '1.0.${{ github.run_number }}'
+  image: 'eliasm50/techchallengeapp:latest'
   AZURE_WEBAPP_NAME: chappweb   # Azure App Service Name 
-  CONTAINER_REGISTRY: ghcr.io
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags')
+    environment: ci
     steps:
       - name: Login via Az module
         uses: azure/login@v1
@@ -22,7 +21,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}-ci-app
-          images: eliasm50/techchallengeapp:latest
+          images: ${{ env.image }}
           startup-command: seeddb
 
       # Azure logout

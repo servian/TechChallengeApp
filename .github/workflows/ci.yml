@@ -10,13 +10,11 @@ on:
 
 env:
   imageTag: '1.0.${{ github.run_number }}'
-  AZURE_WEBAPP_NAME: chappweb   # Azure App Service Name 
-  CONTAINER_REGISTRY: ghcr.io
+  AZURE_WEBAPP_NAME: chappweb   # Azure App Service Name   
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags')
     steps:
       - name: Extract Version
         id: version_step
@@ -62,6 +60,11 @@ jobs:
           build-args: |
             ${{steps.version_step.outputs.version}}
 
+  deploy-ci:
+    needs: build 
+    runs-on: ubuntu-latest
+    environment: ci
+    steps:
       - name: Login via Az module
         uses: azure/login@v1
         with:
