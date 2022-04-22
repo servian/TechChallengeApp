@@ -121,9 +121,9 @@ In your applications repository go to >> settings >> secrets >> actions >> new r
     4.3.2 Create secret
 
         - Name: DOCKER_USERNAME
-          Value: {the token created in 3.3.1}
-        - Name: DOCKER_USERNAME
           Value: {Your github account username}
+        - Name: DOCKER_ACCESS_TOKEN
+          Value: {the token created in 3.3.1}
 
 
 NOTE: The app is defaulted to the image eliasm50/techchallengeapp:latest that already exists, it can be changed by changing the file env.{env_name}.ftvars terraform file        
