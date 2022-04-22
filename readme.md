@@ -8,8 +8,8 @@ The sample shows:
 
 - managing and deployment using Terraform
 - secret management using Key Vault and keyvault integration with app service
-- networking lockdown using Azure App Service with VNET integrations
-- database access using Postgres Flexi
+- networking lockdown using Azure App Service with VNET integration
+- database access using Postgres Flexi with VNET integration
 - github workflows to deploy infrastructure, database seeding and application deployment ci
 
 ## Contents
