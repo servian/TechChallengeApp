@@ -41,13 +41,13 @@ type Config struct {
 }
 
 func getDbInfo(cfg Config) string {
-	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
 		cfg.DbHost, cfg.DbPort, cfg.DbUser, cfg.DbPassword, cfg.DbName)
 }
 
 // RebuildDb drops the database and recreates it
 func RebuildDb(cfg Config) error {
-	dbinfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=postgres sslmode=disable",
+	dbinfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=postgres sslmode=require",
 		cfg.DbHost, cfg.DbPort, cfg.DbUser, cfg.DbPassword)
 
 	db, err := sql.Open("postgres", dbinfo)

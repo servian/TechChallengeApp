@@ -61,8 +61,9 @@ func Start(cfg Config, listener net.Listener) {
 func healthcheckHandler(cfg Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, err := db.GetAllTasks(cfg.DB)
-
+		         
 		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Fprintf(w, "Error: db connection down")
 			return
 		}
