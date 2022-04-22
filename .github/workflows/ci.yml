@@ -9,21 +9,20 @@ on:
       - master
 
 env:
-  imageTag: '1.0.${{ github.run_number }}'
-  AZURE_WEBAPP_NAME: chappweb   # Azure App Service Name 
-  CONTAINER_REGISTRY: ghcr.io
+  IMAGE_TAG: '1.0.${{ github.run_number }}'
+  IMAGE_NAME: 'eliasm50/techchallengeapp'
+  AZURE_WEBAPP_NAME: chappweb   # Azure App Service Name   
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags')
     steps:
       - name: Extract Version
         id: version_step
         run: |
           echo "##[set-output name=version;]VERSION=${GITHUB_REF#$"refs/tags/v"}"
-          echo "##[set-output name=version_tag;]$GITHUB_REPOSITORY:${{ env.imageTag }}"
-          echo "##[set-output name=latest_tag;]$GITHUB_REPOSITORY:latest"
+          echo "##[set-output name=version_tag;]${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
+          echo "##[set-output name=latest_tag;]${{ env.IMAGE_NAME }}:latest"
 
       - name: Print Version
         run: |
@@ -62,6 +61,11 @@ jobs:
           build-args: |
             ${{steps.version_step.outputs.version}}
 
+  deploy-ci:
+    needs: build 
+    runs-on: ubuntu-latest
+    environment: ci
+    steps:
       - name: Login via Az module
         uses: azure/login@v1
         with:
@@ -73,7 +77,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}-ci-app
-          images: ${{ env.VERSION_TAG }}
+          images: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           startup-command: serve
 
       # Azure logout

@@ -1,4 +1,4 @@
-name: 'Infrastructure Destroy Worflow'
+name: 'Infrastructure Destroy Workflow'
 
 on: workflow_dispatch
 
@@ -24,12 +24,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Login via Az module
-      uses: azure/login@v1
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
-        enable-AzPSSession: true       
-
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -43,8 +37,3 @@ jobs:
     - name: Terraform Destroy
       if: github.ref == 'refs/heads/master'
       run: terraform destroy -var-file="vars/env.ci.tfvars" -auto-approve
-
-     # Azure logout
-    - name: logout
-      run: |
-        az logout
