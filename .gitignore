@@ -22,3 +22,6 @@ dist/
 
 # Output Binary
 TechChallengeApp
+
+env/.terraform
+env/.env
