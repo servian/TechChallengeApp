@@ -1,4 +1,4 @@
-// Copyright © 2020 Servian
+// Copyright © 2022 Servian
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ var rootCmd = &cobra.Command{
 This application is used as part of challenging potential candiates at Sevian.
 
 Please visit http://Servian.com for more details`,
-	Version: "0.9.0",
+	Version: "0.10.0",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
