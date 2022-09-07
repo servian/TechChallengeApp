@@ -1,6 +1,6 @@
 module github.com/servian/TechChallengeApp
 
-go 1.18
+go 1.19
 
 require (
 	github.com/GeertJohan/go.rice v1.0.2
@@ -11,10 +11,8 @@ require (
 )
 
 require (
-	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/daaku/go.zipexe v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
-	github.com/gorilla/context v1.1.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
@@ -25,7 +23,6 @@ require (
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stretchr/testify v1.7.2 // indirect
 	github.com/subosito/gotenv v1.4.0 // indirect
 	golang.org/x/sys v0.0.0-20220624220833-87e55d714810 // indirect
 	golang.org/x/text v0.3.7 // indirect

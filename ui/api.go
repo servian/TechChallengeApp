@@ -58,13 +58,14 @@ type allTasks struct {
 //
 // Fetch all tasks
 //
-//    Produces:
-//      - application/json
+//	Produces:
+//	  - application/json
 //
-//    Responses:
-//      200: allTasks
-//
+//	Responses:
+//	  200: allTasks
 func getTasks(cfg Config) http.Handler {
+	db := db.Pqdb{}
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		output, _ := db.GetAllTasks(cfg.DB)
 		js, _ := json.Marshal(output)
@@ -93,14 +94,13 @@ type taskParameter struct {
 //
 // Add a new task to the list.
 //
-//    Produces:
-//      - application/json
+//	Produces:
+//	  - application/json
 //
-//    Responses:
-//      200: aTask
-//      400:
-//      500:
-//
+//	Responses:
+//	  200: aTask
+//	  400:
+//	  500:
 func addTask(cfg Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
@@ -113,6 +113,8 @@ func addTask(cfg Config) http.Handler {
 			http.Error(w, err.Error(), 400)
 			return
 		}
+
+		db := db.Pqdb{}
 
 		newTask, err := db.AddTask(cfg.DB, task)
 
@@ -130,13 +132,13 @@ func addTask(cfg Config) http.Handler {
 
 // swagger:route DELETE /api/task/{id}/ deleteTask
 //
-// Delete a Task by ID
+// # Delete a Task by ID
 //
 // Responses:
-//    204:
-//    404:
-//    500:
 //
+//	204:
+//	404:
+//	500:
 func deleteTask(cfg Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
@@ -148,6 +150,8 @@ func deleteTask(cfg Config) http.Handler {
 			http.Error(w, err.Error(), 500)
 			return
 		}
+
+		db := db.Pqdb{}
 
 		err = db.DeleteTask(cfg.DB, model.Task{ID: id})
 

@@ -22,8 +22,8 @@
 //
 // This application is used as part of the Servian Technical Assessment.
 //
-//     Version: 1.0
-//     Contact: Thomas Winsnes<thomas.winsnes@servian.com> https://www.servian.com
+//	Version: 1.0
+//	Contact: Thomas Winsnes<thomas.winsnes@servian.com> https://www.servian.com
 //
 // swagger:meta
 package main
