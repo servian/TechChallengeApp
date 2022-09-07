@@ -275,32 +275,4 @@ func (p Pqdb) DeleteTask(cfg Config, task model.Task) error {
 	}
 
 	return nil
-
-}
-
-func (p Pqdb) UpdateTask(cfg Config, task model.Task) (model.Task, error) {
-
-	dbInfo := p.getDbInfo(cfg)
-
-	db, err := sql.Open("postgres", dbInfo)
-
-	if err != nil {
-		return task, err
-	}
-
-	defer db.Close()
-
-	stmt, err := db.Prepare("UPDATE tasks SET completed=$1, priority=$2, title=$3 WHERE id=$4")
-
-	if err != nil {
-		return task, err
-	}
-
-	_, err = stmt.Exec(task.Complete, task.Priority, task.Title, task.ID)
-
-	if err != nil {
-		return task, nil
-	}
-
-	return task, nil
 }

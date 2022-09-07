@@ -8,6 +8,7 @@ require (
 	github.com/lib/pq v1.10.6
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.12.0
+	go.etcd.io/bbolt v1.3.6
 )
 
 require (
