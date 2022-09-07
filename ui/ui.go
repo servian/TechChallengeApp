@@ -59,7 +59,7 @@ func Start(cfg Config, listener net.Listener) {
 }
 
 func healthcheckHandler(cfg Config) http.Handler {
-	db := db.Pqdb{}
+	db := db.GetDatabase(cfg.DB)
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, err := db.GetAllTasks(cfg.DB)

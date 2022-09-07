@@ -51,7 +51,7 @@ func init() {
 }
 
 func updateDb(cfg db.Config) error {
-	db := db.Pqdb{}
+	db := db.GetDatabase(cfg)
 
 	if !skipCreateDbOption {
 		fmt.Println("Dropping and recreating database: " + cfg.DbName)

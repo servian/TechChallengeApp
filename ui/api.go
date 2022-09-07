@@ -64,7 +64,7 @@ type allTasks struct {
 //	Responses:
 //	  200: allTasks
 func getTasks(cfg Config) http.Handler {
-	db := db.Pqdb{}
+	db := db.GetDatabase(cfg.DB)
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		output, _ := db.GetAllTasks(cfg.DB)
@@ -114,7 +114,7 @@ func addTask(cfg Config) http.Handler {
 			return
 		}
 
-		db := db.Pqdb{}
+		db := db.GetDatabase(cfg.DB)
 
 		newTask, err := db.AddTask(cfg.DB, task)
 
@@ -151,7 +151,7 @@ func deleteTask(cfg Config) http.Handler {
 			return
 		}
 
-		db := db.Pqdb{}
+		db := db.GetDatabase(cfg.DB)
 
 		err = db.DeleteTask(cfg.DB, model.Task{ID: id})
 

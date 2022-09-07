@@ -1,6 +1,9 @@
 package db
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/servian/TechChallengeApp/model"
 )
 
@@ -11,6 +14,7 @@ type Config struct {
 	DbName     string
 	DbHost     string
 	DbPort     string
+	DbType     string
 }
 
 type Database interface {
@@ -21,4 +25,15 @@ type Database interface {
 	AddTask(cfg Config, task model.Task) (model.Task, error)
 	DeleteTask(cfg Config, task model.Task) error
 	//UpdateTask(cfg Config, task model.Task) (model.Task, error)
+}
+
+func GetDatabase(cfg Config) Database {
+	if "postgres" == cfg.DbType {
+		return Pqdb{}
+	}
+
+	fmt.Println("No Database Type set")
+	os.Exit(1)
+
+	return nil
 }

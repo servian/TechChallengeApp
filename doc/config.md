@@ -14,6 +14,7 @@ Example:
 "DbName" = "app"
 "DbPort" = "5432"
 "DbHost" = "localhost"
+"DbType" = "postgres"
 "ListenHost" = "localhost"
 "ListenPort" = "3000"
 ```
@@ -23,6 +24,7 @@ Example:
 * `DbName` - name of the database to use on the database server
 * `DbPort` - port to connect to the database server on
 * `DbHost` - host to connect to, ip or dns entry
+* `DbType` - type of database to connect to
 * `ListenHost` - listener configuration for the application, 0.0.0.0 for all IP, or specify ip to listen on
 * `ListenPort` - port to bind on the local server
 
