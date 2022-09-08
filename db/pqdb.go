@@ -25,8 +25,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/lib/pq"
-
 	_ "github.com/lib/pq"
 	"github.com/servian/TechChallengeApp/model"
 )
@@ -125,67 +123,6 @@ func (p Pqdb) CreateTable(cfg Config) error {
 	err = tx.Commit()
 
 	return err
-}
-
-func (p Pqdb) SeedData(cfg Config) error {
-
-	dbinfo := p.getDbInfo(cfg)
-
-	db, err := sql.Open("postgres", dbinfo)
-
-	if err != nil {
-		return err
-	}
-
-	defer db.Close()
-
-	tx, err := db.Begin()
-
-	if err != nil {
-		return err
-	}
-
-	defer tx.Rollback()
-
-	stmt, err := tx.Prepare(pq.CopyIn("tasks", "completed", "priority", "title"))
-
-	if err != nil {
-		return err
-	}
-
-	tasks := p.getSeedTasks()
-
-	for _, task := range tasks {
-		_, err = stmt.Exec(task.Complete, task.Priority, task.Title)
-		if err != nil {
-			return err
-		}
-	}
-
-	_, err = stmt.Exec()
-
-	if err != nil {
-		return err
-	}
-
-	err = stmt.Close()
-
-	if err != nil {
-		return err
-	}
-
-	err = tx.Commit()
-
-	return err
-}
-
-func (Pqdb) getSeedTasks() []model.Task {
-	var tasks = []model.Task{
-		model.Task{Complete: false, Priority: 0, Title: "1st Task"},
-		model.Task{Complete: false, Priority: 0, Title: "2nd Task"},
-		model.Task{Complete: false, Priority: 0, Title: "3rd Task"},
-	}
-	return tasks
 }
 
 // GetAllTasks lists all tasks in the database

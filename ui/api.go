@@ -132,7 +132,7 @@ func addTask(cfg Config) http.Handler {
 
 // swagger:route DELETE /api/task/{id}/ deleteTask
 //
-// # Delete a Task by ID
+// Delete a Task by ID
 //
 // Responses:
 //

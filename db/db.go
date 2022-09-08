@@ -40,7 +40,6 @@ type Config struct {
 type Database interface {
 	RebuildDb(cfg Config) error
 	CreateTable(cfg Config) error
-	SeedData(cfg Config) error
 	GetAllTasks(cfg Config) ([]model.Task, error)
 	AddTask(cfg Config, task model.Task) (model.Task, error)
 	DeleteTask(cfg Config, task model.Task) error

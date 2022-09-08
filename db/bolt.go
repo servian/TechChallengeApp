@@ -73,43 +73,6 @@ func (b Boltdb) CreateTable(cfg Config) error {
 	return nil
 }
 
-func (b Boltdb) SeedData(cfg Config) error {
-	var tasks = []model.Task{
-		model.Task{Complete: false, Priority: 0, Title: "1st Task"},
-		model.Task{Complete: false, Priority: 0, Title: "2nd Task"},
-		model.Task{Complete: false, Priority: 0, Title: "3rd Task"},
-	}
-
-	database, err := bolt.Open(cfg.DbName, 0644, nil)
-	if err != nil {
-		return err
-	}
-	defer database.Close()
-
-	err = database.Update(func(tx *bolt.Tx) error {
-
-		b := tx.Bucket([]byte(cfg.DbUser))
-		for _, task := range tasks {
-			id, _ := b.NextSequence()
-			task.ID = int(id)
-			bytes, err := json.Marshal(task)
-			if err != nil {
-				return err
-			}
-			err = tx.Bucket([]byte(cfg.DbUser)).Put([]byte(fmt.Sprint(task.ID)), bytes)
-			if err != nil {
-				return err
-			}
-		}
-		return nil
-	})
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (b Boltdb) GetAllTasks(cfg Config) ([]model.Task, error) {
 
 	database, err := bolt.Open(cfg.DbName, 0644, nil)
