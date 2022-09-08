@@ -86,6 +86,8 @@ update `conf.toml` with database settings
 
 `/healthcheck/` - Used to validate the health of the application
 
+`/debug` - Used to print a debug message for the application
+
 ## Finally
 
 More details about configuring the application can be found in the [document folder](doc/config.md)

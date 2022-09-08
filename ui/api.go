@@ -134,11 +134,10 @@ func addTask(cfg Config) http.Handler {
 //
 // Delete a Task by ID
 //
-// Responses:
-//
-//	204:
-//	404:
-//	500:
+//	 Responses:
+//		  204:
+//		  404:
+//		  500:
 func deleteTask(cfg Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)

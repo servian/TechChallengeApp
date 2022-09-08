@@ -66,6 +66,8 @@ update `conf.toml` with database settings (details on how to configure the appli
 
 `/healthcheck/` - Used to validate the health of the application
 
+`/debug` - Used to print a debug message for the application
+
 ## Repository structure
 
 ``` sh
