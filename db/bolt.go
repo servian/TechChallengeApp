@@ -23,7 +23,6 @@ package db
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
 	bolt "go.etcd.io/bbolt"
 
@@ -87,12 +86,12 @@ func (b Boltdb) SeedData(cfg Config) error {
 	}
 	defer database.Close()
 
-	id := time.Now().UnixMilli()
-
 	err = database.Update(func(tx *bolt.Tx) error {
 
-		for idx, task := range tasks {
-      task.ID = int(id) + idx
+		b := tx.Bucket([]byte(cfg.DbUser))
+		for _, task := range tasks {
+			id, _ := b.NextSequence()
+			task.ID = int(id)
 			bytes, err := json.Marshal(task)
 			if err != nil {
 				return err
@@ -126,7 +125,6 @@ func (b Boltdb) GetAllTasks(cfg Config) ([]model.Task, error) {
 		c := b.Cursor()
 
 		for k, v := c.First(); k != nil; k, v = c.Next() {
-			fmt.Printf("key=%s, value=%s\n", k, v)
 			task := model.Task{}
 			json.Unmarshal([]byte(v), &task)
 			tasks = append(tasks, task)
@@ -148,13 +146,14 @@ func (b Boltdb) AddTask(cfg Config, task model.Task) (model.Task, error) {
 	defer database.Close()
 
 	err = database.Update(func(tx *bolt.Tx) error {
-		id := time.Now().UnixMilli()
-    task.ID = int(id)
-    bytes, err := json.Marshal(task)
-    if err != nil {
-      return err
-    }
-    err = tx.Bucket([]byte(cfg.DbUser)).Put([]byte(fmt.Sprint(task.ID)), bytes)
+		b := tx.Bucket([]byte(cfg.DbUser))
+		id, _ := b.NextSequence()
+		task.ID = int(id)
+		bytes, err := json.Marshal(task)
+		if err != nil {
+			return err
+		}
+		err = tx.Bucket([]byte(cfg.DbUser)).Put([]byte(fmt.Sprint(task.ID)), bytes)
 		if err != nil {
 			return err
 		}
