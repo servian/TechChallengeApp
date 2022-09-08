@@ -126,6 +126,7 @@ func (b Boltdb) GetAllTasks(cfg Config) ([]model.Task, error) {
 		c := b.Cursor()
 
 		for k, v := c.First(); k != nil; k, v = c.Next() {
+			fmt.Printf("key=%s, value=%s\n", k, v)
 			task := model.Task{}
 			json.Unmarshal([]byte(v), &task)
 			tasks = append(tasks, task)

@@ -24,13 +24,13 @@ Example:
 * `DbName` - name of the database to use on the database server
 * `DbPort` - port to connect to the database server on
 * `DbHost` - host to connect to, ip or dns entry
-* `DbType` - type of database to connect to
+* `DbType` - type of database to connect to ("postgres" or "boltdb")
 * `ListenHost` - listener configuration for the application, 0.0.0.0 for all IP, or specify ip to listen on
 * `ListenPort` - port to bind on the local server
 
 ## Environment Variables
 
-The application will look for environment variables that are able to override the configuration defined in the `conf.toml` file. These environment variables are prefixed with `VTT` and follow this pattern `VTT_<conf value>`. e.g. `VTT_LISTENPORT`.
+The application will look for environment variables that are able to override the configuration defined in the `conf.toml` file. These environment variables are prefixed with `VTT` and follow this pattern `VTT_<conf value>`. e.g. `VTT_LISTENPORT`. Note, they are UPPERCASE.
 
 Environment variables has precedence over configuration from the `conf.toml` file
 
