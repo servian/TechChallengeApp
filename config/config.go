@@ -34,6 +34,7 @@ type Config struct {
 	DbName     string
 	DbHost     string
 	DbPort     string
+	DbType     string
 	ListenHost string
 	ListenPort string
 }
@@ -55,6 +56,7 @@ func LoadConfig() (*Config, error) {
 	v.SetDefault("DbName", "postgres")
 	v.SetDefault("DbPort", "postgres")
 	v.SetDefault("DbHost", "localhost")
+	v.SetDefault("DbType", "postgres")
 
 	v.SetDefault("ListenHost", "127.0.0.1")
 	v.SetDefault("ListenPort", "3000")
@@ -70,6 +72,7 @@ func LoadConfig() (*Config, error) {
 	conf.DbName = strings.TrimSpace(v.GetString("DbName"))
 	conf.DbHost = strings.TrimSpace(v.GetString("DbHost"))
 	conf.DbPort = strings.TrimSpace(v.GetString("DbPort"))
+	conf.DbType = strings.TrimSpace(v.GetString("DbType"))
 	conf.ListenHost = strings.TrimSpace(v.GetString("ListenHost"))
 	conf.ListenPort = strings.TrimSpace(v.GetString("ListenPort"))
 

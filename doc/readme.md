@@ -117,7 +117,7 @@ the `dist` folder contains the compiled web package
 
 To build a docker image with the application installed on it
 
-`docker build . -t servian/techchallengeapp:latest`
+`docker build --build-arg arch=amd64 -t servian/techchallengeapp:latest .`
 
 
 ### Pull Image from Dockerhub:

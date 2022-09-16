@@ -25,6 +25,7 @@ import (
 	"os"
 
 	"github.com/servian/TechChallengeApp/db"
+	"github.com/servian/TechChallengeApp/model"
 	"github.com/spf13/cobra"
 )
 
@@ -51,6 +52,7 @@ func init() {
 }
 
 func updateDb(cfg db.Config) error {
+	db := db.GetDatabase(cfg)
 
 	if !skipCreateDbOption {
 		fmt.Println("Dropping and recreating database: " + cfg.DbName)
@@ -69,7 +71,17 @@ func updateDb(cfg db.Config) error {
 	}
 
 	fmt.Println("Seeding table with data")
-	err = db.SeedData(cfg)
+	var tasks = []model.Task{
+		model.Task{Complete: false, Priority: 0, Title: "1st Task"},
+		model.Task{Complete: false, Priority: 0, Title: "2nd Task"},
+		model.Task{Complete: false, Priority: 0, Title: "3rd Task"},
+	}
+	for _, task := range tasks {
+		_, err = db.AddTask(cfg, task)
+		if err != nil {
+			return err
+		}
+	}
 
 	return err
 }

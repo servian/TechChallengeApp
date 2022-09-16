@@ -81,6 +81,7 @@ func initConfig() {
 	cfg.UI.DB.DbUser = conf.DbUser
 	cfg.UI.DB.DbHost = conf.DbHost
 	cfg.UI.DB.DbPort = conf.DbPort
+	cfg.UI.DB.DbType = conf.DbType
 	cfg.ListenSpec = conf.ListenHost + ":" + conf.ListenPort
 
 }
