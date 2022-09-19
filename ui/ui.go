@@ -21,9 +21,12 @@
 package ui
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -32,8 +35,11 @@ import (
 
 // Config configuration for ui package
 type Config struct {
-	Assets http.FileSystem
-	DB     db.Config
+	Assets    http.FileSystem
+	DB        db.Config
+	Hostname  string
+	Publicip  string
+	Timestamp int64
 }
 
 // Start - start web server and handle web requets
@@ -47,6 +53,8 @@ func Start(cfg Config, listener net.Listener) {
 	mainRouter := mux.NewRouter()
 	mainRouter.Handle("/healthcheck", healthcheckHandler(cfg))
 	mainRouter.Handle("/healthcheck/", healthcheckHandler(cfg))
+
+	mainRouter.Handle("/debug", debugHandler(cfg))
 
 	apiRouter := mainRouter.PathPrefix("/api").Subrouter()
 	apiHandler(cfg, apiRouter)
@@ -71,4 +79,36 @@ func healthcheckHandler(cfg Config) http.Handler {
 
 		fmt.Fprintf(w, "OK")
 	})
+}
+
+func debugHandler(cfg Config) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		cfg.DB.DbUser = "********"
+		cfg.DB.DbPassword = "********"
+		cfg.Publicip = publicIP()
+		cfg.Hostname, _ = os.Hostname()
+		cfg.Timestamp = time.Now().Unix()
+		bytes, err := json.Marshal(cfg)
+
+		if err != nil {
+			fmt.Fprintf(w, "{\"error\": \"JSON Marshal error\"}")
+			return
+		}
+		fmt.Fprintf(w, string(bytes))
+	})
+}
+
+func publicIP() string {
+	url := "https://checkip.amazonaws.com/"
+	resp, err := http.Get(url)
+	if err != nil {
+		return "connect-error"
+	}
+	defer resp.Body.Close()
+	ip, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "read-error"
+	}
+	return string(ip)
 }
