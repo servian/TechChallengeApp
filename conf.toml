@@ -3,6 +3,6 @@
 "DbName" = "app"
 "DbPort" = "5432"
 "DbHost" = "localhost"
-"DbType" = "postgres"
+"DbType" = "boltdb"
 "ListenHost" = "localhost"
 "ListenPort" = "3000"
