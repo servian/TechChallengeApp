@@ -1,0 +1,36 @@
+version: 0.2
+install:
+    runtime-versions:
+      docker: 18
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...         
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG      
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - printf '{"ImageURI":"%s"}' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG  > imageDetail.json
+      - sed -i 's/<APP_NAME>/'$IMAGE_REPO_NAME'/g' appspec.yml
+      - sed -i 's/<SERVICE_PORT>/'$SERVICE_PORT'/g' appspec.yml scripts/start_server.sh
+      - sed -i 's/<AWS_DEFAULT_REGION>/'$AWS_DEFAULT_REGION'/g' scripts/login_to_ecr.sh scripts/start_server.sh
+      - sed -i 's/<AWS_ACCOUNT_ID>/'$AWS_ACCOUNT_ID'/g' scripts/login_to_ecr.sh scripts/start_server.sh
+      - sed -i 's/<IMAGE_REPO_NAME>/'$IMAGE_REPO_NAME'/g' scripts/start_server.sh
+      - sed -i 's/<IMAGE_TAG>/'$IMAGE_TAG'/g' scripts/start_server.sh
+      - sed -i 's/<DBNAME>/'$DBNAME'/g' scripts/start_server.sh
+      - sed -i 's/<DBHOST>/'$DBHOST'/g' scripts/start_server.sh
+artifacts:
+  files: 
+    - imageDetail.json
+    - appspec.yml
+    - scripts/login_to_ecr.sh
+    - scripts/start_server.sh
+    - scripts/stop_server.sh
