@@ -32,4 +32,4 @@ WORKDIR /TechChallengeApp
 COPY conf.toml ./conf.toml
 COPY --from=build /TechChallengeApp TechChallengeApp
 
-ENTRYPOINT [ "./TechChallengeApp" ]
+ENTRYPOINT [ "sh", "-c", "./TechChallengeApp updatedb -s && ./TechChallengeApp serve" ]
