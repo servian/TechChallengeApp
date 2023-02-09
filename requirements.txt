@@ -1,0 +1,17 @@
+There are several prerequisites that need to be considered before deploying to a public cloud:
+
+Cloud Architecture: You need to have a clear understanding of your desired cloud architecture, including the number and type of resources required, network topology, and security considerations.
+
+Cost Estimation: You need to estimate the cost of deploying your workloads to the cloud, taking into account the cost of compute, storage, networking, and other resources.
+
+Security: You need to ensure that your cloud environment is secure, including securing data at rest, in transit, and while being processed. You also need to implement security best practices, such as network segmentation, identity and access management, and monitoring and logging.
+
+Compliance: You need to ensure that your cloud environment complies with any regulatory or industry-specific requirements, such as those related to data privacy and protection.
+
+Data Migration: You need to plan for the migration of existing data and applications to the cloud, including the tools, techniques, and processes required to transfer data securely.
+
+Network Connectivity: You need to ensure that your cloud environment has the necessary network connectivity to support your workloads, including the ability to connect to on-premises systems, other cloud environments, and the internet.
+
+Performance and Scalability: You need to ensure that your cloud environment has the performance and scalability to meet the demands of your workloads, including the ability to automatically scale resources as needed.
+
+Monitoring and Management: You need to have a plan for monitoring and managing your cloud environment, including the tools, processes, and personnel required to ensure that your systems are up-to-date and running optimally.
