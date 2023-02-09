@@ -1,6 +1,6 @@
 There are several prerequisites that need to be considered before deploying to a public cloud:
 
-Cloud Architecture: You need to have a clear understanding of your desired cloud architecture, including the number and type of resources required, network topology, and security considerations.
+Cloud Architecture:You need to have a clear understanding of your desired cloud architecture, including the number and type of resources required, network topology, and security considerations.
 
 Cost Estimation: You need to estimate the cost of deploying your workloads to the cloud, taking into account the cost of compute, storage, networking, and other resources.
 
