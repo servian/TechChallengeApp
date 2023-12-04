@@ -1,0 +1,80 @@
+name: 'Docker & Terraform Deployment'
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  docker: 
+    name: 'Upload Docker Image to ECR'
+    runs-on: ubuntu-latest
+    defaults: 
+      run: 
+        shell: bash
+    
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::726363461405:role/GithubEcrUser
+          role-session-name: ecr-upload-role
+          aws-region: us-east-1
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to Amazon ECR
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry-type: public
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        env: 
+          REGISTRY: ${{ steps.login-ecr-public.outputs.REGISTRY }}
+          REGISTRY_ALIAS: x6e3r3m8
+          REPOSITORY: ogc-cloudtechchallenge-public
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG --build-arg="arch=amd64" .
+          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+
+  terraform:
+    name: 'Deploy Infrastructure'
+    needs: docker
+    runs-on: ubuntu-latest
+    defaults: 
+      run: 
+        shell: bash
+        working-directory: infra
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::726363461405:role/GithubTerraformUser
+          role-session-name: terraform-deployment-role
+          aws-region: ap-southeast-2
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Initialise Terraform
+        run: terraform init
+
+      - name: Terraform Format Check
+        run: terraform fmt -check
+
+      - name: Plan Terraform
+        run: terraform plan -input=false
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false

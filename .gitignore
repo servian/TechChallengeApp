@@ -22,3 +22,7 @@ dist/
 
 # Output Binary
 TechChallengeApp
+
+# .terraform
+infra/.terraform
+*.tfstate

@@ -1,0 +1,30 @@
+name: 'Check Terraform Code'
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  check_terraform:
+    name: 'Check terraform config'
+    runs-on: ubuntu-latest
+    defaults: 
+      run: 
+        shell: bash
+        working-directory: infra
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Initialise Terraform
+        run: terraform init -backend=false
+  
+      - name: Validate Terraform Config
+        run: terraform validate
+  
+      - name: Check Terraform Format
+        run: terraform fmt -check
