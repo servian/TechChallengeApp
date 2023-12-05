@@ -1,0 +1,1 @@
+azs = ["ap-southeast-2a", "ap-southeast-2b"]
