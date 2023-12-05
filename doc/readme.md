@@ -91,6 +91,10 @@ update `conf.toml` with database settings (details on how to configure the appli
 
 The application itself is a React based single page application (SPA) with an API backend and a postgres database used for data persistence. It's been designed to be completely stateless and will deploy into most types of environments, be it container based or VM based.
 
+## Infrastructure Architecture
+
+Please refer to the `infra-architecture.md` file
+
 ## Build from source
 
 Pre-built releases are available so not many people need to look here.
